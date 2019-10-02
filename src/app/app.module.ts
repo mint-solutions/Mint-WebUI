@@ -10,18 +10,15 @@ import { environment } from '@env/environment';
 import { SharedModule } from '@app/shared';
 import { HomeModule } from './home/home.module';
 import { ShellModule } from './shell/shell.module';
-import { AboutModule } from './about/about.module';
 import { LoginModule } from './login/login.module';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { RegisterModule } from '@app/register/register.module';
 import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { VerifyEmailModule } from '@app/verify-email/verify-email.module';
 import { SetpasswordModule } from '@app/setpassword/setpassword.module';
 import { CoreModule } from '@app/core/core.module';
 import { ForgetPasswordModule } from './forget-password/forget-password.module';
-import { ReportsModule } from './reports/reports.module';
 
 @NgModule({
   imports: [
@@ -37,13 +34,10 @@ import { ReportsModule } from './reports/reports.module';
     SharedModule,
     ShellModule,
     HomeModule,
-    AboutModule,
     LoginModule,
     RegisterModule,
-    VerifyEmailModule,
     SetpasswordModule,
     ForgetPasswordModule,
-    ReportsModule,
     AppRoutingModule // must be imported as the last module as it contains the fallback route
   ],
   declarations: [AppComponent],

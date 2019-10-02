@@ -12,13 +12,15 @@ exports.config = {
     chromeOptions: {
       args: ['lang=en-US'],
       prefs: {
-        intl: { accept_languages: 'en-US' }
+        intl: {
+          accept_languages: 'en-US'
+        }
       }
     }
   },
   // Only works with Chrome and Firefox
   directConnect: true,
-  baseUrl: 'http://localhost:4040/',
+  baseUrl: 'http://localhost:5200/',
   framework: 'jasmine2',
   jasmineNodeOpts: {
     showColors: true,
@@ -31,6 +33,12 @@ exports.config = {
     });
 
     // Better console spec reporter
-    jasmine.getEnv().addReporter(new SpecReporter({ spec: { displayStacktrace: true } }));
+    jasmine.getEnv().addReporter(
+      new SpecReporter({
+        spec: {
+          displayStacktrace: true
+        }
+      })
+    );
   }
 };
