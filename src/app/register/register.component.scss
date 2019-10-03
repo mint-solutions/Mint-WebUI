@@ -40,13 +40,13 @@ body {
   height: 100%;
   z-index: -1;
   background: linear-gradient(180deg, $client, $client, $client-40) !important;
-  //background: $client;
+  display: none;
 }
 
 .img-wraaper {
-  position: absolute;
-  right: 10%;
-  top: 10vh;
-  width: 40%;
+  position: relative;
+  right: unset;
+  top: unset;
+  width: 100%;
   margin: auto;
 }
