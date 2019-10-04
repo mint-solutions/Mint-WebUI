@@ -1,30 +1,24 @@
 @import "src/theme/theme-variables";
-@import "~bootstrap/scss/mixins/_breakpoints";
 
-.login-container {
+body {
+  background-color: #f8f9fa;
+}
+
+.auth-main {
+  content: "";
   position: absolute;
-  top: 0;
-  bottom: 0;
   left: 0;
-  right: 0;
-}
-
-.login-box {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  top: 0;
   width: 100%;
-  min-height: 100%;
-}
-
-.ng-invalid.ng-touched:not(form) {
-  border-left: 4px solid theme-color("danger");
+  height: 100%;
+  z-index: -1;
+  background: linear-gradient(180deg, $client, $client, $client-40) !important;
+  //background: $client;
 }
 
 .auth-main:after {
   content: "";
-  position: absolute;
+  position: relative;
   right: 0;
   top: 0;
   width: 100%;
@@ -34,22 +28,25 @@
   background-position: right;
   background-repeat: no-repeat;
   background-size: contain;
+  display: none;
 }
 
 .auth-main::before {
   content: "";
-  position: absolute;
+  position: relative;
   left: 0;
   top: 0;
   width: 400px;
   height: 100%;
   z-index: -1;
   background: linear-gradient(180deg, $client, $client, $client-40) !important;
-  //background: $client;
+  display: none;
 }
 
-@include media-breakpoint-down(xs) {
-  .container {
-    width: 100%;
-  }
+.img-wraaper {
+  position: relative;
+  right: unset;
+  top: unset;
+  width: 100%;
+  margin: auto;
 }

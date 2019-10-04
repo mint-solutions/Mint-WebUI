@@ -85,7 +85,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   createForm() {
     this.loginForm = this.formBuilder.group({
-      username: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
       remember: true
     });
@@ -93,7 +93,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   buildLoginPayload(formValue: any): ILoginContext {
     const payload = {
-      userName: formValue.username,
+      email: formValue.email,
       password: formValue.password
     };
     return payload;

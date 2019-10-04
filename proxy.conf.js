@@ -10,9 +10,11 @@ const HttpsProxyAgent = require('https-proxy-agent');
  */
 const proxyConfig = [
   {
-    context: '/api/',
-    pathRewrite: { '^/api/': '' },
-    target: 'http://mbappeloan2.us-east-1.elasticbeanstalk.com',
+    context: '/api',
+    pathRewrite: {
+      '^/api': ''
+    },
+    target: 'http://retail-pro.herokuapp.com/api',
     changeOrigin: true,
     secure: false
   }

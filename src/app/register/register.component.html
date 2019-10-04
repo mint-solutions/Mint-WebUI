@@ -13,73 +13,92 @@
               <div class="col-lg-6">
                 <div class="body">
                   <form class="form-auth-small" (ngSubmit)="onSubmit()" [formGroup]="regForm" novalidate>
-                    <div class="form-group">
-                      <label for="signin-email" class="control-label sr-only">Firstname</label>
-                      <input
-                        type="email"
-                        class="form-control"
-                        id="signin-firstname"
-                        formControlName="firstName"
-                        placeholder="Full Name"
-                      />
+                    <div>
+                      <div class="form-group">
+                        <label for="company-name" class="control-label sr-only">Company Name</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="company-name"
+                          formControlName="comapanyName"
+                          placeholder="Company Name"
+                        />
+                      </div>
+                      <div class="form-group">
+                        <label for="company-address" class="control-label sr-only">Address</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="company-address"
+                          formControlName="address"
+                          placeholder="Address"
+                        />
+                      </div>
                     </div>
-                    <div class="form-group">
-                      <label for="signin-email" class="control-label sr-only">Lastname</label>
-                      <input
-                        type="email"
-                        class="form-control"
-                        id="signin-fullname"
-                        formControlName="lastName"
-                        placeholder="Full Name"
-                      />
+                    <div>
+                      <div class="form-group">
+                        <label for="signin-email" class="control-label sr-only">Firstname</label>
+                        <input
+                          type="email"
+                          class="form-control"
+                          id="signin-firstname"
+                          formControlName="firstName"
+                          placeholder="First Name"
+                        />
+                      </div>
+                      <div class="form-group">
+                        <label for="signin-email" class="control-label sr-only">Lastname</label>
+                        <input
+                          type="email"
+                          class="form-control"
+                          id="signin-fullname"
+                          formControlName="lastName"
+                          placeholder="Last Name"
+                        />
+                      </div>
+                      <div class="form-group">
+                        <label for="signin-email" class="control-label sr-only">Email</label>
+                        <input
+                          type="email"
+                          class="form-control"
+                          id="signin-email"
+                          formControlName="email"
+                          placeholder="Email"
+                        />
+                      </div>
+                      <div class="form-group">
+                        <label for="signin-email" class="control-label sr-only">Phone Number</label>
+                        <input
+                          type="tel"
+                          class="form-control"
+                          id="signin-phone-number"
+                          formControlName="phonenumber"
+                          placeholder="Phone Number"
+                        />
+                      </div>
+                      <div class="form-group">
+                        <label for="signin-password" class="control-label sr-only">Password</label>
+                        <input
+                          type="password"
+                          class="form-control"
+                          id="signin-password"
+                          formControlName="password"
+                          placeholder="Password"
+                        />
+                      </div>
+                      <div class="form-group">
+                        <label for="signin-password" class="control-label sr-only">Confirm Password</label>
+                        <input
+                          type="password"
+                          class="form-control"
+                          id="confirm-signin-password"
+                          formControlName="confirmPassword"
+                          placeholder="Confirm Password"
+                        />
+                      </div>
                     </div>
-                    <div class="form-group">
-                      <label for="signin-email" class="control-label sr-only">Email</label>
-                      <input
-                        type="email"
-                        class="form-control"
-                        id="signin-email"
-                        formControlName="email"
-                        placeholder="Email"
-                      />
-                    </div>
-                    <div class="form-group">
-                      <label for="signin-email" class="control-label sr-only">Phone Number</label>
-                      <input
-                        type="tel"
-                        class="form-control"
-                        id="signin-phone-number"
-                        formControlName="phoneNumber"
-                        placeholder="Phone Number"
-                      />
-                    </div>
-                    <div class="form-group">
-                      <label for="signin-password" class="control-label sr-only">Password</label>
-                      <input
-                        type="password"
-                        class="form-control"
-                        id="signin-password"
-                        formControlName="password"
-                        placeholder="Password"
-                      />
-                    </div>
-                    <div class="form-group">
-                      <label for="signin-password" class="control-label sr-only">Confirm Password</label>
-                      <input
-                        type="password"
-                        class="form-control"
-                        id="confirm-signin-password"
-                        formControlName="confirmPassword"
-                        placeholder="Confirm Password"
-                      />
-                    </div>
-                    <!--              <button type="submit" class="btn btn-primary btn-lg btn-block">Register</button>-->
-                    <button
-                      type="submit"
-                      class="btn btn-client btn-lg btn-block"
-                      [disabled]="!regForm.valid"
-                      *ngIf="!isLoading"
-                    >
+
+                    <button type="submit" class="btn btn-client btn-lg btn-block" [disabled]="">
                       Register
                     </button>
                     <button class="btn btn-client btn-lg btn-block" [disabled]="true" *ngIf="isLoading">

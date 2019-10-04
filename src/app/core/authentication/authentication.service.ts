@@ -6,14 +6,13 @@ import { BaseService } from '@app/core/base.service';
 import { HttpClient } from '@angular/common/http';
 
 export interface ILoginContext {
-  userName: string;
+  email: string;
   password: string;
   remember?: boolean;
 }
 
 const routes = {
-  // userLogin: 'Auth/login',
-  userLogin: 'AdminAuth/login'
+  userLogin: '/auth/login'
 };
 
 /**
@@ -32,16 +31,7 @@ export class AuthenticationService extends BaseService<ILoginContext> {
    * @return The user credentials.
    */
   login(context: ILoginContext): Observable<ILoginContext> {
-    // Replace by proper authentication call
-
-    // const data = {
-    //   username: context.userName,
-    //   token: '123456'
-    // };
-    // this.credentialsService.setCredentials(data, context.remember);
-    // return of(data);
-
-    return this.sendPost(this.baseUrl(routes.userLogin), context);
+    return this.sendPost(routes.userLogin, context);
   }
 
   /**

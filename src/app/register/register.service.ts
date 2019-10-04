@@ -19,7 +19,7 @@ export interface IRegResponse {
 }
 
 const routes = {
-  userRegistration: 'Auth/register'
+  userRegistration: '/account/signup'
 };
 
 @Injectable({
@@ -30,7 +30,7 @@ export class RegisterService extends BaseService<IRegister> {
     super(http);
   }
 
-  userRegistration(payload: IRegister): Observable<IRegister> {
-    return this.sendPost(this.baseUrl(routes.userRegistration), payload);
+  userRegistration(payload: any): Observable<IRegister> {
+    return this.sendPost(routes.userRegistration, payload);
   }
 }

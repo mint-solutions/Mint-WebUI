@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { IRegister, IRegResponse, RegisterService } from '@app/register/register.service';
-import { FormBuilder, FormGroup, RequiredValidator, Validator, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, RequiredValidator, Validator, Validators, FormControl } from '@angular/forms';
 import { EAlertMessageIcon, EAlertMessageType, IAlertMessage } from '@app/shared/alert-message/alert-message.component';
 import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs/operators';
@@ -35,6 +35,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     this.isLoading = true;
+
     if (this.regForm.valid) {
       const resgister$ = this.regService.userRegistration(this.buildPayload(this.regForm.value));
       resgister$
@@ -48,14 +49,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
         .subscribe(
           (res: any) => {
             log.info(`userRegistration response: ${res}`);
-            if (res.responseCode === '00') {
+            if (res.status === true) {
               log.error(`userRegistration error: ${res.message}`);
-              // this.alertMessage = {
-              //   message: res.message,
-              //   showClose: true,
-              //   icon: EAlertMessageIcon.SUCCESS,
-              //   type: EAlertMessageType.SUCCESS
-              // };
 
               this.toastr.success(res.message, 'Please Check your mail to confirm', {
                 closeButton: true,
@@ -64,12 +59,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
               this.router.navigateByUrl('/login');
             } else {
               log.error(`userRegistration error: ${res.message}`);
-              // this.alertMessage = {
-              //   message: res.message,
-              //   showClose: true,
-              //   icon: EAlertMessageIcon.DANGER,
-              //   type: EAlertMessageType.DANGER
-              // };
               this.toastr.error(res.message, undefined, {
                 closeButton: true,
                 positionClass: 'toast-top-right'
@@ -89,24 +78,34 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   private createRegForm(): void {
-    this.regForm = this.fb.group({
-      firstName: [null, Validators.required],
-      lastName: [null, Validators.required],
-      email: [null, Validators.required],
-      password: [null, Validators.required],
-      confirmPassword: [null, Validators.required],
-      phoneNumber: [null, Validators.required]
+    this.regForm = new FormGroup({
+      //company: new FormGroup({}),
+      //contactPerson: new FormGroup({}),
+
+      comapanyName: new FormControl(null, Validators.required),
+      address: new FormControl(null, Validators.required),
+      firstName: new FormControl(null, Validators.required),
+      lastName: new FormControl(null, Validators.required),
+      email: new FormControl(null, [Validators.required, Validators.email]),
+      password: new FormControl(null, Validators.required),
+      confirmPassword: new FormControl(null, Validators.required),
+      phonenumber: new FormControl(null, Validators.required)
     });
   }
 
-  private buildPayload(formDetails: IRegister): IRegister {
-    const payload: IRegister = {
-      firstName: formDetails.firstName,
-      lastName: formDetails.lastName,
-      email: formDetails.email,
-      password: formDetails.password,
-      phoneNumber: formDetails.phoneNumber,
-      confirmPassword: formDetails.confirmPassword
+  private buildPayload(formDetails: any) {
+    const payload = {
+      company: {
+        comapanyName: formDetails.comapanyName,
+        address: formDetails.address
+      },
+      contactPerson: {
+        firstName: formDetails.firstName,
+        lastName: formDetails.lastName,
+        email: formDetails.email,
+        password: formDetails.password,
+        phonenumber: formDetails.phonenumber
+      }
     };
 
     return payload;
