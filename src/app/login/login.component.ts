@@ -23,7 +23,7 @@ export interface IResponseContext {
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit, OnDestroy {
-  version: string = environment.version;
+  // version: string = environment.version;
   error: string | undefined;
   loginForm: FormGroup;
   isLoading = false;
