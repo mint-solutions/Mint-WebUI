@@ -28,6 +28,7 @@
 .settings/
 xcuserdata/
 *.sublime-workspace
+package-lock.json
 
 # IDE - VSCode
 .vscode/*
