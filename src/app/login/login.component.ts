@@ -56,6 +56,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       )
       .subscribe(
         (res: any) => {
+          this.router.navigate(['/']);
           if (res.responseCode === '00') {
             log.debug(`${res.responseData} successfully logged in`);
             this.credentialsService.setCredentials(res.responseData, true);

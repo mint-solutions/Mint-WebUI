@@ -2,7 +2,7 @@
   <div class="container">
     <div class="row">
       <div class="col-lg-8 offset-lg-2">
-        <div class="card shadow-lg rounded">
+        <div class="card shadow-lg rounded py-5">
           <div class="container-fluid">
             <div class="row">
               <div class="col-lg-6 d-flex align-items-center">
@@ -12,6 +12,7 @@
               </div>
               <div class="col-lg-6">
                 <div class="body">
+                  <h2 class="card-title">Registration</h2>
                   <form class="form-auth-small" (ngSubmit)="onSubmit()" [formGroup]="regForm" novalidate>
                     <div>
                       <div class="form-group">
@@ -98,14 +99,14 @@
                       </div>
                     </div>
 
-                    <button type="submit" class="btn btn-client btn-lg btn-block" [disabled]="">
+                    <button type="submit" class="btn btn-client btn-lg btn-block mt-4" [disabled]="" *ngIf="!isLoading">
                       Register
                     </button>
-                    <button class="btn btn-client btn-lg btn-block" [disabled]="true" *ngIf="isLoading">
+                    <button class="btn btn-client btn-lg btn-block mt-4" [disabled]="true" *ngIf="isLoading">
                       <i class="fa fa-spinner fa-spin" style="margin-right: 5px"></i>
                       Registering you account, please wait
                     </button>
-                    <div class="bottom">
+                    <div class="bottom text-center mt-4">
                       <span>have an account? <a [routerLink]="['/login']">Login</a></span>
                     </div>
                   </form>
