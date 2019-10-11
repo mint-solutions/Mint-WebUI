@@ -1,10 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { environment } from '@env/environment';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { I18nService } from '@app/core/i18n.service';
-import { AuthenticationService, ILoginContext } from '@app/core/authentication/authentication.service';
-import { CredentialsService } from '@app/core/authentication/credentials.service';
 import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs/operators';
 import { untilDestroyed } from '@app/core/until-destroyed';
@@ -19,7 +15,6 @@ const log = new Logger('forget password');
   styleUrls: ['./forget-password.component.scss']
 })
 export class ForgetPasswordComponent implements OnInit, OnDestroy {
-  version: string = environment.version;
   error: string | undefined;
   loginForm: FormGroup;
   isLoading = false;
@@ -29,9 +24,7 @@ export class ForgetPasswordComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
-    private i18nService: I18nService,
     private fpService: ForgetPasswordService,
-    private credentialsService: CredentialsService,
     private toastr: ToastrService
   ) {
     this.createForm();

@@ -99,7 +99,12 @@
                       </div>
                     </div>
 
-                    <button type="submit" class="btn btn-client btn-lg btn-block mt-4" [disabled]="" *ngIf="!isLoading">
+                    <button
+                      type="submit"
+                      class="btn btn-client btn-lg btn-block mt-4"
+                      [disabled]="!regForm.valid"
+                      *ngIf="!isLoading"
+                    >
                       Register
                     </button>
                     <button class="btn btn-client btn-lg btn-block mt-4" [disabled]="true" *ngIf="isLoading">
