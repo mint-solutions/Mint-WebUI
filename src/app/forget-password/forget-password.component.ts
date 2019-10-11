@@ -19,7 +19,7 @@ const log = new Logger('forget password');
   styleUrls: ['./forget-password.component.scss']
 })
 export class ForgetPasswordComponent implements OnInit, OnDestroy {
-  version: string = environment.version;
+  // version: string = environment.version;
   error: string | undefined;
   loginForm: FormGroup;
   isLoading = false;

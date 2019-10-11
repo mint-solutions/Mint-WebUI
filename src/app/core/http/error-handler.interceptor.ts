@@ -23,13 +23,19 @@ export class ErrorHandlerInterceptor implements HttpInterceptor {
 
   // Customize the default error handler here if needed
   private errorHandler(response: HttpErrorResponse): Observable<HttpEvent<any>> {
-    if (!environment.production) {
+    /*if (!environment.production) {
       // Do something with the error
       if (response.status === 401 || response.status === 504) {
         this.toastr.error('Your Login had expired', 'ERROR!');
         this.logoutService.logout().subscribe();
       }
+    }*/
+
+    if (response.status === 401 || response.status === 504) {
+      this.toastr.error('Your Login has expired', 'ERROR!');
+      this.logoutService.logout().subscribe();
     }
+
     throw response;
   }
 
