@@ -10,7 +10,7 @@
 export const environment = {
   production: true,
   //version: env.npm_package_version,
-  serverUrl: 'http://retail-pro.herokuapp.com/api/',
+  serverUrl: 'https://retail-pro.herokuapp.com/api/',
   defaultLanguage: 'en-US',
   supportedLanguages: ['en-US', 'fr-FR']
 };

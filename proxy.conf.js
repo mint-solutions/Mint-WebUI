@@ -14,7 +14,7 @@ const proxyConfig = [
     pathRewrite: {
       '^/api': ''
     },
-    target: 'http://retail-pro.herokuapp.com/api',
+    target: 'https://retail-pro.herokuapp.com/api',
     changeOrigin: true,
     secure: false
   }
