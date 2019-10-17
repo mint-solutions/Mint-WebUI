@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 const routes = {
-  forgetPassword: 'Auth/forgotpassword'
+  forgetPassword: '/Auth/forgotpassword'
 };
 
 @Injectable({
