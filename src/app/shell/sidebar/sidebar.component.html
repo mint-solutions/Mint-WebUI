@@ -27,10 +27,10 @@
               >
               <ul *ngIf="currentActiveMenu == 'product'">
                 <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-                  <a [routerLink]="['/products/create']">Add Loan Product</a>
+                  <a [routerLink]="['/products/create']">Add Product</a>
                 </li>
                 <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-                  <a [routerLink]="['/products/list']">View Loan Products</a>
+                  <a [routerLink]="['/products/list']">View Products</a>
                 </li>
               </ul>
             </li>
@@ -40,14 +40,14 @@
               [ngClass]="{ active: currentActiveMenu == 'loans' }"
             >
               <a class="has-arrow" (click)="activeInactiveMenu('loans')"
-                ><i class="icon-credit-card"></i> <span>Manage Loans</span></a
+                ><i class="icon-credit-card"></i> <span>Category</span></a
               >
               <ul *ngIf="currentActiveMenu == 'loans'">
                 <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-                  <a [routerLink]="['/loans/approvals']">Approval List</a>
+                  <a [routerLink]="['/loans/approvals']">Add Category</a>
                 </li>
                 <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-                  <a [routerLink]="['/loans/pending']">Pending Disbursement</a>
+                  <a [routerLink]="['/loans/pending']">View Category</a>
                 </li>
               </ul>
             </li>
