@@ -35,7 +35,7 @@ export class SidebarComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loggedInUser = this.credentialsService.credentials.name;
+    this.loggedInUser = 'MgbakoCentric';
     this.activeInactiveMenuEvent.emit({ item: 'admin' });
   }
 

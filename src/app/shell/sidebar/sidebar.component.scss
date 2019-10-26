@@ -5,16 +5,27 @@
   -o-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
   width: 250px;
-  height: calc(100% - 65px);
+  height: calc(100%);
   float: left;
-  margin-top: 61px;
+  margin-top: 0px;
   position: fixed;
   /*left: 5px;*/
-  background-color: #ffffff;
+  background-color: #43425d;
   z-index: 9;
   box-shadow: -5px 1px 15px 0 #898989;
+  left: 0;
+  color: #ffffff;
 }
 
 .sidebar-nav .metismenu a {
   cursor: pointer;
+  color: #ffffff;
+}
+
+.logo-account {
+  display: flex;
+  align-items: center;
+  height: 60px;
+  padding-left: 1.2rem;
+  font-size: 20px;
 }

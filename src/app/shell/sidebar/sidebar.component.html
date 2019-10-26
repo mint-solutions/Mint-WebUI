@@ -1,59 +1,8 @@
 <div id="left-sidebar" class="sidebar" *ngIf="sidebarVisible" style="overflow-y:scroll;">
   <div class="sidebar-scroll">
-    <div class="user-account">
-      <div class="dropdown d-flex align-items-center" ngbDropdown>
-        <img src="assets/images/user.png" class="rounded-circle user-photo" alt="User Profile Picture" />
-        <a href="javascript:void(0);" class="dropdown-toggle user-name"
-          ><strong>{{ loggedInUser }} </strong></a
-        >
-        <ul class="dropdown-menu dropdown-menu-right account" ngbDropdownMenu>
-          <li>
-            <a [routerLink]="['/admin/pages/page-profile2']"><i class="icon-user"></i>My Profile</a>
-          </li>
-          <li>
-            <a [routerLink]="['/admin/app/app-inbox']"><i class="icon-envelope-open"></i>Messages</a>
-          </li>
-          <li>
-            <a href="javascript:void(0);"><i class="icon-settings"></i>Settings</a>
-          </li>
-          <li class="divider"></li>
-          <li>
-            <a href="#" (click)="logout()"><i class="icon-power"></i>Logout</a>
-          </li>
-        </ul>
-      </div>
-      <hr />
-      <ul class="row list-unstyled">
-        <li class="col-4">
-          <small>Customers</small>
-          <h6>456</h6>
-        </li>
-        <li class="col-4">
-          <small>Loans</small>
-          <h6>1350</h6>
-        </li>
-        <li class="col-4">
-          <small>Revenue</small>
-          <h6>₦2.3B</h6>
-        </li>
-      </ul>
+    <div class="logo-account">
+      eCorvids
     </div>
-    <!-- Nav tabs -->
-    <ul class="nav nav-tabs">
-      <li class="nav-item d-none">
-        <a class="nav-link" [ngClass]="{ active: navTab == 'menu' }" (click)="changeNavTab('menu')">Menu</a>
-      </li>
-      <!--      <li class="nav-item"><a class="nav-link" [ngClass]="{'active':navTab == 'chat'}" (click)="changeNavTab('chat')"><i-->
-      <!--        class="icon-book-open"></i></a></li>-->
-      <!--      <li class="nav-item"><a class="nav-link" [ngClass]="{'active':navTab == 'setting'}" (click)="changeNavTab('setting')"><i-->
-      <!--        class="icon-settings"></i></a></li>-->
-      <li class="nav-item d-none">
-        <a class="nav-link" [ngClass]="{ active: navTab == 'question' }" (click)="changeNavTab('question')"
-          ><i class="icon-question"></i
-        ></a>
-      </li>
-    </ul>
-
     <!-- Tab panes -->
     <div class="tab-content p-l-0 p-r-0">
       <div class="tab-pane" id="menu" [ngClass]="{ active: navTab == 'menu' || !navTab }">

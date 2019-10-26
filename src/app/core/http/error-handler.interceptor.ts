@@ -32,7 +32,8 @@ export class ErrorHandlerInterceptor implements HttpInterceptor {
     }*/
 
     if (response.status === 401 || response.status === 504) {
-      this.toastr.error('Your Login has expired', 'ERROR!');
+      this.toastr.error(response.statusText, 'ERROR!');
+      console.log(response);
       this.logoutService.logout().subscribe();
     }
 
