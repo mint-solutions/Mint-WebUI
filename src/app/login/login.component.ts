@@ -57,9 +57,9 @@ export class LoginComponent implements OnInit, OnDestroy {
       .subscribe(
         (res: any) => {
           this.router.navigate(['/']);
-          if (res.responseCode === '00') {
+          if (res.status === true) {
             log.debug(`${res.responseData} successfully logged in`);
-            this.credentialsService.setCredentials(res.responseData, true);
+            this.credentialsService.setCredentials(res.data, true);
             this.router.navigate([this.route.snapshot.queryParams.redirect || '/'], { replaceUrl: true });
           } else {
             log.debug(`Login error: ${res.message}`);
