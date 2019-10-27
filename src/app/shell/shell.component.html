@@ -15,6 +15,7 @@
       [showToggleMenu]="showToggleMenu"
       (toggleSettingDropMenuEvent)="toggleSettingDropMenu()"
       (toggleNotificationDropMenuEvent)="toggleNotificationDropMenu()"
+      [ngClass]="{ 'layout-fullwidth': !sidebarService.sidebarVisible }"
     ></app-header>
 
     <app-sidebar

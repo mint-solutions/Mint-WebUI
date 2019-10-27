@@ -11,37 +11,23 @@
 <div class="container-fluid">
   <app-block-header [title]="title" [breadcrumbItem]="breadcrumbItem"></app-block-header>
   <div class="row clearfix">
-    <div class="col-lg-3 col-md-6 col-sm-6">
-      <app-detail-tiles
-        [title]="'Disbursements'"
-        [value]="earnings"
-        [details]="'19% compared to last week'"
-        [chartOptions]="earningOptions"
-      ></app-detail-tiles>
+    <div class="col-lg-4 col-md-6 col-sm-6">
+      <app-detail-tiles [title]="'Total Product'" [value]="earnings" [chartOptions]="earningOptions"></app-detail-tiles>
     </div>
-    <div class="col-lg-3 col-md-6 col-sm-6">
-      <app-detail-tiles
-        [title]="'Repayments'"
-        [value]="sales"
-        [details]="'25% compared to last week'"
-        [chartOptions]="salesOptions"
-      ></app-detail-tiles>
+    <div class="col-lg-4 col-md-6 col-sm-6">
+      <app-detail-tiles [title]="'Product Sold'" [value]="sales" [chartOptions]="salesOptions"></app-detail-tiles>
     </div>
-    <div class="col-lg-3 col-md-6 col-sm-6">
+    <div class="col-lg-4 col-md-6 col-sm-6">
       <app-detail-tiles
-        [title]="'Total Loans'"
+        [title]="'Total Amount of product sold'"
         [value]="visits.toLocaleString()"
-        [details]="'19% compared to last week'"
         [chartOptions]="visitsAreaOptions"
-      ></app-detail-tiles>
+      >
+      </app-detail-tiles>
     </div>
-    <div class="col-lg-3 col-md-6 col-sm-6">
-      <app-detail-tiles
-        [title]="'Total Repayments'"
-        [value]="likes.toLocaleString()"
-        [details]="'19% compared to last week'"
-        [chartOptions]="LikesOptions"
-      ></app-detail-tiles>
+    <div class="col-lg-3 col-md-6 col-sm-6 d-none">
+      <app-detail-tiles [title]="'Total Repayments'" [value]="likes.toLocaleString()" [chartOptions]="LikesOptions">
+      </app-detail-tiles>
     </div>
   </div>
   <div class="row clearfix d-none">
