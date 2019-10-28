@@ -20,6 +20,7 @@ import { SetpasswordModule } from '@app/setpassword/setpassword.module';
 import { CoreModule } from '@app/core/core.module';
 import { ForgetPasswordModule } from './forget-password/forget-password.module';
 import { VerifyEmailModule } from './verify-email/verify-email.module';
+import { ChartsModule } from 'ng2-charts';
 
 @NgModule({
   imports: [
@@ -30,6 +31,7 @@ import { VerifyEmailModule } from './verify-email/verify-email.module';
     TranslateModule.forRoot(),
     ToastrModule.forRoot(),
     BrowserAnimationsModule,
+    ChartsModule,
     NgbModule,
     CoreModule,
     SharedModule,

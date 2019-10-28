@@ -14,9 +14,10 @@ import { ReferralsComponent } from './referrals/referrals.component';
 import { TotalRevenueComponent } from './total-revenue/total-revenue.component';
 import { ActivitiesComponent } from './activities/activities.component';
 import { CoreModule } from '@app/core/core.module';
+import { ChartsModule } from 'ng2-charts';
 
 @NgModule({
-  imports: [CommonModule, TranslateModule, CoreModule, SharedModule, HomeRoutingModule, NgxEchartsModule],
+  imports: [CommonModule, TranslateModule, CoreModule, SharedModule, HomeRoutingModule, NgxEchartsModule, ChartsModule],
   declarations: [
     HomeComponent,
     DetailTilesComponent,

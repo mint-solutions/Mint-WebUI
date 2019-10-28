@@ -12,9 +12,12 @@ import { SortableDirective } from '@app/shared/directives/sortable.directive';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { GroupByPipe } from './pipes/group-by.pipe';
+import { DoughnutChartComponent } from './charts/doughnut-chart/doughnut-chart.component';
+import { LineChartComponent } from './charts/line-chart/line-chart.component';
+import { ChartsModule } from 'ng2-charts';
 
 @NgModule({
-  imports: [CommonModule, NgxEchartsModule, RouterModule, NgbModule, FormsModule],
+  imports: [CommonModule, NgxEchartsModule, RouterModule, NgbModule, FormsModule, ChartsModule],
   declarations: [
     LoaderComponent,
     AlertMessageComponent,
@@ -22,7 +25,9 @@ import { GroupByPipe } from './pipes/group-by.pipe';
     BlockHeaderComponent,
     DataTableComponent,
     SortableDirective,
-    GroupByPipe
+    GroupByPipe,
+    LineChartComponent,
+    DoughnutChartComponent
   ],
   exports: [
     LoaderComponent,
@@ -30,7 +35,9 @@ import { GroupByPipe } from './pipes/group-by.pipe';
     ActivityPostComponent,
     BlockHeaderComponent,
     DataTableComponent,
-    GroupByPipe
+    GroupByPipe,
+    LineChartComponent,
+    DoughnutChartComponent
   ]
 })
 export class SharedModule {}

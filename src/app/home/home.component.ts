@@ -6,6 +6,8 @@ import EChartOption = echarts.EChartOption;
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Logger } from '@app/core/logger.service';
+import { ChartOptions, ChartDataSets } from 'chart.js';
+import { Label, Color } from 'ng2-charts';
 
 const log = new Logger('home');
 
@@ -52,24 +54,90 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.dataManagedBarChart = this.getDataManagedChartOptions();
   }
 
+  public lineChartData: ChartDataSets[] = [
+    { data: [65, 59, 80, 81, 56, 55, 40], label: 'USSD' },
+    { data: [28, 48, 40, 99, 86, 27, 90], label: 'GDP' },
+    {
+      data: [80, 40, 70, 90, 50, 27, 40],
+      label: 'NGN'
+    }
+  ];
+  public lineChartLabels: Label[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+
+  public lineChartOptions: ChartOptions & { annotation: any } = {
+    responsive: true,
+    legend: {
+      position: 'bottom',
+      labels: {
+        fontColor: '#555'
+      }
+    },
+    scales: {
+      // We use this empty structure as a placeholder for dynamic theming.
+      xAxes: [{}],
+      yAxes: [
+        {
+          position: 'left',
+          gridLines: {
+            color: 'rgba(255,255,255,0)'
+          },
+          ticks: {
+            fontColor: '#555'
+          }
+        }
+      ]
+    },
+    annotation: {
+      annotations: [
+        {
+          type: 'line',
+          mode: 'vertical',
+          value: 'March',
+          borderColor: 'orange',
+          borderWidth: 2,
+          label: {
+            enabled: true,
+            fontColor: 'orange',
+            content: 'LineAnno'
+          }
+        }
+      ]
+    }
+  };
+  public lineChartColors: Color[] = [
+    {
+      // grey
+      backgroundColor: 'rgba(201, 138, 235, .5)',
+      borderColor: 'rgba(201, 138, 235, .5)',
+      pointBackgroundColor: 'rgba(148,159,177,1)',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: 'rgba(148,159,177,0.8)'
+    },
+    {
+      // dark grey
+      backgroundColor: 'rgba(124,144,255,0.5)',
+      borderColor: 'rgba(124,144,255, .5)',
+      pointBackgroundColor: 'rgba(77,83,96,1)',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: 'rgba(77,83,96,1)'
+    },
+    {
+      // red
+      backgroundColor: 'rgba(132,136,250,0.5)',
+      borderColor: 'rgba(132,136,250,0.5)',
+      pointBackgroundColor: 'rgba(148,159,177,1)',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: 'rgba(148,159,177,0.8)'
+    }
+  ];
+  public lineChartLegend = true;
+  public lineChartType = 'line';
+
   ngOnInit() {
     this.isLoading = true;
-    // this.quoteService
-    //   .getRandomQuote({ category: 'dev' })
-    //   .pipe(
-    //     finalize(() => {
-    //       this.isLoading = false;
-    //     })
-    //   )
-    //   .subscribe((quote: string) => {
-    //     this.quote = quote;
-    //   });
-
-    /*const that = this;
-    setTimeout(function() {
-      that.showToastr();
-    }, 1000);
-    */
     this.chartIntervals();
   }
 

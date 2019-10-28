@@ -1,13 +1,3 @@
-<!--<div class="container-fluid">-->
-<!--  <div class="jumbotron text-center">-->
-<!--    <h1>-->
-<!--      <img class="logo" src="assets/ngx-rocket-logo.png" alt="angular logo" />-->
-<!--      <span translate>Hello world !</span>-->
-<!--    </h1>-->
-<!--    <app-loader [isLoading]="isLoading"></app-loader>-->
-<!--    <q [hidden]="isLoading">{{ quote }}</q>-->
-<!--  </div>-->
-<!--</div>-->
 <div class="container-fluid">
   <app-block-header [title]="title" [breadcrumbItem]="breadcrumbItem"></app-block-header>
   <div class="row clearfix">
@@ -30,20 +20,52 @@
       </app-detail-tiles>
     </div>
   </div>
-  <div class="row clearfix d-none">
-    <div class="col-lg-6 col-md-12">
-      <app-top-products></app-top-products>
-    </div>
-    <div class="col-lg-3 col-md-6">
-      <app-referrals></app-referrals>
-    </div>
-    <div class="col-lg-3 col-md-6">
-      <app-total-revenue></app-total-revenue>
+
+  <div class="row dashboard">
+    <div class="col-lg-12">
+      <div class="card chart shadow-sm">
+        <div class="header d-flex justify-content-between align-items-center pb-0">
+          <h2>Product Sold</h2>
+        </div>
+        <div class="card-body">
+          <app-line-chart [lineLabels]="lineChartLabels"></app-line-chart>
+        </div>
+      </div>
     </div>
   </div>
-  <div class="row clearfix d-none">
+
+  <div class="row clearfix">
     <div class="col-lg-12">
-      <app-activities></app-activities>
+      <div class="card">
+        <div class="header d-flex justify-content-between align-items-center pb-0">
+          <h2>Recent Transactions</h2>
+          <div class="">
+            <i class="icon datatable-icon-add"></i>
+            <span style="text-decoration: underline; cursor: pointer">View all</span>
+          </div>
+        </div>
+
+        <div class="body table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Product</th>
+                <th>Price</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let permission of [1, 2, 3, 4, 5]; let i = index">
+                <th scope="row">{{ i + 1 }}</th>
+                <td>John Mgbako</td>
+                <td>Rice</td>
+                <td>{{ 200 | currency: '₦' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
 </div>
