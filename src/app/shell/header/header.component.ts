@@ -19,20 +19,22 @@ export class HeaderComponent implements OnInit {
   @Input() showToggleMenu = false;
   @Output() toggleSettingDropMenuEvent = new EventEmitter();
   @Output() toggleNotificationDropMenuEvent = new EventEmitter();
+  userName: string = '';
 
   constructor(
     private router: Router,
     private authenticationService: AuthenticationService,
     private credentialsService: CredentialsService,
     private i18nService: I18nService,
-
     private config: NgbDropdownConfig,
     private themeService: ThemeService
   ) {
     config.placement = 'bottom-right';
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.userName = this.credentialsService.credentials.username;
+  }
 
   toggleMenu() {
     this.menuHidden = !this.menuHidden;

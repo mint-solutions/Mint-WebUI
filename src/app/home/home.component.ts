@@ -55,8 +55,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   public lineChartData: ChartDataSets[] = [
-    { data: [65, 59, 80, 81, 56, 55, 40], label: 'USSD' },
-    { data: [28, 48, 40, 99, 86, 27, 90], label: 'GDP' },
+    { data: [65, 59, 80, 81, 56, 55, 40], label: 'USD' },
+    { data: [28, 48, 40, 99, 86, 27, 90], label: 'GDB' },
     {
       data: [80, 40, 70, 90, 50, 27, 40],
       label: 'NGN'

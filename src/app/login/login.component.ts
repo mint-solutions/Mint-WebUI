@@ -44,8 +44,9 @@ export class LoginComponent implements OnInit, OnDestroy {
   ngOnDestroy() {}
 
   login() {
+    console.log('this.loginForm.value', this.loginForm.value);
     this.isLoading = true;
-    const login$ = this.authenticationService.login(this.buildLoginPayload(this.loginForm.value));
+    const login$ = this.authenticationService.login(this.loginForm.value);
     login$
       .pipe(
         finalize(() => {
@@ -56,10 +57,10 @@ export class LoginComponent implements OnInit, OnDestroy {
       )
       .subscribe(
         (res: any) => {
-          this.router.navigate(['/']);
+          // this.router.navigate(['/']);
+          console.log(res);
           if (res.status === true) {
-            log.debug(`${res.responseData} successfully logged in`);
-            this.credentialsService.setCredentials(res.data, true);
+            this.credentialsService.setCredentials(res.result, true);
             this.router.navigate([this.route.snapshot.queryParams.redirect || '/'], { replaceUrl: true });
           } else {
             log.debug(`Login error: ${res.message}`);
@@ -87,8 +88,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   createForm() {
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required],
-      remember: true
+      password: ['', Validators.required]
+      // remember: true
     });
   }
 

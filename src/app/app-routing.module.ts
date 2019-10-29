@@ -1,12 +1,15 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { Shell } from './shell/shell.service';
 
 const routes: Routes = [
   // Fallback when no prior route is matched
-  {
-    path: 'forgot-password',
-    loadChildren: './forget-password/forget-password.module#ForgetPasswordModule'
-  },
+  Shell.childRoutes([
+    {
+      path: 'product',
+      loadChildren: 'app/product/product.module#ProductModule'
+    }
+  ]),
   { path: '**', redirectTo: '', pathMatch: 'full' }
 ];
 

@@ -21,6 +21,7 @@ import { CoreModule } from '@app/core/core.module';
 import { ForgetPasswordModule } from './forget-password/forget-password.module';
 import { VerifyEmailModule } from './verify-email/verify-email.module';
 import { ChartsModule } from 'ng2-charts';
+import { ProductModule } from './product/product.module';
 
 @NgModule({
   imports: [
@@ -42,6 +43,7 @@ import { ChartsModule } from 'ng2-charts';
     SetpasswordModule,
     ForgetPasswordModule,
     VerifyEmailModule,
+    ProductModule,
     AppRoutingModule // must be imported as the last module as it contains the fallback route
   ],
   declarations: [AppComponent],
