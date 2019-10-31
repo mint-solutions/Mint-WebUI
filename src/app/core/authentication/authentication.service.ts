@@ -12,7 +12,8 @@ export interface ILoginContext {
 }
 
 const routes = {
-  userLogin: '/auth/login'
+  userLogin: '/auth/login',
+  accountActivation: ''
 };
 
 /**
