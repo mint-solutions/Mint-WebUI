@@ -35,11 +35,11 @@ export class LoginComponent implements OnInit, OnDestroy {
     private i18nService: I18nService,
     private authenticationService: AuthenticationService,
     private credentialsService: CredentialsService
-  ) {
+  ) {}
+
+  ngOnInit() {
     this.createForm();
   }
-
-  ngOnInit() {}
 
   ngOnDestroy() {}
 

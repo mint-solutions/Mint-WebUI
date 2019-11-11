@@ -20,17 +20,17 @@
             <li
               routerLinkActive="active"
               [routerLinkActiveOptions]="{ exact: true }"
-              [ngClass]="{ active: currentActiveMenu == 'loans' }"
+              [ngClass]="{ active: currentActiveMenu == 'category' }"
             >
-              <a class="has-arrow" (click)="activeInactiveMenu('loans')"
+              <a class="has-arrow" (click)="activeInactiveMenu('category')"
                 ><i class="icon-credit-card"></i> <span>Category</span></a
               >
-              <ul *ngIf="currentActiveMenu == 'loans'">
+              <ul *ngIf="currentActiveMenu == 'category'">
                 <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-                  <a [routerLink]="['/loans/approvals']">Add Category</a>
+                  <a [routerLink]="['/category/', 'create']">Add Category</a>
                 </li>
                 <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-                  <a [routerLink]="['/loans/pending']">View Category</a>
+                  <a [routerLink]="['/category/', 'view']">View Category</a>
                 </li>
               </ul>
             </li>

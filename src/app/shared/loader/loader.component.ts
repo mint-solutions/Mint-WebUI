@@ -7,6 +7,9 @@ import { LoaderService } from './loader.service';
   styleUrls: ['./loader.component.scss']
 })
 export class LoaderComponent implements OnInit {
+  @Input() isLoading = false;
+  message: string = 'Please wait';
+
   constructor(public loaderService: LoaderService) {}
 
   ngOnInit() {}

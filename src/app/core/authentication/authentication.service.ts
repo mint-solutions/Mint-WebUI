@@ -13,7 +13,7 @@ export interface ILoginContext {
 
 const routes = {
   userLogin: '/auth/login',
-  accountActivation: ''
+  accountActivation: '/account/activate'
 };
 
 /**
@@ -33,6 +33,10 @@ export class AuthenticationService extends BaseService<ILoginContext> {
    */
   login(context: ILoginContext): Observable<ILoginContext> {
     return this.sendPost(routes.userLogin, context);
+  }
+
+  activate(token: any): Observable<any> {
+    return this.sendGet(`${routes.accountActivation}/${token}`);
   }
 
   /**

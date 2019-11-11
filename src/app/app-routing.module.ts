@@ -6,6 +6,10 @@ const routes: Routes = [
   // Fallback when no prior route is matched
   Shell.childRoutes([
     {
+      path: 'category',
+      loadChildren: 'app/category/category.module#CategoryModule'
+    },
+    {
       path: 'product',
       loadChildren: 'app/product/product.module#ProductModule'
     }

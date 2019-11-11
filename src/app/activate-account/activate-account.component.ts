@@ -9,6 +9,7 @@ import { AuthenticationService, ILoginContext } from '@app/core/authentication/a
 import { CredentialsService } from '@app/core/authentication/credentials.service';
 import { untilDestroyed } from '@app/core/until-destroyed';
 import { Logger } from '@app/core/logger.service';
+import { ToastrService } from 'ngx-toastr';
 const log = new Logger('Activate Account');
 
 export interface IResponseContext {
@@ -27,6 +28,7 @@ export class ActivateAccountComponent implements OnInit, OnDestroy {
   error: string | undefined;
   loginForm: FormGroup;
   isLoading = false;
+  token: string;
 
   constructor(
     private router: Router,
@@ -34,36 +36,35 @@ export class ActivateAccountComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private i18nService: I18nService,
     private authenticationService: AuthenticationService,
-    private credentialsService: CredentialsService
+    private credentialsService: CredentialsService,
+    private toastr: ToastrService
   ) {
     this.createForm();
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.activate();
+  }
 
   ngOnDestroy() {}
 
-  login() {
-    console.log('this.loginForm.value', this.loginForm.value);
+  activate() {
     this.isLoading = true;
-    const login$ = this.authenticationService.login(this.loginForm.value);
+    const login$ = this.authenticationService.activate(this.token);
     login$
       .pipe(
         finalize(() => {
-          this.loginForm.markAsPristine();
           this.isLoading = false;
-        }),
-        untilDestroyed(this)
+        })
       )
       .subscribe(
         (res: any) => {
           // this.router.navigate(['/']);
           console.log(res);
           if (res.status === true) {
-            this.credentialsService.setCredentials(res.result, true);
-            this.router.navigate([this.route.snapshot.queryParams.redirect || '/'], { replaceUrl: true });
+            this.toastr.success(res.message);
           } else {
-            log.debug(`Login error: ${res.message}`);
+            this.toastr.warning(res.message);
           }
         },
         error => {

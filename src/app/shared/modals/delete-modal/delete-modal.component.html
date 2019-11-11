@@ -1,0 +1,23 @@
+<app-loader [isLoading]="loader"></app-loader>
+<div class="delete">
+  <button type="button" class="search-close" aria-label="Close search form" (click)="cancel()">
+    <i class="fi flaticon-close"></i>
+  </button>
+  <div class="card mt-3">
+    <div class="card-header text-center mt-3">
+      Are you sure, you want to delete?
+    </div>
+    <div class="card-body text-center">
+      <p>{{ selectedRowData }}</p>
+    </div>
+    <div class="card-footer">
+      <button type="button" class="float-left btn btn-sm btn-outline-danger btn-padding-wide" (click)="onDoDelete()">
+        Delete
+      </button>
+
+      <button type="button" class="float-right btn btn-sm btn-outline-dark btn-padding-wide" (click)="cancel()">
+        Cancel
+      </button>
+    </div>
+  </div>
+</div>
