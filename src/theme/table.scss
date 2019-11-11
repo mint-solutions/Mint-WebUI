@@ -1,0 +1,19 @@
+table.dataTable tbody th,
+table.dataTable tbody td {
+  padding: 16px 10px;
+  vertical-align: middle;
+}
+
+table {
+  p {
+    margin-bottom: 0;
+  }
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current,
+.dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+  color: #ffffff !important;
+  border: 1px solid #2196f3;
+  background-color: $client;
+  background: linear-gradient(to bottom, #2c75e2 0%, #2196f3 100%);
+}

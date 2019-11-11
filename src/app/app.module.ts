@@ -23,6 +23,7 @@ import { VerifyEmailModule } from './verify-email/verify-email.module';
 import { ChartsModule } from 'ng2-charts';
 import { ProductModule } from './product/product.module';
 import { ActivateAccountModule } from './activate-account/activate-account.module';
+import { CategoryModule } from './category/category.module';
 
 @NgModule({
   imports: [
@@ -39,6 +40,7 @@ import { ActivateAccountModule } from './activate-account/activate-account.modul
     SharedModule,
     ShellModule,
     HomeModule,
+    CategoryModule,
     LoginModule,
     RegisterModule,
     SetpasswordModule,

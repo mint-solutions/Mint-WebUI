@@ -1,0 +1,12 @@
+@import "./theme-variables.scss";
+
+.btn-primary {
+  background-color: $client;
+}
+
+.btn-link:hover,
+.btn-link:focus,
+.btn-link:active {
+  text-decoration: none;
+  opacity: .7;
+}

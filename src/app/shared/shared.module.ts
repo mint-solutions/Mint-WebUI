@@ -44,6 +44,7 @@ import { AppModalComponent } from './modals/app-modal/app-modal/app-modal.compon
     ActivityPostComponent,
     BlockHeaderComponent,
     DataTableComponent,
+    DeleteModalComponent,
     GroupByPipe,
     LineChartComponent,
     DoughnutChartComponent,

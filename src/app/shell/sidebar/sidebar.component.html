@@ -22,17 +22,9 @@
               [routerLinkActiveOptions]="{ exact: true }"
               [ngClass]="{ active: currentActiveMenu == 'category' }"
             >
-              <a class="has-arrow" (click)="activeInactiveMenu('category')"
+              <a class="" (click)="activeInactiveMenu('category')" [routerLink]="['/', 'category']"
                 ><i class="icon-credit-card"></i> <span>Category</span></a
               >
-              <ul *ngIf="currentActiveMenu == 'category'">
-                <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-                  <a [routerLink]="['/category/', 'create']">Add Category</a>
-                </li>
-                <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-                  <a [routerLink]="['/category/', 'view']">View Category</a>
-                </li>
-              </ul>
             </li>
 
             <li

@@ -41,8 +41,7 @@ $client: #43425d;
 $client-60: #229a22;
 $client-40: #1e791e;
 
-$theme-colors: (
-  primary: $blue,
+$theme-colors: (primary: $blue,
   secondary: $gray-600,
   success: $green,
   info: $cyan,
@@ -52,8 +51,7 @@ $theme-colors: (
   dark: $gray-800,
   client: $client,
   client-60: $client-60,
-  client-40: $client-40
-);
+  client-40: $client-40);
 
 // Use Bootstrap defaults for other variables, imported here so we can access all app variables in one place when used
 // in components.
