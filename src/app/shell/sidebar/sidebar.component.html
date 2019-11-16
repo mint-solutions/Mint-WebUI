@@ -30,6 +30,23 @@
             <li
               routerLinkActive="active"
               [routerLinkActiveOptions]="{ exact: true }"
+              [ngClass]="{ active: currentActiveMenu == 'customer' }"
+            >
+              <a class="has-arrow" (click)="activeInactiveMenu('customer')"
+                ><i class="icon-grid"></i> <span>Customer</span></a
+              >
+              <ul *ngIf="currentActiveMenu == 'customer'">
+                <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                  <a [routerLink]="['/customer/create']">Add Customer</a>
+                </li>
+                <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                  <a [routerLink]="['/customer/view']">View Customers</a>
+                </li>
+              </ul>
+            </li>
+            <li
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
               [ngClass]="{ active: currentActiveMenu == 'product' }"
             >
               <a class="has-arrow" (click)="activeInactiveMenu('product')"
@@ -59,6 +76,23 @@
                 </li>
                 <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
                   <a [routerLink]="['/admin-users/view']">View Users</a>
+                </li>
+              </ul>
+            </li>
+            <li
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              [ngClass]="{ active: currentActiveMenu == 'admin-users' }"
+            >
+              <a class="has-arrow" (click)="activeInactiveMenu('admin-users')"
+                ><i class="icon-truck"></i> <span>Supplier</span></a
+              >
+              <ul *ngIf="currentActiveMenu == 'admin-users'">
+                <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                  <a [routerLink]="['/supplier/add']">Add Supplier</a>
+                </li>
+                <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                  <a [routerLink]="['/supplier/view']">View Suppliers</a>
                 </li>
               </ul>
             </li>

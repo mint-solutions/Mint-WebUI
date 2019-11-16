@@ -8,6 +8,10 @@ const routes: Routes = [
     {
       path: 'product',
       loadChildren: 'app/product/product.module#ProductModule'
+    },
+    {
+      path: 'customer',
+      loadChildren: 'app/customer/customer.module#CustomerModule'
     }
   ]),
   { path: '**', redirectTo: '', pathMatch: 'full' }

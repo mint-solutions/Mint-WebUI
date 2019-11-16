@@ -3,12 +3,13 @@
  * Framework overrides and customization goes here.
  */
 @import "src/theme/theme-variables";
-@import "src/theme/table";
 @import "src/theme/button";
+@import "src/theme/modal";
+@import "src/theme/table";
 
 .btn-link:hover {
   text-decoration: none;
-  opacity: .7;
+  opacity: 0.7;
 }
 
 .search .modal-content {

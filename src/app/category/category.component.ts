@@ -1,8 +1,14 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import EChartOption = echarts.EChartOption;
 import { Logger } from '@app/core/logger.service';
 import { ToastrService } from 'ngx-toastr';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
+import { componentError, serverError, removeDeletedItem } from '@app/helper';
+import { CategoryService } from './category.service';
+import { DataTableDirective } from 'angular-datatables';
+import { finalize } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 const log = new Logger('home');
 
@@ -11,11 +17,23 @@ const log = new Logger('home');
   templateUrl: './category.component.html',
   styleUrls: ['./category.component.scss']
 })
-export class CategoryComponent implements OnInit, OnDestroy {
+export class CategoryComponent implements OnInit, AfterViewInit, OnDestroy {
+  @ViewChild(DataTableDirective, { read: false })
+  dtElement: DataTableDirective;
+
+  dtTrigger: Subject<any> = new Subject();
+  dtOptions: DataTables.Settings = {};
+
+  modalTitle = 'Subcategory';
+  modalRef: NgbModalRef;
+  doDeleteModalRef: NgbModalRef;
+  selectedRow: any;
+
   categoryForm: FormGroup;
   formLoading = false;
   categories: any[] = [];
   mode: string = 'Create';
+  loader: boolean;
 
   public sidebarVisible = true;
   public title = 'Category';
@@ -26,27 +44,55 @@ export class CategoryComponent implements OnInit, OnDestroy {
     }
   ];
 
-  constructor(private cdr: ChangeDetectorRef, private toastr: ToastrService, private formBuilder: FormBuilder) {}
+  constructor(
+    private cdr: ChangeDetectorRef,
+    private toastr: ToastrService,
+    private formBuilder: FormBuilder,
+    private categoryService: CategoryService,
+    private modalService: NgbModal
+  ) {}
 
   ngOnInit() {
     this.createForm();
-    this.categories = [
-      {
-        id: 1,
-        name: 'Electronic'
-      },
-      {
-        id: 2,
-        name: 'Phone'
-      },
-      {
-        id: 3,
-        name: 'Fashion'
-      }
-    ];
+    this.getCategories();
   }
 
-  ngOnDestroy() {}
+  ngAfterViewInit(): void {
+    this.dtTrigger.next();
+  }
+
+  ngOnDestroy(): void {
+    // Do not forget to unsubscribe the event
+    this.dtTrigger.unsubscribe();
+  }
+
+  getCategories() {
+    this.loader = true;
+    this.categoryService
+      .getCategories()
+      .pipe(
+        finalize(() => {
+          this.loader = false;
+        })
+      )
+      .subscribe(
+        res => {
+          console.log('getCountries', res);
+          if (res.status === true) {
+            this.categories = res.result;
+            this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+              // Destroy the table first
+              dtInstance.destroy();
+              // Call the dtTrigger to rerender again
+              this.dtTrigger.next();
+            });
+          } else {
+            componentError(res.message, this.toastr);
+          }
+        },
+        error => serverError(error, this.toastr)
+      );
+  }
 
   onSubmit() {
     this.formLoading = true;
@@ -59,19 +105,11 @@ export class CategoryComponent implements OnInit, OnDestroy {
         case 'Create':
           this.onCreate(data);
           break;
-        case 'Ppdate':
+        case 'Update':
           this.onUpdate(data);
           break;
       }
-      this.toastr.info('Hello, welcome to eCorvids.', undefined, {
-        closeButton: true,
-        positionClass: 'toast-top-right'
-      });
     }
-  }
-
-  onViewRow(data: any, mode?: string) {
-    console.log(data, mode);
   }
 
   onEdit(data: any, mode: any) {
@@ -80,10 +118,104 @@ export class CategoryComponent implements OnInit, OnDestroy {
   }
 
   onCreate(data: any) {
-    console.log('onCreate', data);
+    console.log(data);
+
+    this.categoryService
+      .createCategory(data)
+      .pipe(
+        finalize(() => {
+          this.formLoading = false;
+        })
+      )
+      .subscribe(
+        (res: any) => {
+          this.loader = false;
+          if (res.status !== true) {
+            return componentError(res.message, this.toastr);
+          }
+          this.getCategories();
+          this.toastr.success(res.message, 'Category');
+        },
+        error => serverError(error, this.toastr)
+      );
   }
   onUpdate(data: any) {
-    console.log('onUpdate', data);
+    console.log(data);
+    const payload = {
+      ...data,
+      id: this.selectedRow.id
+    };
+
+    this.categoryService
+      .updateCategory(payload)
+      .pipe(
+        finalize(() => {
+          this.formLoading = false;
+        })
+      )
+      .subscribe(
+        (res: any) => {
+          this.loader = false;
+          if (res.status !== true) {
+            return componentError(res.message, this.toastr);
+          }
+          this.getCategories();
+          this.toastr.success(res.message, 'Category');
+        },
+        error => serverError(error, this.toastr)
+      );
+  }
+
+  onDelete(user: any, doDelete: any) {
+    this.selectedRow = user;
+    this.doDeleteModalRef = this.modalService.open(doDelete, {
+      backdrop: true,
+      backdropClass: 'light-blue-backdrop',
+      size: 'sm',
+      windowClass: 'confirmModal'
+    });
+  }
+
+  onDoDelete(event: any) {
+    this.formLoading = true;
+    this.categoryService
+      .deleteCategory(this.selectedRow.id)
+      .pipe(
+        finalize(() => {
+          this.formLoading = false;
+          this.modalService.dismissAll();
+        })
+      )
+      .subscribe(
+        (res: any) => {
+          if (res.status === true) {
+            this.categories = removeDeletedItem(this.categories, this.selectedRow.id);
+            this.toastr.success(res.message, 'Category');
+          } else {
+            componentError(res.message, this.toastr);
+          }
+        },
+        (error: any) => serverError(error, this.toastr)
+      );
+  }
+
+  onViewRow(event: any, category: any, viewCountry: null) {
+    const selectedRow = event;
+    this.selectedRow = selectedRow;
+
+    this.modalTitle = `Update Wallet - ${this.selectedRow.name}`;
+    this.createForm();
+
+    if (viewCountry === 'VIEW') {
+      // this.createForm(viewCountry);
+
+      this.modalTitle = `View Walet - ${this.selectedRow.name}`;
+    }
+
+    this.modalRef = this.modalService.open(category, {
+      windowClass: 'search',
+      backdrop: false
+    });
   }
 
   createForm() {

@@ -3,14 +3,14 @@
   <button type="button" class="search-close" aria-label="Close search form" (click)="cancel()">
     <i class="fi flaticon-close"></i>
   </button>
-  <div class="card mt-3">
-    <div class="card-header text-center mt-3">
+  <div class="card py-4">
+    <div class="card-header text-center no-border">
       Are you sure, you want to delete?
     </div>
     <div class="card-body text-center">
       <p>{{ selectedRowData }}</p>
     </div>
-    <div class="card-footer">
+    <div class="card-footer no-border">
       <button type="button" class="float-left btn btn-sm btn-outline-danger btn-padding-wide" (click)="onDoDelete()">
         Delete
       </button>
