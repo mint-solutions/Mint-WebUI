@@ -28,8 +28,10 @@ export class CategoryComponent implements OnInit, AfterViewInit, OnDestroy {
   modalRef: NgbModalRef;
   doDeleteModalRef: NgbModalRef;
   selectedRow: any;
+  selectedSubcategory: any;
 
   categoryForm: FormGroup;
+  subcategoryForm: FormGroup;
   formLoading = false;
   categories: any[] = [];
   mode: string = 'Create';
@@ -114,7 +116,8 @@ export class CategoryComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onEdit(data: any, mode: any) {
     this.mode = 'Update';
-    this.categoryForm.patchValue({ name: data.name });
+    this.selectedRow = data;
+    this.categoryForm.patchValue({ name: this.selectedRow.name });
   }
 
   onCreate(data: any) {
@@ -125,6 +128,7 @@ export class CategoryComponent implements OnInit, AfterViewInit, OnDestroy {
       .pipe(
         finalize(() => {
           this.formLoading = false;
+          this.resetForm();
         })
       )
       .subscribe(
@@ -140,7 +144,7 @@ export class CategoryComponent implements OnInit, AfterViewInit, OnDestroy {
       );
   }
   onUpdate(data: any) {
-    console.log(data);
+    console.log('onUpdate', data);
     const payload = {
       ...data,
       id: this.selectedRow.id
@@ -151,6 +155,7 @@ export class CategoryComponent implements OnInit, AfterViewInit, OnDestroy {
       .pipe(
         finalize(() => {
           this.formLoading = false;
+          this.resetForm();
         })
       )
       .subscribe(
@@ -199,18 +204,13 @@ export class CategoryComponent implements OnInit, AfterViewInit, OnDestroy {
       );
   }
 
-  onViewRow(event: any, category: any, viewCountry: null) {
+  onViewRow(event: any, category: any, mode: null) {
     const selectedRow = event;
     this.selectedRow = selectedRow;
+    this.mode = mode;
 
     this.modalTitle = `Update Wallet - ${this.selectedRow.name}`;
     this.createForm();
-
-    if (viewCountry === 'VIEW') {
-      // this.createForm(viewCountry);
-
-      this.modalTitle = `View Walet - ${this.selectedRow.name}`;
-    }
 
     this.modalRef = this.modalService.open(category, {
       windowClass: 'search',
@@ -218,8 +218,92 @@ export class CategoryComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  createForm() {
+  onSubmitSubcategory() {
+    this.formLoading = true;
+
+    if (this.subcategoryForm.valid) {
+      const data = {
+        categoryId: this.selectedRow.id,
+        ...this.subcategoryForm.value
+      };
+      switch (this.mode) {
+        case 'Create':
+          this.onCreateSubcategory(data);
+          break;
+        case 'Update':
+          this.onUpdateSubcategory(data);
+          break;
+      }
+    }
+  }
+
+  onEditSubcategory(data: any, mode: any) {
+    this.mode = 'Update';
+    this.selectedSubcategory = data;
+    this.subcategoryForm.patchValue({ name: this.selectedSubcategory.name });
+  }
+
+  onCreateSubcategory(data: any) {
+    console.log(data);
+
+    this.categoryService
+      .createSubcategory(data)
+      .pipe(
+        finalize(() => {
+          this.formLoading = false;
+          this.modalService.dismissAll();
+          this.resetForm();
+        })
+      )
+      .subscribe(
+        (res: any) => {
+          this.loader = false;
+          if (res.status !== true) {
+            return componentError(res.message, this.toastr);
+          }
+          this.getCategories();
+          this.toastr.success(res.message, 'subcategory');
+        },
+        error => serverError(error, this.toastr)
+      );
+  }
+  onUpdateSubcategory(data: any) {
+    console.log('onUpdate', data);
+    const payload = {
+      ...data,
+      id: this.selectedSubcategory.id
+    };
+
+    this.categoryService
+      .updateSubcategory(payload)
+      .pipe(
+        finalize(() => {
+          this.formLoading = false;
+          this.resetForm();
+          this.modalService.dismissAll();
+        })
+      )
+      .subscribe(
+        (res: any) => {
+          this.loader = false;
+          if (res.status !== true) {
+            return componentError(res.message, this.toastr);
+          }
+          this.getCategories();
+          this.toastr.success(res.message, 'Category');
+        },
+        error => serverError(error, this.toastr)
+      );
+  }
+
+  createForm(formMode: any = null) {
+    let isDisabled = formMode === 'view' ? true : false;
+
     this.categoryForm = this.formBuilder.group({
+      name: ['', Validators.required]
+      // remember: true
+    });
+    this.subcategoryForm = this.formBuilder.group({
       name: ['', Validators.required]
       // remember: true
     });
@@ -228,5 +312,6 @@ export class CategoryComponent implements OnInit, AfterViewInit, OnDestroy {
   resetForm() {
     this.categoryForm.reset();
     this.mode = 'Create';
+    this.selectedRow = {};
   }
 }

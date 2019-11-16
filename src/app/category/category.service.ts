@@ -9,7 +9,11 @@ const routes = {
   getCategory: '/categorys/mycategory',
   getCategories: '/categorys/mycategory',
   updateCategory: '/categorys',
-  deleteCategory: '/categorys'
+  deleteCategory: '/categorys',
+  createSubcategory: '/categorys/subcategory/create',
+  getSubcategory: '/categorys/mycategory',
+  updateSubcategory: '/categorys',
+  deleteSubcategory: '/categorys'
 };
 
 @Injectable()
@@ -18,7 +22,7 @@ export class CategoryService extends BaseService<CategoryModel> {
     super(httpClient);
   }
 
-  geCategory(id: number): Observable<any> {
+  getCategory(id: number): Observable<any> {
     return this.sendGet(`${routes.getCategory}/${id}`);
   }
 
@@ -31,10 +35,22 @@ export class CategoryService extends BaseService<CategoryModel> {
   }
 
   updateCategory(payload: CategoryModel): Observable<any> {
-    return this.sendPut(`${routes.updateCategory}/{payload.id}/updatecategory`, payload);
+    return this.sendPatch(`${routes.updateCategory}/${payload.id}/updatecategory`, payload);
   }
 
   deleteCategory(id: number): Observable<any> {
     return this.sendDelete(`${routes.deleteCategory}/${id}/deletecategory`);
+  }
+
+  createSubcategory(payload: CategoryModel): Observable<any> {
+    return this.sendPost(routes.createSubcategory, payload);
+  }
+
+  updateSubcategory(payload: CategoryModel): Observable<any> {
+    return this.sendPatch(`${routes.updateSubcategory}/${payload.id}/updatesubcategory`, payload);
+  }
+
+  deleteSubcategory(id: number): Observable<any> {
+    return this.sendDelete(`${routes.deleteSubcategory}/${id}/deletesubcategory`);
   }
 }
