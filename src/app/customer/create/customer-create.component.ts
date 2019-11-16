@@ -53,7 +53,7 @@ export class CustomerCreateComponent implements OnInit, AfterViewInit, OnDestroy
 
   ngOnDestroy(): void {}
 
-  onDateSelect(event: any, type: string) {
+  onDateSelect(event: any) {
     const birthmonth = `${event.year}-${event.month}-${event.day}`;
     this.customerForm.patchValue({ birthmonth });
   }
