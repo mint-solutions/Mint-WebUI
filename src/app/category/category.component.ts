@@ -171,8 +171,9 @@ export class CategoryComponent implements OnInit, AfterViewInit, OnDestroy {
       );
   }
 
-  onDelete(user: any, doDelete: any) {
-    this.selectedRow = user;
+  onDelete(category: any, doDelete: any) {
+    this.selectedRow = category;
+    this.selectedSubcategory = category;
     this.doDeleteModalRef = this.modalService.open(doDelete, {
       backdrop: true,
       backdropClass: 'light-blue-backdrop',
@@ -183,6 +184,7 @@ export class CategoryComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onDoDelete(event: any) {
     this.formLoading = true;
+
     this.categoryService
       .deleteCategory(this.selectedRow.id)
       .pipe(
@@ -208,9 +210,6 @@ export class CategoryComponent implements OnInit, AfterViewInit, OnDestroy {
     const selectedRow = event;
     this.selectedRow = selectedRow;
     this.mode = mode;
-
-    this.modalTitle = `Update Wallet - ${this.selectedRow.name}`;
-    this.createForm();
 
     this.modalRef = this.modalService.open(category, {
       windowClass: 'search',
@@ -293,6 +292,32 @@ export class CategoryComponent implements OnInit, AfterViewInit, OnDestroy {
           this.toastr.success(res.message, 'Category');
         },
         error => serverError(error, this.toastr)
+      );
+  }
+
+  onDoDeleteSubcategory(event: any) {
+    this.formLoading = true;
+
+    this.categoryService
+      .deleteSubcategory(this.selectedRow.id)
+      .pipe(
+        finalize(() => {
+          this.formLoading = false;
+          this.modalService.dismissAll();
+        })
+      )
+      .subscribe(
+        (res: any) => {
+          if (res.status === true) {
+            // console.log('onDoDeleteSubcategory');
+            // this.selectedRow.subcategory = removeDeletedItem(this.selectedRow.subcategory, this.selectedSubcategory.id);
+            this.toastr.success(res.message, 'Subcategory');
+            this.getCategories();
+          } else {
+            componentError(res.message, this.toastr);
+          }
+        },
+        (error: any) => serverError(error, this.toastr)
       );
   }
 
