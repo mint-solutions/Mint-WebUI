@@ -24,6 +24,9 @@ import { ChartsModule } from 'ng2-charts';
 import { ProductModule } from './product/product.module';
 import { ActivateAccountModule } from './activate-account/activate-account.module';
 import { CategoryModule } from './category/category.module';
+import { CustomerService } from './customer/customer.service';
+import { SupplierModule } from './supplier/supplier.module';
+import { SupplierService } from './supplier/supplier.service';
 
 @NgModule({
   imports: [
@@ -48,10 +51,11 @@ import { CategoryModule } from './category/category.module';
     VerifyEmailModule,
     ActivateAccountModule,
     ProductModule,
+    SupplierModule,
     AppRoutingModule // must be imported as the last module as it contains the fallback route
   ],
   declarations: [AppComponent],
-  providers: [],
+  providers: [CustomerService, SupplierService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

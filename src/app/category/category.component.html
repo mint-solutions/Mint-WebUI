@@ -89,12 +89,12 @@
                 <th scope="row">{{ i + 1 }}</th>
                 <td>{{ category.name }}</td>
                 <td>
-                  <span class="btn btn-link" (click)="onViewRow(category, subcategoryModal, 'View')"
-                    >({{ category.subcategory.length }}) Subcategory</span
-                  >
-                  <span class="btn btn-link" (click)="onViewRow(category, subcategoryModal, 'Create')"
-                    >Add Subcategory</span
-                  >
+                  <button class="btn btn-sm btn-outline-client" (click)="onViewRow(category, subcategoryModal, 'View')">
+                    ({{ category.subcategory.length }}) Subcategory
+                  </button>
+                  <button class="btn btn-sm btn-client" (click)="onViewRow(category, subcategoryModal, 'Create')">
+                    Add Subcategory
+                  </button>
                 </td>
                 <td>
                   <button class="btn btn-sm btn-link btn-clear px-2" (click)="onEdit(category, 'edith')">

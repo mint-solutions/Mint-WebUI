@@ -3,10 +3,10 @@ import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { SharedModule } from '@app/shared';
-import { CustomerRoutingModule } from './customer-routing.module';
-import { CustomerComponent } from './customer.component';
+import { SupplierRoutingModule } from './supplier-routing.module';
+import { SupplierComponent } from './supplier.component';
 import { CoreModule } from '@app/core/core.module';
-import { CustomerCreateComponent } from './create/customer-create.component';
+import { SupplierCreateComponent } from './create/supplier-create.component';
 import { DataTablesModule } from 'angular-datatables';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -16,12 +16,12 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     CommonModule,
     TranslateModule,
     SharedModule,
-    CustomerRoutingModule,
+    SupplierRoutingModule,
     ReactiveFormsModule,
     DataTablesModule,
     NgbModule
   ],
-  declarations: [CustomerComponent, CustomerCreateComponent],
+  declarations: [SupplierComponent, SupplierCreateComponent],
   providers: []
 })
-export class CustomerModule {}
+export class SupplierModule {}

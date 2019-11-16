@@ -23,7 +23,7 @@
               [ngClass]="{ active: currentActiveMenu == 'category' }"
             >
               <a class="" (click)="activeInactiveMenu('category')" [routerLink]="['/', 'category']"
-                ><i class="icon-credit-card"></i> <span>Category</span></a
+                ><i class="icon-docs"></i> <span>Category</span></a
               >
             </li>
 
@@ -33,7 +33,7 @@
               [ngClass]="{ active: currentActiveMenu == 'customer' }"
             >
               <a class="has-arrow" (click)="activeInactiveMenu('customer')"
-                ><i class="icon-grid"></i> <span>Customer</span></a
+                ><i class="icon-user"></i> <span>Customer</span></a
               >
               <ul *ngIf="currentActiveMenu == 'customer'">
                 <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
@@ -50,7 +50,11 @@
               [ngClass]="{ active: currentActiveMenu == 'product' }"
             >
               <a class="has-arrow" (click)="activeInactiveMenu('product')"
-                ><i class="icon-grid"></i> <span>Product</span></a
+                ><i
+                  class="icon-bag
+                "
+                ></i>
+                <span>Product</span></a
               >
               <ul *ngIf="currentActiveMenu == 'product'">
                 <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
@@ -68,7 +72,7 @@
               [ngClass]="{ active: currentActiveMenu == 'admin-users' }"
             >
               <a class="has-arrow" (click)="activeInactiveMenu('admin-users')"
-                ><i class="icon-users"></i> <span>Manage Users</span></a
+                ><i class="icon-users"></i> <span> User</span></a
               >
               <ul *ngIf="currentActiveMenu == 'admin-users'">
                 <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
@@ -82,17 +86,17 @@
             <li
               routerLinkActive="active"
               [routerLinkActiveOptions]="{ exact: true }"
-              [ngClass]="{ active: currentActiveMenu == 'admin-users' }"
+              [ngClass]="{ active: currentActiveMenu == 'supplier' }"
             >
-              <a class="has-arrow" (click)="activeInactiveMenu('admin-users')"
-                ><i class="icon-truck"></i> <span>Supplier</span></a
+              <a class="has-arrow" (click)="activeInactiveMenu('supplier')"
+                ><i class="icon-user-following"></i> <span>Supplier</span></a
               >
-              <ul *ngIf="currentActiveMenu == 'admin-users'">
+              <ul *ngIf="currentActiveMenu == 'supplier'">
                 <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-                  <a [routerLink]="['/supplier/add']">Add Supplier</a>
+                  <a [routerLink]="['/', 'supplier', 'create']">Add Supplier</a>
                 </li>
                 <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-                  <a [routerLink]="['/supplier/view']">View Suppliers</a>
+                  <a [routerLink]="['/', 'supplier', 'view']">View Suppliers</a>
                 </li>
               </ul>
             </li>
@@ -103,7 +107,7 @@
               [ngClass]="{ active: currentActiveMenu == 'reports' }"
             >
               <a class="" (click)="activeInactiveMenu('reports')" [routerLink]="['/reports']"
-                ><i class="icon-home"></i> <span>Reports</span></a
+                ><i class="icon-pie-chart"></i> <span>Reports</span></a
               >
             </li>
 

@@ -5,7 +5,7 @@
     <div class="col-lg-12">
       <div class="card">
         <div class="header d-flex justify-content-between align-items-center pb-0">
-          <h2>New Customer</h2>
+          <h2>New Supplier</h2>
           <div class="">
             <i class="icon datatable-icon-add"></i>
             <span style="text-decoration: underline; cursor: pointer">View all</span>
@@ -13,33 +13,33 @@
         </div>
 
         <div class="body">
-          <form class="row" [formGroup]="customerForm" (ngSubmit)="onSubmit()">
+          <form class="row" [formGroup]="supplierForm" (ngSubmit)="onSubmit()">
             <div class="form-group col-lg-6">
-              <label for="name" class="control-label">full Name</label>
+              <label for="name" class="control-label">Company Name</label>
               <input
                 type="text"
                 class="form-control mb-0"
                 id="name"
-                placeholder="Eg. Anthony Ofor"
-                formControlName="fullname"
+                placeholder="Eg. Anthony Ofor Limited"
+                formControlName="company"
                 [ngClass]="{
                   'parsley-error':
-                    !customerForm.controls.fullname.valid &&
-                    (customerForm.controls.fullname.touched || customerForm.controls.fullname.dirty),
+                    !supplierForm.controls.company.valid &&
+                    (supplierForm.controls.company.touched || supplierForm.controls.company.dirty),
                   'parsley-success':
-                    customerForm.controls.fullname.valid &&
-                    (customerForm.controls.fullname.touched || customerForm.controls.fullname.dirty)
+                    supplierForm.controls.company.valid &&
+                    (supplierForm.controls.company.touched || supplierForm.controls.company.dirty)
                 }"
               />
               <ul
                 class="parsley-errors-list filled"
                 *ngIf="
-                  !customerForm.controls.fullname.valid &&
-                  (customerForm.controls.fullname.touched || customerForm.controls.fullname.dirty)
+                  !supplierForm.controls.company.valid &&
+                  (supplierForm.controls.company.touched || supplierForm.controls.company.dirty)
                 "
               >
-                <li class="parsley-required" *ngIf="customerForm.controls.fullname.hasError('required')">
-                  This value is required.
+                <li class="parsley-required" *ngIf="supplierForm.controls.company.hasError('required')">
+                  Company name is required.
                 </li>
               </ul>
             </div>
@@ -53,22 +53,22 @@
                 formControlName="mobilenumber"
                 [ngClass]="{
                   'parsley-error':
-                    !customerForm.controls.mobilenumber.valid &&
-                    (customerForm.controls.mobilenumber.touched || customerForm.controls.mobilenumber.dirty),
+                    !supplierForm.controls.mobilenumber.valid &&
+                    (supplierForm.controls.mobilenumber.touched || supplierForm.controls.mobilenumber.dirty),
                   'parsley-success':
-                    customerForm.controls.mobilenumber.valid &&
-                    (customerForm.controls.mobilenumber.touched || customerForm.controls.mobilenumber.dirty)
+                    supplierForm.controls.mobilenumber.valid &&
+                    (supplierForm.controls.mobilenumber.touched || supplierForm.controls.mobilenumber.dirty)
                 }"
               />
               <ul
                 class="parsley-errors-list filled"
                 *ngIf="
-                  !customerForm.controls.mobilenumber.valid &&
-                  (customerForm.controls.mobilenumber.touched || customerForm.controls.mobilenumber.dirty)
+                  !supplierForm.controls.mobilenumber.valid &&
+                  (supplierForm.controls.mobilenumber.touched || supplierForm.controls.mobilenumber.dirty)
                 "
               >
-                <li class="parsley-required" *ngIf="customerForm.controls.mobilenumber.hasError('required')">
-                  This value is required.
+                <li class="parsley-required" *ngIf="supplierForm.controls.mobilenumber.hasError('required')">
+                  Mobile number is required.
                 </li>
               </ul>
             </div>
@@ -82,57 +82,54 @@
                 formControlName="email"
                 [ngClass]="{
                   'parsley-error':
-                    !customerForm.controls.email.valid &&
-                    (customerForm.controls.email.touched || customerForm.controls.email.dirty),
+                    !supplierForm.controls.email.valid &&
+                    (supplierForm.controls.email.touched || supplierForm.controls.email.dirty),
                   'parsley-success':
-                    customerForm.controls.email.valid &&
-                    (customerForm.controls.email.touched || customerForm.controls.email.dirty)
+                    supplierForm.controls.email.valid &&
+                    (supplierForm.controls.email.touched || supplierForm.controls.email.dirty)
                 }"
               />
               <ul
                 class="parsley-errors-list filled"
                 *ngIf="
-                  !customerForm.controls.email.valid &&
-                  (customerForm.controls.email.touched || customerForm.controls.email.dirty)
+                  !supplierForm.controls.email.valid &&
+                  (supplierForm.controls.email.touched || supplierForm.controls.email.dirty)
                 "
               >
-                <li class="parsley-required" *ngIf="customerForm.controls.email.hasError('required')">
-                  This email is required.
+                <li class="parsley-required" *ngIf="supplierForm.controls.email.hasError('required')">
+                  Email is required.
                 </li>
-                <li class="parsley-required" *ngIf="customerForm.controls.email.hasError('email')">
+                <li class="parsley-required" *ngIf="supplierForm.controls.email.hasError('email')">
                   Not a valid email address.
                 </li>
               </ul>
             </div>
             <div class="form-group col-lg-6">
-              <label for="name" class="control-label">birthmonth</label>
+              <label for="address" class="control-label">Address</label>
               <input
                 type="text"
                 class="form-control mb-0"
-                id="name"
-                placeholder="Eg. 1978/02/29"
-                ngbDatepicker
-                #birthmonth="ngbDatepicker"
-                (click)="birthmonth.toggle()"
-                (dateSelect)="onDateSelect($event)"
+                id="address"
+                placeholder="Eg. 49 Airport road, Ikeja, Lagos"
+                formControlName="address"
                 [ngClass]="{
                   'parsley-error':
-                    !customerForm.controls.birthmonth.valid &&
-                    (customerForm.controls.birthmonth.touched || customerForm.controls.birthmonth.dirty),
+                    !supplierForm.controls.address.valid &&
+                    (supplierForm.controls.address.touched || supplierForm.controls.address.dirty),
                   'parsley-success':
-                    customerForm.controls.birthmonth.valid &&
-                    (customerForm.controls.birthmonth.touched || customerForm.controls.birthmonth.dirty)
+                    supplierForm.controls.address.valid &&
+                    (supplierForm.controls.address.touched || supplierForm.controls.address.dirty)
                 }"
               />
               <ul
                 class="parsley-errors-list filled"
                 *ngIf="
-                  !customerForm.controls.birthmonth.valid &&
-                  (customerForm.controls.birthmonth.touched || customerForm.controls.birthmonth.dirty)
+                  !supplierForm.controls.address.valid &&
+                  (supplierForm.controls.address.touched || supplierForm.controls.address.dirty)
                 "
               >
-                <li class="parsley-required" *ngIf="customerForm.controls.birthmonth.hasError('required')">
-                  This email is required.
+                <li class="parsley-required" *ngIf="supplierForm.controls.address.hasError('required')">
+                  Address is required.
                 </li>
               </ul>
             </div>
@@ -141,7 +138,7 @@
               <button
                 type="submit"
                 class="btn btn-client btn-round"
-                [disabled]="!customerForm.valid"
+                [disabled]="!supplierForm.valid"
                 *ngIf="!formLoading"
               >
                 {{ this.mode }}

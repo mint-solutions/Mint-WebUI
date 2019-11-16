@@ -7,32 +7,33 @@ import { DataTableDirective } from 'angular-datatables';
 import { finalize } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { CustomerService } from '../customer.service';
+import { SupplierService } from '../supplier.service';
+import { Router } from '@angular/router';
 
 const log = new Logger('home');
 
 @Component({
-  selector: 'app-customer-create',
-  templateUrl: './customer-create.component.html',
-  styleUrls: ['./customer-create.component.scss']
+  selector: 'app-supplier-create',
+  templateUrl: './supplier-create.component.html',
+  styleUrls: ['./supplier-create.component.scss']
 })
-export class CustomerCreateComponent implements OnInit, AfterViewInit, OnDestroy {
-  modalTitle = 'Customer';
+export class SupplierCreateComponent implements OnInit, AfterViewInit, OnDestroy {
+  modalTitle = 'supplier';
   modalRef: NgbModalRef;
   doDeleteModalRef: NgbModalRef;
   selectedRow: any;
 
-  customerForm: FormGroup;
+  supplierForm: FormGroup;
   formLoading = false;
-  customers: any[] = [];
+  suppliers: any[] = [];
   mode: string = 'Create';
   loader: boolean;
 
   public sidebarVisible = true;
-  public title = 'Create New Customer';
+  public title = 'Create New supplier';
   public breadcrumbItem: any = [
     {
-      title: 'Create New Customer',
+      title: 'Create New supplier',
       cssClass: 'active'
     }
   ];
@@ -42,7 +43,8 @@ export class CustomerCreateComponent implements OnInit, AfterViewInit, OnDestroy
     private toastr: ToastrService,
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
-    private customerService: CustomerService
+    private supplierService: SupplierService,
+    private route: Router
   ) {}
 
   ngOnInit() {
@@ -53,17 +55,12 @@ export class CustomerCreateComponent implements OnInit, AfterViewInit, OnDestroy
 
   ngOnDestroy(): void {}
 
-  onDateSelect(event: any, type: string) {
-    const birthmonth = `${event.year}-${event.month}-${event.day}`;
-    this.customerForm.patchValue({ birthmonth });
-  }
-
   onSubmit() {
     this.formLoading = true;
 
-    if (this.customerForm.valid) {
+    if (this.supplierForm.valid) {
       const data = {
-        ...this.customerForm.value
+        ...this.supplierForm.value
       };
       switch (this.mode) {
         case 'Create':
@@ -79,12 +76,11 @@ export class CustomerCreateComponent implements OnInit, AfterViewInit, OnDestroy
   onCreate(data: any) {
     console.log(data);
 
-    this.customerService
-      .createCustomer(data)
+    this.supplierService
+      .createsupplier(data)
       .pipe(
         finalize(() => {
           this.formLoading = false;
-          this.resetForm();
         })
       )
       .subscribe(
@@ -93,7 +89,9 @@ export class CustomerCreateComponent implements OnInit, AfterViewInit, OnDestroy
           if (res.status !== true) {
             return componentError(res.message, this.toastr);
           }
-          this.toastr.success(res.message, 'Category');
+          this.toastr.success(res.message, 'Supplier');
+          this.resetForm();
+          this.route.navigate(['/', 'supplier', 'view']);
         },
         error => serverError(error, this.toastr)
       );
@@ -105,8 +103,8 @@ export class CustomerCreateComponent implements OnInit, AfterViewInit, OnDestroy
       id: this.selectedRow.id
     };
 
-    this.customerService
-      .updateCustomer(payload)
+    this.supplierService
+      .updatesupplier(payload)
       .pipe(
         finalize(() => {
           this.formLoading = false;
@@ -119,7 +117,7 @@ export class CustomerCreateComponent implements OnInit, AfterViewInit, OnDestroy
           if (res.status !== true) {
             return componentError(res.message, this.toastr);
           }
-          this.toastr.success(res.message, 'Category');
+          this.toastr.success(res.message, 'Supplier');
         },
         error => serverError(error, this.toastr)
       );
@@ -128,20 +126,16 @@ export class CustomerCreateComponent implements OnInit, AfterViewInit, OnDestroy
   createForm(formMode: any = null) {
     let isDisabled = formMode === 'view' ? true : false;
 
-    this.customerForm = this.formBuilder.group({
-      name: ['', Validators.required]
-      // remember: true
-    });
-    this.customerForm = this.formBuilder.group({
-      fullname: ['', Validators.required],
+    this.supplierForm = this.formBuilder.group({
+      company: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       mobilenumber: ['', Validators.required],
-      birthmonth: ['', Validators.required]
+      address: ['', Validators.required]
     });
   }
 
   resetForm() {
-    this.customerForm.reset();
+    this.supplierForm.reset();
     this.mode = 'Create';
     this.selectedRow = {};
   }

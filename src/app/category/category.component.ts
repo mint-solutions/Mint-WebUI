@@ -1,5 +1,4 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, AfterViewInit } from '@angular/core';
-import EChartOption = echarts.EChartOption;
 import { Logger } from '@app/core/logger.service';
 import { ToastrService } from 'ngx-toastr';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
