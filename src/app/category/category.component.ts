@@ -6,7 +6,7 @@ import { componentError, serverError, removeDeletedItem } from '@app/helper';
 import { CategoryService } from './category.service';
 import { DataTableDirective } from 'angular-datatables';
 import { finalize } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 const log = new Logger('home');
@@ -335,7 +335,12 @@ export class CategoryComponent implements OnInit, AfterViewInit, OnDestroy {
 
   resetForm() {
     this.categoryForm.reset();
+    this.subcategoryForm.reset();
     this.mode = 'Create';
     this.selectedRow = {};
+  }
+
+  d(data: any) {
+    this.resetForm();
   }
 }

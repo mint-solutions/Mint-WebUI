@@ -8,6 +8,7 @@ import { finalize } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { CustomerService } from '../customer.service';
+import { Router } from '@angular/router';
 
 const log = new Logger('home');
 
@@ -42,7 +43,8 @@ export class CustomerCreateComponent implements OnInit, AfterViewInit, OnDestroy
     private toastr: ToastrService,
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
-    private customerService: CustomerService
+    private customerService: CustomerService,
+    private route: Router
   ) {}
 
   ngOnInit() {
@@ -54,8 +56,8 @@ export class CustomerCreateComponent implements OnInit, AfterViewInit, OnDestroy
   ngOnDestroy(): void {}
 
   onDateSelect(event: any) {
-    const birthmonth = `${event.year}-${event.month}-${event.day}`;
-    this.customerForm.patchValue({ birthmonth });
+    const birthday = `${event.year}-${event.month}-${event.day}`;
+    this.customerForm.patchValue({ birthday });
   }
 
   onSubmit() {
@@ -63,7 +65,10 @@ export class CustomerCreateComponent implements OnInit, AfterViewInit, OnDestroy
 
     if (this.customerForm.valid) {
       const data = {
-        ...this.customerForm.value
+        ...this.customerForm.value,
+        age: +this.customerForm.value.age,
+        gender: +this.customerForm.value.gender,
+        birthday: +this.customerForm.value.birthday
       };
       switch (this.mode) {
         case 'Create':
@@ -94,6 +99,7 @@ export class CustomerCreateComponent implements OnInit, AfterViewInit, OnDestroy
             return componentError(res.message, this.toastr);
           }
           this.toastr.success(res.message, 'Category');
+          this.route.navigate(['/', 'customer', 'view']);
         },
         error => serverError(error, this.toastr)
       );
@@ -136,7 +142,10 @@ export class CustomerCreateComponent implements OnInit, AfterViewInit, OnDestroy
       fullname: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       mobilenumber: ['', Validators.required],
-      birthmonth: ['', Validators.required]
+      birthmonth: ['', Validators.required],
+      age: ['', Validators.required],
+      birthday: ['', Validators.required],
+      gender: ['', Validators.required]
     });
   }
 

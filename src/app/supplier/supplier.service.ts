@@ -7,7 +7,7 @@ import { SupplierModel } from './supplier.model';
 const routes = {
   createSupplier: '/partners/supplier/creat',
   getSupplier: '/partners/supplier',
-  getSuppliers: '/partners/supplier/mycustomer',
+  getSuppliers: '/partners/supplier/mysupplier',
   updateSupplier: '/partners/supplier',
   deleteSupplier: '/partners/supplier'
 };

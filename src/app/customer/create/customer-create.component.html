@@ -72,6 +72,7 @@
                 </li>
               </ul>
             </div>
+
             <div class="form-group col-lg-6">
               <label for="name" class="control-label">Email</label>
               <input
@@ -104,17 +105,77 @@
                 </li>
               </ul>
             </div>
+
             <div class="form-group col-lg-6">
-              <label for="name" class="control-label">birthmonth</label>
+              <label for="name" class="control-label">Gender</label>
+              <select
+                type="text"
+                class="form-control mb-0"
+                id="gender"
+                placeholder="Eg. infor@ecorvids.com"
+                formControlName="gender"
+                [ngClass]="{
+                  'parsley-error':
+                    !customerForm.controls.gender.valid &&
+                    (customerForm.controls.gender.touched || customerForm.controls.gender.dirty),
+                  'parsley-success':
+                    customerForm.controls.gender.valid &&
+                    (customerForm.controls.gender.touched || customerForm.controls.gender.dirty)
+                }"
+              >
+                <option value="1">Male</option>
+                <option value="2">Female</option>
+              </select>
+              <ul
+                class="parsley-errors-list filled"
+                *ngIf="
+                  !customerForm.controls.gender.valid &&
+                  (customerForm.controls.gender.touched || customerForm.controls.gender.dirty)
+                "
+              >
+                <li class="parsley-required" *ngIf="customerForm.controls.gender.hasError('required')">
+                  This birthmonth is required.
+                </li>
+              </ul>
+            </div>
+
+            <div class="form-group col-lg-6">
+              <label for="name" class="control-label">Age</label>
               <input
                 type="text"
                 class="form-control mb-0"
-                id="name"
-                placeholder="Eg. 1978/02/29"
-                ngbDatepicker
-                #birthmonth="ngbDatepicker"
-                (click)="birthmonth.toggle()"
-                (dateSelect)="onDateSelect($event)"
+                id="age"
+                placeholder="Eg. infor@ecorvids.com"
+                formControlName="age"
+                [ngClass]="{
+                  'parsley-error':
+                    !customerForm.controls.age.valid &&
+                    (customerForm.controls.age.touched || customerForm.controls.age.dirty),
+                  'parsley-success':
+                    customerForm.controls.age.valid &&
+                    (customerForm.controls.age.touched || customerForm.controls.age.dirty)
+                }"
+              />
+              <ul
+                class="parsley-errors-list filled"
+                *ngIf="
+                  !customerForm.controls.age.valid &&
+                  (customerForm.controls.age.touched || customerForm.controls.age.dirty)
+                "
+              >
+                <li class="parsley-required" *ngIf="customerForm.controls.age.hasError('required')">
+                  This Age is required.
+                </li>
+              </ul>
+            </div>
+            <div class="form-group col-lg-6">
+              <label for="name" class="control-label">Birth Month</label>
+              <input
+                type="text"
+                class="form-control mb-0"
+                id="birthmonth"
+                placeholder="Eg. May"
+                formControlName="birthmonth"
                 [ngClass]="{
                   'parsley-error':
                     !customerForm.controls.birthmonth.valid &&
@@ -132,10 +193,60 @@
                 "
               >
                 <li class="parsley-required" *ngIf="customerForm.controls.birthmonth.hasError('required')">
-                  This email is required.
+                  This birthmonth is required.
                 </li>
               </ul>
             </div>
+            <div class="form-group col-lg-6">
+              <label for="name" class="control-label">Birth Day</label>
+              <input
+                type="text"
+                class="form-control mb-0"
+                id="birthday"
+                placeholder="Eg. 23"
+                formControlName="birthday"
+                [ngClass]="{
+                  'parsley-error':
+                    !customerForm.controls.birthday.valid &&
+                    (customerForm.controls.birthday.touched || customerForm.controls.birthday.dirty),
+                  'parsley-success':
+                    customerForm.controls.birthday.valid &&
+                    (customerForm.controls.birthday.touched || customerForm.controls.birthday.dirty)
+                }"
+              />
+              <ul
+                class="parsley-errors-list filled"
+                *ngIf="
+                  !customerForm.controls.birthday.valid &&
+                  (customerForm.controls.birthday.touched || customerForm.controls.birthday.dirty)
+                "
+              >
+                <li class="parsley-required" *ngIf="customerForm.controls.birthday.hasError('required')">
+                  This birthmonth is required.
+                </li>
+              </ul>
+            </div>
+
+            <!-- <div class="form-group col-lg-6">
+              <label for="name" class="control-label">Birthday</label>
+              <input type="text" class="form-control mb-0" id="name" placeholder="Eg. 1978/02/29" ngbDatepicker
+                #birthday="ngbDatepicker" (click)="birthday.toggle()" (dateSelect)="onDateSelect($event)" [ngClass]="{
+                  'parsley-error':
+                    !customerForm.controls.birthday.valid &&
+                    (customerForm.controls.birthday.touched || customerForm.controls.birthday.dirty),
+                  'parsley-success':
+                    customerForm.controls.birthday.valid &&
+                    (customerForm.controls.birthday.touched || customerForm.controls.birthday.dirty)
+                }" />
+              <ul class="parsley-errors-list filled" *ngIf="
+                  !customerForm.controls.birthday.valid &&
+                  (customerForm.controls.birthday.touched || customerForm.controls.birthday.dirty)
+                ">
+                <li class="parsley-required" *ngIf="customerForm.controls.birthday.hasError('required')">
+                  This Birthday is required.
+                </li>
+              </ul>
+            </div> -->
 
             <div class="form-group col-lg-4 pt-4 mt-1">
               <button
