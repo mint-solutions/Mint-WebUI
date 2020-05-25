@@ -7,10 +7,13 @@ import { ProductRoutingModule } from './product-routing.module';
 import { ProductComponent } from './product.component';
 import { CoreModule } from '@app/core/core.module';
 import { ProductCreateComponent } from './create/product-create.component';
+import { ProductService } from './product.service';
+import { DataTablesModule } from 'angular-datatables';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
-  imports: [CommonModule, TranslateModule, SharedModule, ProductRoutingModule],
+  imports: [CommonModule, TranslateModule, SharedModule, ProductRoutingModule, DataTablesModule, ReactiveFormsModule],
   declarations: [ProductComponent, ProductCreateComponent],
-  providers: []
+  providers: [ProductService]
 })
 export class ProductModule {}

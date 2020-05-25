@@ -1,28 +1,28 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { BaseService } from '@app/core/base.service';
+import { ProductModel } from './product.model';
+import { Observable } from 'rxjs';
 
 const routes = {
-  quote: (c: RandomQuoteContext) => `/jokes/random?category=${c.category}`
+  getproducts: '/product/getmyproducts',
+  getpacking: '/product/getpacking',
+  createproducts: '/product/create'
 };
 
-export interface RandomQuoteContext {
-  // The quote's category: 'dev', 'explicit'...
-  category: string;
-}
-
 @Injectable()
-export class ProductService {
-  constructor(private httpClient: HttpClient) {}
+export class ProductService extends BaseService<ProductModel> {
+  constructor(public httpClient: HttpClient) {
+    super(httpClient);
+  }
 
-  getRandomQuote(context: RandomQuoteContext): Observable<string> {
-    return this.httpClient
-      .cache()
-      .get(routes.quote(context))
-      .pipe(
-        map((body: any) => body.value),
-        catchError(() => of('Error, could not load joke :-('))
-      );
+  getProducts(): Observable<any> {
+    return this.sendGet(`${routes.getproducts}`);
+  }
+  getPacking(): Observable<any> {
+    return this.sendGet(`${routes.getpacking}`);
+  }
+  createProduct(payload: ProductModel): Observable<any> {
+    return this.sendPost(routes.createproducts, payload);
   }
 }

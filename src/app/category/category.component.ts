@@ -31,9 +31,9 @@ export class CategoryComponent implements OnInit, AfterViewInit, OnDestroy {
 
   categoryForm: FormGroup;
   subcategoryForm: FormGroup;
-  formLoading = false;
   categories: any[] = [];
   mode: string = 'Create';
+  formLoading = false;
   loader: boolean;
 
   public sidebarVisible = true;
@@ -49,8 +49,8 @@ export class CategoryComponent implements OnInit, AfterViewInit, OnDestroy {
     private cdr: ChangeDetectorRef,
     private toastr: ToastrService,
     private formBuilder: FormBuilder,
-    private categoryService: CategoryService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private categoryService: CategoryService
   ) {}
 
   ngOnInit() {
@@ -171,7 +171,6 @@ export class CategoryComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onDelete(category: any, doDelete: any) {
-    this.selectedRow = category;
     this.selectedSubcategory = category;
     this.doDeleteModalRef = this.modalService.open(doDelete, {
       backdrop: true,

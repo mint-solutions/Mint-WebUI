@@ -12,7 +12,265 @@
           </div>
         </div>
 
-        <div class="body table-responsive"></div>
+        <div class="body">
+          <form class="row" [formGroup]="productForm" (ngSubmit)="onSubmit()">
+            <div class="form-group col-lg-6">
+              <label for="name" class="control-label">Name</label>
+              <input
+                type="text"
+                class="form-control mb-0"
+                id="name"
+                placeholder="Eg. Pepsi"
+                formControlName="name"
+                [ngClass]="{
+                  'parsley-error':
+                    !productForm.controls.name.valid &&
+                    (productForm.controls.name.touched || productForm.controls.name.dirty),
+                  'parsley-success':
+                    productForm.controls.name.valid &&
+                    (productForm.controls.name.touched || productForm.controls.name.dirty)
+                }"
+              />
+              <ul
+                class="parsley-errors-list filled"
+                *ngIf="
+                  !productForm.controls.name.valid &&
+                  (productForm.controls.name.touched || productForm.controls.name.dirty)
+                "
+              >
+                <li class="parsley-required" *ngIf="productForm.controls.name.hasError('required')">
+                  Name is required.
+                </li>
+              </ul>
+            </div>
+            <div class="form-group col-lg-6">
+              <label for="name" class="control-label">Item Code</label>
+              <input
+                type="text"
+                class="form-control mb-0"
+                id="name"
+                placeholder="Eg. 009039"
+                formControlName="itemcode"
+                [ngClass]="{
+                  'parsley-error':
+                    !productForm.controls.itemcode.valid &&
+                    (productForm.controls.itemcode.touched || productForm.controls.itemcode.dirty),
+                  'parsley-success':
+                    productForm.controls.itemcode.valid &&
+                    (productForm.controls.itemcode.touched || productForm.controls.itemcode.dirty)
+                }"
+              />
+              <ul
+                class="parsley-errors-list filled"
+                *ngIf="
+                  !productForm.controls.itemcode.valid &&
+                  (productForm.controls.itemcode.touched || productForm.controls.itemcode.dirty)
+                "
+              >
+                <li class="parsley-required" *ngIf="productForm.controls.itemcode.hasError('required')">
+                  Item Code is required.
+                </li>
+              </ul>
+            </div>
+            <div class="form-group col-lg-6">
+              <label for="name" class="control-label">Packs</label>
+              <input
+                type="text"
+                class="form-control mb-0"
+                id="name"
+                placeholder="Eg. 12"
+                formControlName="packs"
+                [ngClass]="{
+                  'parsley-error':
+                    !productForm.controls.packs.valid &&
+                    (productForm.controls.packs.touched || productForm.controls.packs.dirty),
+                  'parsley-success':
+                    productForm.controls.packs.valid &&
+                    (productForm.controls.packs.touched || productForm.controls.packs.dirty)
+                }"
+                appInputValidator="number"
+              />
+              <ul
+                class="parsley-errors-list filled"
+                *ngIf="
+                  !productForm.controls.packs.valid &&
+                  (productForm.controls.packs.touched || productForm.controls.packs.dirty)
+                "
+              >
+                <li class="parsley-required" *ngIf="productForm.controls.packs.hasError('required')">
+                  Packs is required.
+                </li>
+              </ul>
+            </div>
+            <div class="form-group col-lg-6">
+              <label for="address" class="control-label">Packing Type</label>
+              <select
+                name=""
+                id=""
+                class="form-control mb-0"
+                formControlName="packingtype"
+                [ngClass]="{
+                  'parsley-error':
+                    !productForm.controls.packingtype.valid &&
+                    (productForm.controls.packingtype.touched || productForm.controls.packingtype.dirty),
+                  'parsley-success':
+                    productForm.controls.packingtype.valid &&
+                    (productForm.controls.packingtype.touched || productForm.controls.packingtype.dirty)
+                }"
+              >
+                <option selected disabled value="">Select Pack type</option>
+                <option [value]="packingtype.vaule" *ngFor="let packingtype of packings">{{
+                  packingtype.vaule
+                }}</option>
+              </select>
+
+              <ul
+                class="parsley-errors-list filled"
+                *ngIf="
+                  !productForm.controls.packingtype.valid &&
+                  (productForm.controls.packingtype.touched || productForm.controls.packingtype.dirty)
+                "
+              >
+                <li class="parsley-required" *ngIf="productForm.controls.packingtype.hasError('required')">
+                  Packing Type is required.
+                </li>
+              </ul>
+            </div>
+            <div class="form-group col-lg-6">
+              <label for="address" class="control-label">Category</label>
+              <select
+                name=""
+                id=""
+                class="form-control mb-0"
+                formControlName="categoryId"
+                [ngClass]="{
+                  'parsley-error':
+                    !productForm.controls.categoryId.valid &&
+                    (productForm.controls.categoryId.touched || productForm.controls.categoryId.dirty),
+                  'parsley-success':
+                    productForm.controls.categoryId.valid &&
+                    (productForm.controls.categoryId.touched || productForm.controls.categoryId.dirty)
+                }"
+                (change)="setSubcategoryId($event)"
+              >
+                <option selected disabled value="">Select category</option>
+                <option [value]="category.id" *ngFor="let category of categories">{{ category.name }}</option>
+              </select>
+
+              <ul
+                class="parsley-errors-list filled"
+                *ngIf="
+                  !productForm.controls.categoryId.valid &&
+                  (productForm.controls.categoryId.touched || productForm.controls.categoryId.dirty)
+                "
+              >
+                <li class="parsley-required" *ngIf="productForm.controls.categoryId.hasError('required')">
+                  Category is required.
+                </li>
+              </ul>
+            </div>
+            <div class="form-group col-lg-6" *ngIf="subcategories.length > 0">
+              <label for="address" class="control-label">Subcategory</label>
+              <select
+                name=""
+                id=""
+                class="form-control mb-0"
+                formControlName="subcategoryId"
+                [ngClass]="{
+                  'parsley-error':
+                    !productForm.controls.subcategoryId.valid &&
+                    (productForm.controls.subcategoryId.touched || productForm.controls.subcategoryId.dirty),
+                  'parsley-success':
+                    productForm.controls.subcategoryId.valid &&
+                    (productForm.controls.subcategoryId.touched || productForm.controls.subcategoryId.dirty)
+                }"
+              >
+                <option selected disabled value="">Select subcategory</option>
+                <option [value]="subcategory.id" *ngFor="let subcategory of subcategories"
+                  >{{ subcategory.name }}
+                </option>
+              </select>
+
+              <ul
+                class="parsley-errors-list filled"
+                *ngIf="
+                  !productForm.controls.subcategoryId.valid &&
+                  (productForm.controls.subcategoryId.touched || productForm.controls.subcategoryId.dirty)
+                "
+              >
+                <li class="parsley-required" *ngIf="productForm.controls.subcategoryId.hasError('required')">
+                  subcategory is required.
+                </li>
+              </ul>
+            </div>
+
+            <div class="form-group col-lg-12">
+              <label for="description" class="control-label">Description</label>
+              <textarea
+                type="text"
+                class="form-control mb-0"
+                id="description"
+                placeholder="Eg. Pepsi is a soft drink"
+                formControlName="description"
+                [ngClass]="{
+                  'parsley-error':
+                    !productForm.controls.description.valid &&
+                    (productForm.controls.description.touched || productForm.controls.description.dirty),
+                  'parsley-success':
+                    productForm.controls.description.valid &&
+                    (productForm.controls.description.touched || productForm.controls.description.dirty)
+                }"
+              ></textarea>
+              <ul
+                class="parsley-errors-list filled"
+                *ngIf="
+                  !productForm.controls.description.valid &&
+                  (productForm.controls.description.touched || productForm.controls.description.dirty)
+                "
+              >
+                <li class="parsley-required" *ngIf="productForm.controls.description.hasError('required')">
+                  Description is required.
+                </li>
+              </ul>
+            </div>
+
+            <div class="form-group col-md-6 d-inline-block pt-4">
+              <div class="custom-control custom-checkbox">
+                <input
+                  type="checkbox"
+                  class="custom-control-input"
+                  id="expiredenabled"
+                  formControlName="expiredenabled"
+                />
+                <label class="custom-control-label pointer" for="expiredenabled">Is Expiredenabled</label>
+              </div>
+            </div>
+
+            <div class="form-group col-lg-4 pt-4 mt-1">
+              <button
+                type="submit"
+                class="btn btn-client btn-round"
+                [disabled]="!productForm.valid"
+                *ngIf="!formLoading"
+              >
+                {{ this.mode }}
+              </button>
+              <button
+                type="button"
+                class="btn btn-outline-client btn-round float-right"
+                (click)="resetForm()"
+                *ngIf="mode === 'Update'"
+              >
+                Cancel
+              </button>
+
+              <button class="btn btn-client btn-round" [disabled]="true" *ngIf="formLoading">
+                <i class="fa fa-spinner fa-spin" style="margin-right: 5px"></i>
+                please wait
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   </div>
