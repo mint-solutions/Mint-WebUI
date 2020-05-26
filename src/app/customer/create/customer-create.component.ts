@@ -9,6 +9,7 @@ import { Subject } from 'rxjs';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { CustomerService } from '../customer.service';
 import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 const log = new Logger('home');
 
@@ -44,11 +45,29 @@ export class CustomerCreateComponent implements OnInit, AfterViewInit, OnDestroy
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
     private customerService: CustomerService,
-    private route: Router
+    private route: Router,
+    private location: Location
   ) {}
 
   ngOnInit() {
     this.createForm();
+    let state = history.state;
+
+    console.log(state);
+    if (state.mode && state.mode === 'edit') {
+      this.selectedRow = state.data;
+      this.mode = 'Update';
+      this.customerForm.patchValue({
+        fullname: state.data.fullname,
+        email: state.data.email,
+        age: state.data.age,
+        birthday: state.data.birthday,
+        birthmonth: state.data.birthmonth,
+        gender: state.data.gender,
+        mobilenumber: state.data.mobilenumber
+      });
+      console.log('edit', state);
+    }
   }
 
   ngAfterViewInit(): void {}
@@ -89,16 +108,17 @@ export class CustomerCreateComponent implements OnInit, AfterViewInit, OnDestroy
       .pipe(
         finalize(() => {
           this.formLoading = false;
-          this.resetForm();
         })
       )
       .subscribe(
         (res: any) => {
           this.loader = false;
           if (res.status !== true) {
-            return componentError(res.message, this.toastr);
+            console.log('Failed', res.message);
+            //return componentError(res.message, this.toastr);
           }
           this.toastr.success(res.message, 'Category');
+          this.resetForm();
           this.route.navigate(['/', 'customer', 'view']);
         },
         error => serverError(error, this.toastr)
@@ -116,16 +136,17 @@ export class CustomerCreateComponent implements OnInit, AfterViewInit, OnDestroy
       .pipe(
         finalize(() => {
           this.formLoading = false;
-          this.resetForm();
         })
       )
       .subscribe(
         (res: any) => {
           this.loader = false;
-          if (res.status !== true) {
+          if (res.status === false) {
             return componentError(res.message, this.toastr);
           }
+
           this.toastr.success(res.message, 'Category');
+          this.resetForm();
         },
         error => serverError(error, this.toastr)
       );

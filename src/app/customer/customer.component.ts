@@ -9,6 +9,7 @@ import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 import { componentError, serverError } from '@app/helper';
+import { Router } from '@angular/router';
 
 const log = new Logger('home');
 
@@ -47,6 +48,7 @@ export class CustomerComponent implements OnInit, AfterViewInit, OnDestroy {
     private toastr: ToastrService,
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
+    private router: Router,
     private customerService: CustomerService
   ) {}
 
@@ -113,7 +115,8 @@ export class CustomerComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onEdit(data: any, mode: any) {
-    this.customerForm.patchValue({ name: data.name });
+    this.router.navigateByUrl('/customer/create', { state: { mode: 'edit', data: data } });
+    // this.customerForm.patchValue({ name: data.name });
   }
 
   onCreate(data: any) {
