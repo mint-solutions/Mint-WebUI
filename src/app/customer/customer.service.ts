@@ -8,7 +8,7 @@ const routes = {
   createCustomer: '/partners/customer/creat',
   getCustomer: '/partners/customer',
   getCustomers: '/partners/customer/mycustomer',
-  updateCustomer: '/partners/customer',
+  updateCustomer: '/partners',
   deleteCustomer: '/partners/customer'
 };
 
@@ -31,7 +31,7 @@ export class CustomerService extends BaseService<CustomerModel> {
   }
 
   updateCustomer(payload: CustomerModel): Observable<any> {
-    return this.sendPatch(`${routes.updateCustomer}/${payload.id}/updateCustomer`, payload);
+    return this.sendPatch(`${routes.updateCustomer}/${payload.id}/customer/update`, payload);
   }
 
   deleteCustomer(id: number): Observable<any> {

@@ -147,6 +147,7 @@ export class CustomerCreateComponent implements OnInit, AfterViewInit, OnDestroy
 
           this.toastr.success(res.message, 'Category');
           this.resetForm();
+          this.route.navigate(['/', 'customer', 'view']);
         },
         error => serverError(error, this.toastr)
       );
