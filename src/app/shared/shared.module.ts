@@ -10,7 +10,7 @@ import { RouterModule } from '@angular/router';
 import { DataTableComponent } from './data-table/data-table.component';
 import { SortableDirective } from '@app/shared/directives/sortable.directive';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { GroupByPipe } from './pipes/group-by.pipe';
 import { DoughnutChartComponent } from './charts/doughnut-chart/doughnut-chart.component';
 import { LineChartComponent } from './charts/line-chart/line-chart.component';
@@ -19,9 +19,11 @@ import { InputValidatorDirective } from './validators/input-validator.directive'
 import { BtnLoaderComponent } from './btn-loader/btn-loader.component';
 import { DeleteModalComponent } from './modals/delete-modal/delete-modal.component';
 import { AppModalComponent } from './modals/app-modal/app-modal/app-modal.component';
+import { InputComponent } from './input/input.component';
+import { InputErrorComponent } from './input-error/input-error.component';
 
 @NgModule({
-  imports: [CommonModule, NgxEchartsModule, RouterModule, NgbModule, FormsModule, ChartsModule],
+  imports: [CommonModule, NgxEchartsModule, RouterModule, NgbModule, FormsModule, ReactiveFormsModule, ChartsModule],
   declarations: [
     LoaderComponent,
     BtnLoaderComponent,
@@ -35,7 +37,9 @@ import { AppModalComponent } from './modals/app-modal/app-modal/app-modal.compon
     GroupByPipe,
     LineChartComponent,
     DoughnutChartComponent,
-    InputValidatorDirective
+    InputValidatorDirective,
+    InputComponent,
+    InputErrorComponent
   ],
   exports: [
     LoaderComponent,
@@ -48,7 +52,9 @@ import { AppModalComponent } from './modals/app-modal/app-modal/app-modal.compon
     GroupByPipe,
     LineChartComponent,
     DoughnutChartComponent,
-    InputValidatorDirective
+    InputValidatorDirective,
+    InputComponent,
+    InputErrorComponent
   ]
 })
 export class SharedModule {}

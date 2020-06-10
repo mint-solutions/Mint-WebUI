@@ -73,6 +73,11 @@ export class BaseService<M> {
       }
     }
     // return an observable with a user-facing error message
-    return throwError(JSON.stringify({ name: error.name, status: error.status, message: error.message }));
+    return throwError({
+      name: error.name,
+      status: error.status,
+      message: error.error.message,
+      error: error.error
+    });
   }
 }

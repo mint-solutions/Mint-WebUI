@@ -21,6 +21,7 @@ export class CategoryComponent implements OnInit, AfterViewInit, OnDestroy {
   dtElement: DataTableDirective;
 
   dtTrigger: Subject<any> = new Subject();
+  dtTrigger2: Subject<any> = new Subject();
   dtOptions: DataTables.Settings = {};
 
   modalTitle = 'Subcategory';
@@ -49,22 +50,27 @@ export class CategoryComponent implements OnInit, AfterViewInit, OnDestroy {
     private cdr: ChangeDetectorRef,
     private toastr: ToastrService,
     private formBuilder: FormBuilder,
+    private formBuilder2: FormBuilder,
     private modalService: NgbModal,
     private categoryService: CategoryService
   ) {}
 
   ngOnInit() {
+    this.dtTrigger.next();
+
     this.createForm();
+    this.createSubForm();
     this.getCategories();
   }
 
   ngAfterViewInit(): void {
-    this.dtTrigger.next();
+    this.dtTrigger2.next();
   }
 
   ngOnDestroy(): void {
     // Do not forget to unsubscribe the event
     this.dtTrigger.unsubscribe();
+    this.dtTrigger2.unsubscribe();
   }
 
   getCategories() {
@@ -73,6 +79,8 @@ export class CategoryComponent implements OnInit, AfterViewInit, OnDestroy {
       .getCategories()
       .pipe(
         finalize(() => {
+          this.dtTrigger.unsubscribe();
+          this.dtTrigger2.unsubscribe();
           this.loader = false;
         })
       )
@@ -81,12 +89,8 @@ export class CategoryComponent implements OnInit, AfterViewInit, OnDestroy {
           console.log('getCountries', res);
           if (res.status === true) {
             this.categories = res.result;
-            this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-              // Destroy the table first
-              dtInstance.destroy();
-              // Call the dtTrigger to rerender again
-              this.dtTrigger.next();
-            });
+            this.dtTrigger.next();
+            this.dtTrigger2.next();
           } else {
             componentError(res.message, this.toastr);
           }
@@ -171,7 +175,7 @@ export class CategoryComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onDelete(category: any, doDelete: any) {
-    this.selectedSubcategory = category;
+    this.selectedRow = category;
     this.doDeleteModalRef = this.modalService.open(doDelete, {
       backdrop: true,
       backdropClass: 'light-blue-backdrop',
@@ -205,6 +209,9 @@ export class CategoryComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onViewRow(event: any, category: any, mode: null) {
+    this.categoryForm.reset();
+    this.createSubForm();
+
     const selectedRow = event;
     this.selectedRow = selectedRow;
     this.mode = mode;
@@ -218,10 +225,12 @@ export class CategoryComponent implements OnInit, AfterViewInit, OnDestroy {
   onSubmitSubcategory() {
     this.formLoading = true;
 
+    console.log(this.subcategoryForm.value);
+
     if (this.subcategoryForm.valid) {
       const data = {
         categoryId: this.selectedRow.id,
-        ...this.subcategoryForm.value
+        name: this.subcategoryForm.value.newname
       };
       switch (this.mode) {
         case 'Create':
@@ -237,7 +246,7 @@ export class CategoryComponent implements OnInit, AfterViewInit, OnDestroy {
   onEditSubcategory(data: any, mode: any) {
     this.mode = 'Update';
     this.selectedSubcategory = data;
-    this.subcategoryForm.patchValue({ name: this.selectedSubcategory.name });
+    this.subcategoryForm.patchValue({ newname: this.selectedSubcategory.name });
   }
 
   onCreateSubcategory(data: any) {
@@ -293,11 +302,22 @@ export class CategoryComponent implements OnInit, AfterViewInit, OnDestroy {
       );
   }
 
+  onDeleteSubcategory(category: any, doDelete: any) {
+    this.selectedSubcategory = category;
+    console.log(this.selectedSubcategory);
+    this.doDeleteModalRef = this.modalService.open(doDelete, {
+      backdrop: true,
+      backdropClass: 'light-blue-backdrop',
+      size: 'sm',
+      windowClass: 'confirmModal'
+    });
+  }
+
   onDoDeleteSubcategory(event: any) {
     this.formLoading = true;
 
     this.categoryService
-      .deleteSubcategory(this.selectedRow.id)
+      .deleteSubcategory(this.selectedSubcategory.id)
       .pipe(
         finalize(() => {
           this.formLoading = false;
@@ -319,15 +339,16 @@ export class CategoryComponent implements OnInit, AfterViewInit, OnDestroy {
       );
   }
 
-  createForm(formMode: any = null) {
-    let isDisabled = formMode === 'view' ? true : false;
-
+  createForm() {
     this.categoryForm = this.formBuilder.group({
       name: ['', Validators.required]
       // remember: true
     });
-    this.subcategoryForm = this.formBuilder.group({
-      name: ['', Validators.required]
+  }
+
+  createSubForm() {
+    this.subcategoryForm = this.formBuilder2.group({
+      newname: ['', Validators.required]
       // remember: true
     });
   }

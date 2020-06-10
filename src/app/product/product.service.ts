@@ -7,7 +7,8 @@ import { Observable } from 'rxjs';
 const routes = {
   getproducts: '/product/getmyproducts',
   getpacking: '/product/getpacking',
-  createproducts: '/product/create'
+  createproducts: '/product/create',
+  updateproduct: '/product'
 };
 
 @Injectable()
@@ -24,5 +25,8 @@ export class ProductService extends BaseService<ProductModel> {
   }
   createProduct(payload: ProductModel): Observable<any> {
     return this.sendPost(routes.createproducts, payload);
+  }
+  updateproduct(payload: ProductModel): Observable<any> {
+    return this.sendPatch(`${routes.updateproduct}/${payload.id}/updateproduct`, payload);
   }
 }

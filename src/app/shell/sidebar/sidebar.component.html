@@ -17,6 +17,9 @@
                 ><i class="icon-home"></i> <span>Dashboard</span></a
               >
             </li>
+
+            <!-- Inventory -->
+            <hr class="my-2" />
             <li
               routerLinkActive="active"
               [routerLinkActiveOptions]="{ exact: true }"
@@ -25,24 +28,6 @@
               <a class="" (click)="activeInactiveMenu('category')" [routerLink]="['/', 'category']"
                 ><i class="icon-docs"></i> <span>Category</span></a
               >
-            </li>
-
-            <li
-              routerLinkActive="active"
-              [routerLinkActiveOptions]="{ exact: true }"
-              [ngClass]="{ active: currentActiveMenu == 'customer' }"
-            >
-              <a class="has-arrow" (click)="activeInactiveMenu('customer')"
-                ><i class="icon-user"></i> <span>Customer</span></a
-              >
-              <ul *ngIf="currentActiveMenu == 'customer'">
-                <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-                  <a [routerLink]="['/customer/create']">Add Customer</a>
-                </li>
-                <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-                  <a [routerLink]="['/customer/view']">View Customers</a>
-                </li>
-              </ul>
             </li>
             <li
               routerLinkActive="active"
@@ -69,23 +54,6 @@
             <li
               routerLinkActive="active"
               [routerLinkActiveOptions]="{ exact: true }"
-              [ngClass]="{ active: currentActiveMenu == 'admin-users' }"
-            >
-              <a class="has-arrow" (click)="activeInactiveMenu('admin-users')"
-                ><i class="icon-users"></i> <span> User</span></a
-              >
-              <ul *ngIf="currentActiveMenu == 'admin-users'">
-                <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-                  <a [routerLink]="['/admin-users/add']">Add User</a>
-                </li>
-                <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-                  <a [routerLink]="['/admin-users/view']">View Users</a>
-                </li>
-              </ul>
-            </li>
-            <li
-              routerLinkActive="active"
-              [routerLinkActiveOptions]="{ exact: true }"
               [ngClass]="{ active: currentActiveMenu == 'supplier' }"
             >
               <a class="has-arrow" (click)="activeInactiveMenu('supplier')"
@@ -101,6 +69,8 @@
               </ul>
             </li>
 
+            <hr class="my-2" />
+
             <li
               routerLinkActive="active"
               [routerLinkActiveOptions]="{ exact: true }"
@@ -111,7 +81,26 @@
               >
             </li>
 
+            <!-- Settings -->
             <hr class="w-100" />
+            <li
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              [ngClass]="{ active: currentActiveMenu == 'customer' }"
+            >
+              <a class="has-arrow" (click)="activeInactiveMenu('customer')"
+                ><i class="icon-user"></i> <span>Customer</span></a
+              >
+              <ul *ngIf="currentActiveMenu == 'customer'">
+                <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                  <a [routerLink]="['/customer/create']">Add Customer</a>
+                </li>
+                <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                  <a [routerLink]="['/customer/view']">View Customers</a>
+                </li>
+              </ul>
+            </li>
+
             <li
               routerLinkActive="active"
               [routerLinkActiveOptions]="{ exact: true }"
@@ -126,6 +115,24 @@
                 </li>
                 <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
                   <a [routerLink]="['/setting/view']">tags</a>
+                </li>
+              </ul>
+            </li>
+
+            <li
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              [ngClass]="{ active: currentActiveMenu == 'admin-users' }"
+            >
+              <a class="has-arrow" (click)="activeInactiveMenu('admin-users')"
+                ><i class="icon-users"></i> <span> User</span></a
+              >
+              <ul *ngIf="currentActiveMenu == 'admin-users'">
+                <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                  <a [routerLink]="['/admin-users/add']">Add User</a>
+                </li>
+                <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                  <a [routerLink]="['/admin-users/view']">View Users</a>
                 </li>
               </ul>
             </li>

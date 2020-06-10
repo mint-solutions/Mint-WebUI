@@ -13,9 +13,7 @@ export class InputValidatorDirective implements OnInit {
     this.input = el.nativeElement;
   }
 
-  ngOnInit() {
-    console.log('appInputValidator', this.selectInput, this.input);
-  }
+  ngOnInit() {}
 
   @HostListener('keydown', ['$event', '$event.keyCode'])
   onKeyDown($event: KeyboardEvent, keyCode: any) {

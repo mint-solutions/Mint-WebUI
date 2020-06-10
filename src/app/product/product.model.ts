@@ -9,3 +9,23 @@ export interface ProductModel {
   expiredenabled: boolean;
   id?: string;
 }
+
+export interface ProductModel {
+  name: string;
+  itemcode: string;
+  description: string;
+  categoryId: string;
+  subcategoryId: string;
+  productconfiguration: productconfigurationModel;
+}
+export interface productconfigurationModel {
+  imagelink: string;
+  packs: number;
+  expiredenabled: boolean;
+  pack: number;
+  leadtime: number;
+  canexpire: boolean;
+  canbesold: boolean;
+  canbepurchased: boolean;
+  anypromo: boolean;
+}

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, AfterViewInit } from '@angular/core';
 import EChartOption = echarts.EChartOption;
 import { Logger } from '@app/core/logger.service';
 import { ToastrService } from 'ngx-toastr';
@@ -16,7 +16,8 @@ const log = new Logger('home');
   templateUrl: './product-create.component.html',
   styleUrls: ['./product-create.component.scss']
 })
-export class ProductCreateComponent implements OnInit, OnDestroy {
+export class ProductCreateComponent implements OnInit, AfterViewInit, OnDestroy {
+  cardTitle = 'New Product';
   productForm: FormGroup;
   formLoading: boolean;
   loader: boolean;
@@ -56,21 +57,25 @@ export class ProductCreateComponent implements OnInit, OnDestroy {
     this.getPackings();
     this.getCategories();
     this.createForm();
-
-    if (this.selectedRow !== null && this.selectedRow.mode === 'edit') {
-      this.productForm.setValue({
+    if (this.selectedRow && this.selectedRow.mode === 'edit') {
+      this.mode = 'Update';
+      this.cardTitle = 'Edit Category';
+      this.productForm.patchValue({
         name: this.selectedRow.name,
         itemcode: this.selectedRow.itemcode,
         description: this.selectedRow.description,
         packingtype: this.selectedRow.packingtype,
         packs: this.selectedRow.packs,
-        categoryId: this.selectedRow.categoryId,
-        subcategoryId: this.selectedRow.subcategoryId,
-        expiredenabled: false
+        categoryId: this.selectedRow.category.id,
+        subcategoryId: this.selectedRow.subCategory ? this.selectedRow.subCategory.id : null,
+        expiredenabled: this.selectedRow.expiredenabled
       });
-      console.log('this.selectedRow', this.selectedRow);
-      console.log('this.productForm.value', this.productForm.value);
     }
+  }
+
+  ngAfterViewInit(): void {
+    //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
+    //Add 'implements AfterViewInit' to the class.
   }
 
   ngOnDestroy() {}
@@ -87,8 +92,8 @@ export class ProductCreateComponent implements OnInit, OnDestroy {
       .subscribe(
         res => {
           console.log('getPackings', res);
-          this.packings = res;
           if (res.status === true) {
+            this.packings = res.result;
           } else {
             componentError(res.message, this.toastr);
           }
@@ -121,11 +126,26 @@ export class ProductCreateComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     this.formLoading = true;
+    console.log('this.mode', this.mode);
 
     if (this.productForm.valid) {
       const data = {
-        ...this.productForm.value,
-        packs: +this.productForm.value.packs
+        name: this.productForm.value.name,
+        itemcode: this.productForm.value.itemcode,
+        description: this.productForm.value.description,
+        categoryId: this.productForm.value.categoryId,
+        subcategoryId: this.productForm.value.subcategoryId,
+        productconfiguration: {
+          packs: +this.productForm.value.packs,
+          expiredenabled: this.productForm.value.canbepurchased,
+          pack: this.productForm.value.pack,
+          leadtime: this.productForm.value.leadtime,
+          canexpire: this.productForm.value.canexpire,
+          canbesold: this.productForm.value.canbesold,
+          canbepurchased: this.productForm.value.canbepurchased,
+          anypromo: this.productForm.value.anypromo,
+          imagelink: this.productForm.value.imagelink
+        }
       };
       switch (this.mode) {
         case 'Create':
@@ -169,7 +189,7 @@ export class ProductCreateComponent implements OnInit, OnDestroy {
     };
 
     this.productService
-      .createProduct(payload)
+      .updateproduct(payload)
       .pipe(
         finalize(() => {
           this.formLoading = false;
@@ -203,12 +223,18 @@ export class ProductCreateComponent implements OnInit, OnDestroy {
     this.productForm = this.formBuilder.group({
       name: ['', Validators.required],
       itemcode: ['', [Validators.required]],
-      description: [''],
-      packingtype: ['', Validators.required],
-      packs: ['', Validators.required],
-      expiredenabled: [false],
       categoryId: ['', Validators.required],
-      subcategoryId: ['']
+      description: [''],
+      imagelink: [''],
+      subcategoryId: [''],
+      leadtime: [''],
+      packs: [''],
+      pack: [''],
+      expiredenabled: [false],
+      canexpire: [false],
+      canbesold: [false],
+      canbepurchased: [false],
+      anypromo: [false]
     });
   }
 

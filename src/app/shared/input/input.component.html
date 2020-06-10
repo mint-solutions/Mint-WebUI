@@ -1,0 +1,18 @@
+<div class="form-group">
+  <label *ngIf="label" class="text-sm" [ngClass]="isRequired()">{{ label }}</label>
+  <input
+    type="text"
+    class="form-control form-control-sm"
+    [placeholder]="placeholder"
+    [formControl]="control"
+    [appInputValidator]="validator"
+    [name]="label"
+    [id]="id"
+    (blur)="onBlur($event)"
+    [ngClass]="{
+      'parsley-error': !control.valid && (control.touched || control.dirty),
+      'parsley-success': control.valid && (control.touched || control.dirty)
+    }"
+  />
+  <app-input-error [name]="name" [control]="control"> </app-input-error>
+</div>

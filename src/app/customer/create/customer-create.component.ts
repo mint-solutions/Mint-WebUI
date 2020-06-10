@@ -23,6 +23,20 @@ export class CustomerCreateComponent implements OnInit, AfterViewInit, OnDestroy
   modalRef: NgbModalRef;
   doDeleteModalRef: NgbModalRef;
   selectedRow: any;
+  months = [
+    'January',
+    'Februrary',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December'
+  ];
 
   customerForm: FormGroup;
   formLoading = false;
@@ -147,7 +161,7 @@ export class CustomerCreateComponent implements OnInit, AfterViewInit, OnDestroy
 
           this.toastr.success(res.message, 'Category');
           this.resetForm();
-          this.route.navigate(['/', 'customer', 'view']);
+          //this.route.navigate([ '/', 'customer', 'view' ]);
         },
         error => serverError(error, this.toastr)
       );
@@ -162,11 +176,11 @@ export class CustomerCreateComponent implements OnInit, AfterViewInit, OnDestroy
     });
     this.customerForm = this.formBuilder.group({
       fullname: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
+      email: ['', [Validators.email]],
       mobilenumber: ['', Validators.required],
-      birthmonth: ['', Validators.required],
-      age: ['', Validators.required],
-      birthday: ['', Validators.required],
+      birthmonth: [''],
+      age: [''],
+      birthday: [''],
       gender: ['', Validators.required]
     });
   }
@@ -175,5 +189,6 @@ export class CustomerCreateComponent implements OnInit, AfterViewInit, OnDestroy
     this.customerForm.reset();
     this.mode = 'Create';
     this.selectedRow = {};
+    this.route.navigate(['/', 'customer', 'view']);
   }
 }

@@ -1,0 +1,4 @@
+<small *ngIf="showErrors()" class="text-danger">
+  <span *ngIf="control.errors.required">{{ name }} is required</span>
+  <span *ngIf="control.errors.email">Not a valid email address</span>
+</small>
