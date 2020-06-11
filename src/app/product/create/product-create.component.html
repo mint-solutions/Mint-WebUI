@@ -122,34 +122,29 @@
           </div>
 
           <div class="body row">
-            <div class="col-lg-2">
+            <div class="col-lg-3">
               <app-input
                 [required]="true"
-                label="Packs"
-                id="packs"
+                label="Packink Quantity"
+                id="packingQty"
                 placeholder="Eg. 12"
-                [control]="productForm.get('packs')"
-              ></app-input>
-            </div>
-            <div class="col-lg-2">
-              <app-input
-                [required]="true"
-                label="Pack"
-                id="pack"
-                placeholder="Eg. 2"
-                [control]="productForm.get('pack')"
+                [control]="productForm.get('packingQty')"
+                type="number"
+                validator="number"
               ></app-input>
             </div>
 
-            <div class="col-lg-2">
+            <div class="col-lg-3">
               <app-input
                 label="Lead Time"
                 id="leadtime"
                 placeholder="Eg. 3hr"
                 [control]="productForm.get('leadtime')"
+                type="number"
+                validator="number"
               ></app-input>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-5">
               <app-input
                 label="Image link"
                 id="imagelink"
@@ -158,17 +153,6 @@
               ></app-input>
             </div>
 
-            <div class="form-group col-md-2 d-inline-block pt-4">
-              <div class="custom-control custom-checkbox">
-                <input
-                  type="checkbox"
-                  class="custom-control-input"
-                  id="expiredenabled"
-                  formControlName="expiredenabled"
-                />
-                <label class="custom-control-label pointer" for="expiredenabled">Is Expiredenabled</label>
-              </div>
-            </div>
             <div class="form-group col-md-2 d-inline-block pt-4">
               <div class="custom-control custom-checkbox">
                 <input type="checkbox" class="custom-control-input" id="canexpire" formControlName="canexpire" />
@@ -202,7 +186,7 @@
               </div>
             </div>
 
-            <div class="form-group col-lg-12 pt-4 mt-1">
+            <div class="form-group col-lg-3 mt-2">
               <button
                 type="submit"
                 class="btn btn-client btn-round float-right"

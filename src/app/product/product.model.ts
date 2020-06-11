@@ -20,9 +20,8 @@ export interface ProductModel {
 }
 export interface productconfigurationModel {
   imagelink: string;
-  packs: number;
+  packingQty: number;
   expiredenabled: boolean;
-  pack: number;
   leadtime: number;
   canexpire: boolean;
   canbesold: boolean;
