@@ -20,18 +20,25 @@
             <thead>
               <tr>
                 <th>#</th>
-                <th>NAME</th>
+                <th>Name</th>
                 <th>Item Code</th>
-                <th>Packing Type</th>
+                <th>Product Config</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let product of products; let i = index">
-                <th scope="row">{{ i + 1 }}</th>
+                <th>{{ i + 1 }}</th>
                 <td>{{ product.name }}</td>
                 <td>{{ product.itemcode }}</td>
-                <td>{{ product.packingtype }}</td>
+                <td>
+                  <button
+                    class="btn btn-sm btn-outline-client"
+                    (click)="onViewRow(product, productConfigModal, 'View')"
+                  >
+                    Config
+                  </button>
+                </td>
                 <td>
                   <button class="btn btn-sm btn-link btn-clear px-2" (click)="onEdit(product, 'edit')">
                     <i class="icon-software-pencil text-blue mr-1"></i>
@@ -48,3 +55,104 @@
     </div>
   </div>
 </div>
+
+<ng-template #productConfigModal let-c="close" let-d="dismiss">
+  <div class="container">
+    <div class="row clearfix">
+      <div class="col-lg-12">
+        <form class="" [formGroup]="productForm" (ngSubmit)="onSubmit()">
+          <div class="card">
+            <div class="header d-flex justify-content-between align-items-center pb-0">
+              <h2>Product Configurations</h2>
+            </div>
+
+            <div class="body row">
+              <div class="col-lg-3">
+                <app-input
+                  [required]="true"
+                  label="Packing Quantity"
+                  id="packingQty"
+                  placeholder="Eg. 12"
+                  [control]="productForm.get('packingQty')"
+                  type="number"
+                  validator="number"
+                ></app-input>
+              </div>
+
+              <div class="col-lg-3">
+                <app-input
+                  label="Lead Time"
+                  id="leadtime"
+                  placeholder="Eg. 3hr"
+                  [control]="productForm.get('leadtime')"
+                  type="number"
+                  validator="number"
+                ></app-input>
+              </div>
+              <div class="col-lg-6">
+                <app-input
+                  label="Image link"
+                  id="imagelink"
+                  placeholder="Eg. https://placeholder.com"
+                  [control]="productForm.get('imagelink')"
+                ></app-input>
+              </div>
+
+              <div class="form-group col-md-2 d-inline-block pt-4">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="canexpire" formControlName="canexpire" />
+                  <label class="custom-control-label pointer" for="canexpire">Can expire</label>
+                </div>
+              </div>
+
+              <div class="form-group col-md-3 d-inline-block pt-4">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="canbesold" formControlName="canbesold" />
+                  <label class="custom-control-label pointer" for="canbesold">Is Can be sold</label>
+                </div>
+              </div>
+
+              <div class="form-group col-md-3 d-inline-block pt-4">
+                <div class="custom-control custom-checkbox">
+                  <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    id="canbepurchased"
+                    formControlName="canbepurchased"
+                  />
+                  <label class="custom-control-label pointer" for="canbepurchased">Can be purchased</label>
+                </div>
+              </div>
+
+              <div class="form-group col-md-3 d-inline-block pt-4">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="anypromo" formControlName="anypromo" />
+                  <label class="custom-control-label pointer" for="anypromo">Any promo</label>
+                </div>
+              </div>
+
+              <div class="form-group col-lg-12 mt-2">
+                <button
+                  type="submit"
+                  class="btn btn-client btn-round float-right"
+                  [disabled]="!productForm.valid"
+                  *ngIf="!formLoading"
+                >
+                  Update
+                </button>
+                <button class="btn btn-client btn-round float-right" [disabled]="true" *ngIf="formLoading">
+                  <i class="fa fa-spinner fa-spin" style="margin-right: 5px"></i>
+                  please wait
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <button type="button" class="search-close" aria-label="Close search form" (click)="d('Cross click')">
+    <i class="fi flaticon-close"></i>
+  </button>
+</ng-template>

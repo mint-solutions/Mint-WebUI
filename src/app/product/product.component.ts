@@ -4,7 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProductService } from './product.service';
 import { finalize } from 'rxjs/operators';
 import { componentError, serverError } from '@app/helper';
@@ -29,7 +29,7 @@ export class ProductComponent implements OnInit, AfterViewInit, OnDestroy {
   selectedRow: any;
 
   products: any[] = [];
-
+  productForm: FormGroup;
   formLoading: boolean;
   loader: boolean;
 
@@ -45,6 +45,7 @@ export class ProductComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private cdr: ChangeDetectorRef,
     private toastr: ToastrService,
+    private formBuilder: FormBuilder,
     private modalService: NgbModal,
     private productService: ProductService,
     private router: Router
@@ -91,8 +92,50 @@ export class ProductComponent implements OnInit, AfterViewInit, OnDestroy {
       );
   }
 
-  onViewRow(data: any, mode?: string) {
-    console.log(data, mode);
+  onViewRow(event: any, modalView: any) {
+    //this.productForm.reset();
+    this.createForm();
+
+    this.selectedRow = event;
+
+    this.productForm.patchValue({
+      imagelink: this.selectedRow.productconfiguration.imagelink,
+      leadtime: this.selectedRow.productconfiguration.leadtime,
+      packingQty: this.selectedRow.productconfiguration.packingQty,
+      canexpire: this.selectedRow.productconfiguration.canexpire,
+      canbesold: this.selectedRow.productconfiguration.canbesold,
+      canbepurchased: this.selectedRow.productconfiguration.canbepurchased,
+      anypromo: this.selectedRow.productconfiguration.anypromo
+    });
+
+    this.modalRef = this.modalService.open(modalView, {
+      backdrop: true,
+      backdropClass: 'light-blue-backdrop',
+      size: 'lg'
+    });
+  }
+
+  onSubmit() {
+    const data = this.productForm.value;
+
+    this.productService
+      .updateproduct(data)
+      .pipe(
+        finalize(() => {
+          this.formLoading = false;
+          this.resetForm();
+        })
+      )
+      .subscribe(
+        (res: any) => {
+          this.formLoading = false;
+          if (res.status !== true) {
+            return componentError(res.message, this.toastr);
+          }
+          this.toastr.success(res.message, 'Supplier');
+        },
+        error => serverError(error, this.toastr)
+      );
   }
 
   onEdit(data: any, mode: any) {
@@ -115,5 +158,24 @@ export class ProductComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onDoDelete(event: any) {
     this.formLoading = true;
+  }
+
+  createForm(formMode: any = null) {
+    let isDisabled = formMode === 'view' ? true : false;
+
+    this.productForm = this.formBuilder.group({
+      imagelink: [''],
+      leadtime: [0],
+      packingQty: [''],
+      canexpire: [false],
+      canbesold: [false],
+      canbepurchased: [false],
+      anypromo: [false]
+    });
+  }
+
+  resetForm() {
+    this.productForm.reset();
+    this.selectedRow = {};
   }
 }
