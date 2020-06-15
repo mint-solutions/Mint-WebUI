@@ -101,7 +101,7 @@ export class ProductComponent implements OnInit, AfterViewInit, OnDestroy {
     this.productForm.patchValue({
       imagelink: this.selectedRow.productconfiguration.imagelink,
       leadtime: this.selectedRow.productconfiguration.leadtime,
-      packingQty: this.selectedRow.productconfiguration.packingQty,
+      pack: this.selectedRow.productconfiguration.pack,
       canexpire: this.selectedRow.productconfiguration.canexpire,
       canbesold: this.selectedRow.productconfiguration.canbesold,
       canbepurchased: this.selectedRow.productconfiguration.canbepurchased,
@@ -115,15 +115,26 @@ export class ProductComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  onSubmit() {
-    const data = this.productForm.value;
+  onSubmit(status: boolean = true) {
+    this.formLoading = true;
+    const data = {
+      ...this.productForm.value,
+      leadtime: +this.productForm.value.leadtime,
+      pack: +this.productForm.value.pack
+    };
+
+    const config = {
+      status,
+      id: this.selectedRow.productconfiguration.id
+    };
 
     this.productService
-      .updateproduct(data)
+      .updateproductConfig(config, data)
       .pipe(
         finalize(() => {
           this.formLoading = false;
           this.resetForm();
+          this.modalRef.close();
         })
       )
       .subscribe(
@@ -132,7 +143,8 @@ export class ProductComponent implements OnInit, AfterViewInit, OnDestroy {
           if (res.status !== true) {
             return componentError(res.message, this.toastr);
           }
-          this.toastr.success(res.message, 'Supplier');
+          this.getProducts();
+          this.toastr.success(res.message, 'Product Configuration');
         },
         error => serverError(error, this.toastr)
       );
@@ -166,8 +178,9 @@ export class ProductComponent implements OnInit, AfterViewInit, OnDestroy {
     this.productForm = this.formBuilder.group({
       imagelink: [''],
       leadtime: [0],
-      packingQty: [''],
+      pack: [''],
       canexpire: [false],
+      //expiredenabled: [ false ],
       canbesold: [false],
       canbepurchased: [false],
       anypromo: [false]

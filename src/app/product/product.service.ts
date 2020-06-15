@@ -30,7 +30,7 @@ export class ProductService extends BaseService<ProductModel> {
   updateproduct(payload: ProductModel): Observable<any> {
     return this.sendPatch(`${routes.updateproduct}/${payload.id}/updateproduct`, payload);
   }
-  updateproductConfig(payload: any): Observable<any> {
-    return this.sendPatch(`${routes.updateproductConfig}/${payload.id}/${payload.status}/updateproductconfig`, payload);
+  updateproductConfig(configs: any, payload: any): Observable<any> {
+    return this.sendPatch(`${routes.updateproductConfig}/${configs.id}/${configs.status}/updateproductconfig`, payload);
   }
 }
