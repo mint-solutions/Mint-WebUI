@@ -9,6 +9,7 @@ const routes = {
   getpacking: '/product/getpacking',
   createproducts: '/product/create',
   updateproduct: '/product',
+  deleteproduct: '/product',
   updateproductConfig: '/product'
 };
 
@@ -29,6 +30,9 @@ export class ProductService extends BaseService<ProductModel> {
   }
   updateproduct(payload: ProductModel): Observable<any> {
     return this.sendPatch(`${routes.updateproduct}/${payload.id}/updateproduct`, payload);
+  }
+  deleteproduct(id: string): Observable<any> {
+    return this.sendDelete(`${routes.deleteproduct}/${id}/deleteproduct`);
   }
   updateproductConfig(configs: any, payload: any): Observable<any> {
     return this.sendPatch(`${routes.updateproductConfig}/${configs.id}/${configs.status}/updateproductconfig`, payload);

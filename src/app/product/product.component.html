@@ -48,7 +48,7 @@
                   <button class="btn btn-sm btn-link btn-clear px-2" (click)="onEdit(product, 'edit')">
                     <i class="icon-software-pencil text-blue mr-1"></i>
                   </button>
-                  <button class="btn btn-sm btn-link btn-clear px-2" (click)="onDelete(products, doDelete)">
+                  <button class="btn btn-sm btn-link btn-clear px-2" (click)="onDelete(product, doDeleteProduct)">
                     <i class="icon-basic-trashcan text-danger"></i>
                   </button>
                 </td>
@@ -160,4 +160,9 @@
   <button type="button" class="search-close" aria-label="Close search form" (click)="d('Cross click')">
     <i class="fi flaticon-close"></i>
   </button>
+</ng-template>
+
+<ng-template #doDeleteProduct let-c="close" let-d="dismiss">
+  <app-delete-modal [selectedRowData]="selectedRow.name" (onDelete)="onDoDelete()" [loader]="formLoading">
+  </app-delete-modal>
 </ng-template>

@@ -161,6 +161,8 @@ export class ProductComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onDelete(data: any, doDelete: any) {
     this.selectedRow = data;
+
+    console.log(this.selectedRow.id);
     this.doDeleteModalRef = this.modalService.open(doDelete, {
       backdrop: true,
       backdropClass: 'light-blue-backdrop',
@@ -169,8 +171,28 @@ export class ProductComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  onDoDelete(event: any) {
+  onDoDelete() {
     this.formLoading = true;
+
+    this.productService
+      .deleteproduct(this.selectedRow.id)
+      .pipe(
+        finalize(() => {
+          this.formLoading = false;
+          this.doDeleteModalRef.close();
+        })
+      )
+      .subscribe(
+        (res: any) => {
+          this.formLoading = false;
+          if (res.status !== true) {
+            return componentError(res.message, this.toastr);
+          }
+          this.getProducts();
+          this.toastr.success(res.message, 'Product');
+        },
+        error => serverError(error, this.toastr)
+      );
   }
 
   createForm(formMode: any = null) {
