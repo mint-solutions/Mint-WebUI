@@ -20,10 +20,10 @@
             <thead>
               <tr>
                 <th>#</th>
-                <th>Name</th>
+                <th>Product Name</th>
                 <th>Item Code</th>
-                <th>Product Config</th>
-                <th>Actions</th>
+                <th>Product Configurations</th>
+                <th>Actions Button</th>
               </tr>
             </thead>
             <tbody>
@@ -32,11 +32,8 @@
                 <td>{{ product.name }}</td>
                 <td>{{ product.itemcode }}</td>
                 <td>
-                  <button
-                    class="btn btn-sm btn-outline-client"
-                    (click)="onViewRow(product, productConfigModal, 'View')"
-                  >
-                    Config
+                  <button class="btn btn-sm btn-client" (click)="onViewRow(product, productConfigModal, 'View')">
+                    Product Configurations
                   </button>
                 </td>
                 <td>

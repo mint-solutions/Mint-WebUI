@@ -8,154 +8,154 @@
 @import "src/theme/table";
 
 .btn-link:hover {
-  text-decoration: none;
-  opacity: 0.7;
+	text-decoration: none;
+	opacity: 0.7;
 }
 
 .search .modal-content {
-  background: rgba(245, 245, 245, 0.9);
-  height: auto;
-  padding: 2rem 0.5rem;
+	background: rgba(245, 245, 245, 0.9);
+	height: auto;
+	padding: 2rem 0.5rem;
 }
 
 .large {
-  .modal-dialog {
-    max-width: 80vw;
-    margin: 1.75rem auto;
-  }
+	.modal-dialog {
+		max-width: 80vw;
+		margin: 1.75rem auto;
+	}
 }
 
 .medium {
-  .modal-dialog {
-    max-width: 60vw;
-    margin: 1.75rem auto;
-  }
+	.modal-dialog {
+		max-width: 60vw;
+		margin: 1.75rem auto;
+	}
 }
 
 .small {
-  .modal-dialog {
-    max-width: 40vw;
-    margin: 1.75rem auto;
-  }
+	.modal-dialog {
+		max-width: 40vw;
+		margin: 1.75rem auto;
+	}
 }
 
 .search-close {
-  position: fixed;
+	position: fixed;
 }
 
 .search-close {
-  right: 1rem;
-  top: 1rem;
-  border-radius: 50%;
-  transition: all 0.5s ease-in-out;
-  height: 2rem;
-  width: 2rem;
-  outline: none !important;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+	right: 1rem;
+	top: 1rem;
+	border-radius: 50%;
+	transition: all 0.5s ease-in-out;
+	height: 2rem;
+	width: 2rem;
+	outline: none !important;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 
-  &:hover {
-    background: $danger;
-    color: #f2f5f8;
-  }
+	&:hover {
+		background: $danger;
+		color: #f2f5f8;
+	}
 }
 
 .search .modal-content {
-  background: rgba(245, 245, 245, 0.9);
-  height: auto;
+	background: rgba(245, 245, 245, 0.9);
+	height: auto;
 
-  .title {
-    margin-bottom: 1rem;
-    color: #495057;
-    font-size: 1rem;
-  }
+	.title {
+		margin-bottom: 1rem;
+		color: #495057;
+		font-size: 1rem;
+	}
 
-  .sub_title {
-    margin-bottom: 0.5rem;
-    color: #495057;
-    font-size: 1rem;
-  }
+	.sub_title {
+		margin-bottom: 0.5rem;
+		color: #495057;
+		font-size: 1rem;
+	}
 }
 
 button:focus {
-  outline: none;
+	outline: none;
 }
 
 .customer-color {
-  color: #3a7cdd;
+	color: #3a7cdd;
 }
 
 .loan-color {
-  color: #6859f3;
+	color: #6859f3;
 }
 
 .revenue-color {
-  color: #3eae4d;
+	color: #3eae4d;
 }
 
 .btn-16 {
-  min-width: 16%;
+	min-width: 16%;
 }
 
 .call-to-action,
 .recent-transactions {
-  text-align: center;
-  color: #707070;
+	text-align: center;
+	color: #707070;
 
-  .card .body {
-    padding: 50px 20px 20px;
-  }
+	.card .body {
+		padding: 50px 20px 20px;
+	}
 
-  .icon {
-    width: 150px;
-  }
+	.icon {
+		width: 150px;
+	}
 
-  i {
-    font-size: 50px;
-    color: #868e96 !important;
-  }
+	i {
+		font-size: 50px;
+		color: #868e96 !important;
+	}
 
-  h3 {
-    font-size: 1.2rem;
-    color: #707070;
-  }
+	h3 {
+		font-size: 1.2rem;
+		color: #707070;
+	}
 
-  p {
-    font-size: 0.7rem;
-    color: #707070;
-  }
+	p {
+		font-size: 0.7rem;
+		color: #707070;
+	}
 
-  .btn {
-    margin-top: 1rem;
-    color: #fff;
-    background-color: #ff9e02;
-    border-color: #ff9e02;
-    box-shadow: none !important;
+	.btn {
+		margin-top: 1rem;
+		color: #fff;
+		background-color: #ff9e02;
+		border-color: #ff9e02;
+		box-shadow: none !important;
 
-    &:hover {
-      background: transparent;
-      color: #ff9e02;
-    }
-  }
+		&:hover {
+			background: transparent;
+			color: #ff9e02;
+		}
+	}
 
-  .btn-secure {
-    background-color: $client-40;
-    border-color: $client-40;
+	.btn-secure {
+		background-color: $client-40;
+		border-color: $client-40;
 
-    &:hover {
-      color: $client-40;
-    }
-  }
+		&:hover {
+			color: $client-40;
+		}
+	}
 }
 
 a {
-  color: $client-40;
+	color: $client-40;
 
-  &:hover,
-  &:active {
-    color: $client-60;
-  }
+	&:hover,
+	&:active {
+		color: $client-60;
+	}
 }
 
 /*
@@ -163,108 +163,108 @@ a {
 * Sign in, Login, Register
 */
 .auth-main:after {
-  content: "";
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -2;
-  background: none;
-  background-position: right;
-  background-repeat: no-repeat;
-  background-size: contain;
+	content: "";
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	z-index: -2;
+	background: none;
+	background-position: right;
+	background-repeat: no-repeat;
+	background-size: contain;
 }
 
 .auth-main {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-  background: #f5f5f5 !important;
-  //background: $client;
+	content: "";
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	z-index: -1;
+	background: #f5f5f5 !important;
+	//background: $client;
 
-  .card-title {
-    font-size: 24px;
-    margin-bottom: 1.5rem;
-    color: $client;
-  }
+	.card-title {
+		font-size: 24px;
+		margin-bottom: 1.5rem;
+		color: $client;
+	}
 }
 
 .auth-main:after {
-  content: "";
-  position: relative;
-  right: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -2;
-  background: none;
-  background-position: right;
-  background-repeat: no-repeat;
-  background-size: contain;
-  display: none;
+	content: "";
+	position: relative;
+	right: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	z-index: -2;
+	background: none;
+	background-position: right;
+	background-repeat: no-repeat;
+	background-size: contain;
+	display: none;
 }
 
 .auth-main::before {
-  content: "";
-  position: relative;
-  left: 0;
-  top: 0;
-  width: 400px;
-  height: 100%;
-  z-index: -1;
-  background: #f5f5f5 !important;
-  display: none;
+	content: "";
+	position: relative;
+	left: 0;
+	top: 0;
+	width: 400px;
+	height: 100%;
+	z-index: -1;
+	background: #f5f5f5 !important;
+	display: none;
 }
 
 .img-wraaper {
-  position: relative;
-  right: unset;
-  top: unset;
-  width: 100%;
-  margin: auto;
+	position: relative;
+	right: unset;
+	top: unset;
+	width: 100%;
+	margin: auto;
 }
 
 .auth-main {
-  .right {
-    position: relative;
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(./assets/images/bg/auth.jpeg) no-repeat;
-    background-position: 35% 100%;
-    background-size: cover;
-    min-height: 500px;
+	.right {
+		position: relative;
+		background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(./assets/images/bg/auth.jpeg) no-repeat;
+		background-position: 35% 100%;
+		background-size: cover;
+		min-height: 500px;
 
-    .btn-auth {
-      background: transparent;
-      border: 1px solid #fff;
-      font-weight: 300;
-      position: absolute;
-      bottom: 15vh;
+		.btn-auth {
+			background: transparent;
+			border: 1px solid #fff;
+			font-weight: 300;
+			position: absolute;
+			bottom: 15vh;
 
-      &:hover {
-        background: #fff;
-        color: #333;
-        border-color: #333;
-      }
-    }
-  }
+			&:hover {
+				background: #fff;
+				color: #333;
+				border-color: #333;
+			}
+		}
+	}
 
-  .card-title {
-    color: #a8a8a8;
-  }
+	.card-title {
+		color: #a8a8a8;
+	}
 
-  .form-control {
-    background-color: #f5f5f5;
-    font-size: 14px;
+	.form-control {
+		background-color: #f5f5f5;
+		font-size: 14px;
 
-    &:-internal-autofill-selected,
-    &:focus {
-      background-color: #f2f2f2 !important;
-      background-image: none !important;
-      color: rgb(0, 0, 0) !important;
-    }
-  }
+		&:-internal-autofill-selected,
+		&:focus {
+			background-color: #f2f2f2 !important;
+			background-image: none !important;
+			color: rgb(0, 0, 0) !important;
+		}
+	}
 }

@@ -1,19 +1,33 @@
 table.dataTable tbody th,
-table.dataTable tbody td {
-  padding: 16px 10px;
-  vertical-align: middle;
+table.dataTable tbody td,
+table tbody th,
+table tbody td {
+	padding: 10px 10px;
+	vertical-align: middle;
+	font-size: 11px;
 }
 
 table {
-  p {
-    margin-bottom: 0;
-  }
+	p {
+		margin-bottom: 0;
+	}
 }
 
 .dataTables_wrapper .dataTables_paginate .paginate_button.current,
 .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
-  color: #ffffff !important;
-  border: 1px solid #2196f3;
-  background-color: $client;
-  background: linear-gradient(to bottom, #2c75e2 0%, #2196f3 100%);
+	color: #ffffff !important;
+	border: 1px solid #2196f3;
+	background-color: $client;
+	background: linear-gradient(to bottom, #2c75e2 0%, #2196f3 100%);
+}
+
+.dataTables_wrapper {
+	position: relative;
+	font-size: 10px;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+	margin-left: 0.5em;
+	-webkit-appearance: auto;
+	width: 50%;
 }
