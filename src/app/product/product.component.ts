@@ -111,7 +111,8 @@ export class ProductComponent implements OnInit, AfterViewInit, OnDestroy {
     this.modalRef = this.modalService.open(modalView, {
       backdrop: true,
       backdropClass: 'light-blue-backdrop',
-      size: 'lg'
+      size: 'lg',
+      windowClass: 'confirmModal'
     });
   }
 
