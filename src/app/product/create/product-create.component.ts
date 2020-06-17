@@ -65,7 +65,7 @@ export class ProductCreateComponent implements OnInit, AfterViewInit, OnDestroy 
         itemcode: this.selectedRow.itemcode,
         description: this.selectedRow.description,
         packingtype: this.selectedRow.packingtype,
-        packingQty: this.selectedRow.packingQty,
+        pack: this.selectedRow.pack,
         categoryId: this.selectedRow.category.id,
         subcategoryId: this.selectedRow.subCategory ? this.selectedRow.subCategory.id : null,
         expiredenabled: this.selectedRow.expiredenabled
@@ -136,7 +136,7 @@ export class ProductCreateComponent implements OnInit, AfterViewInit, OnDestroy 
         categoryId: this.productForm.value.categoryId,
         subcategoryId: this.productForm.value.subcategoryId,
         productconfiguration: {
-          packingQty: +this.productForm.value.packingQty,
+          pack: +this.productForm.value.pack,
           expiredenabled: this.productForm.value.canbepurchased,
           leadtime: +this.productForm.value.leadtime,
           canexpire: this.productForm.value.canexpire,
@@ -227,7 +227,7 @@ export class ProductCreateComponent implements OnInit, AfterViewInit, OnDestroy 
       imagelink: [''],
       subcategoryId: [''],
       leadtime: [0],
-      packingQty: [''],
+      pack: [''],
       canexpire: [false],
       canbesold: [false],
       canbepurchased: [false],

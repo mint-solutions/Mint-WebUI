@@ -41,6 +41,7 @@
     "angular-font-awesome": "^3.1.2",
     "bootstrap": "^4.3.1",
     "chart.js": "^2.8.0",
+    "classlist.js": "^1.1.20150312",
     "core-js": "^2.6.5",
     "datatables.net": "^1.10.20",
     "datatables.net-buttons": "^1.6.1",
@@ -66,6 +67,7 @@
     "rxjs-compat": "^6.4.0",
     "tslib": "^1.9.0",
     "typescript": "3.2.4",
+    "web-animations-js": "^2.3.2",
     "zone.js": "^0.9.0"
   },
   "devDependencies": {
