@@ -19,7 +19,7 @@
             </li>
 
             <!-- Inventory -->
-            <hr class="my-2" />
+            <li class="nav-title">Inventory</li>
             <li
               routerLinkActive="active"
               [routerLinkActiveOptions]="{ exact: true }"
@@ -69,20 +69,7 @@
               </ul>
             </li>
 
-            <hr class="my-2" />
-
-            <li
-              routerLinkActive="active"
-              [routerLinkActiveOptions]="{ exact: true }"
-              [ngClass]="{ active: currentActiveMenu == 'reports' }"
-            >
-              <a class="" (click)="activeInactiveMenu('reports')" [routerLink]="['/reports']"
-                ><i class="icon-pie-chart"></i> <span>Reports</span></a
-              >
-            </li>
-
-            <!-- Settings -->
-            <hr class="w-100" />
+            <li class="nav-title">Admin</li>
             <li
               routerLinkActive="active"
               [routerLinkActiveOptions]="{ exact: true }"
@@ -111,10 +98,10 @@
               >
               <ul *ngIf="currentActiveMenu == 'store-setting'">
                 <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-                  <a [routerLink]="['/setting/add']">Location</a>
+                  <a [routerLink]="['/settings/business-location']">Business Location</a>
                 </li>
                 <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-                  <a [routerLink]="['/setting/view']">tags</a>
+                  <a [routerLink]="['/settings/view']">tags</a>
                 </li>
               </ul>
             </li>
@@ -135,6 +122,16 @@
                   <a [routerLink]="['/admin-users/view']">View Users</a>
                 </li>
               </ul>
+            </li>
+
+            <li
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              [ngClass]="{ active: currentActiveMenu == 'reports' }"
+            >
+              <a class="" (click)="activeInactiveMenu('reports')" [routerLink]="['/reports']"
+                ><i class="icon-pie-chart"></i> <span>Reports</span></a
+              >
             </li>
           </ul>
         </nav>

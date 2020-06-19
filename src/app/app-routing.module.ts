@@ -14,6 +14,10 @@ const routes: Routes = [
       loadChildren: 'app/customer/customer.module#CustomerModule'
     },
     {
+      path: 'settings',
+      loadChildren: 'app/settings/settings.module#SettingsModule'
+    },
+    {
       path: 'supplier',
       loadChildren: 'app/supplier/supplier.module#SupplierModule'
     }
