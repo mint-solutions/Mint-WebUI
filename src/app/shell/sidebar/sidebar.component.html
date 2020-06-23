@@ -69,6 +69,44 @@
               </ul>
             </li>
 
+            <li
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              [ngClass]="{ active: currentActiveMenu == 'purchaseOrder' }"
+            >
+              <a class="has-arrow" (click)="activeInactiveMenu('purchaseOrder')">
+                <i class="icon fas fa-clipboard-list"></i>
+                <span>Purchase Order</span></a
+              >
+              <ul *ngIf="currentActiveMenu == 'purchaseOrder'">
+                <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                  <a [routerLink]="['/', 'purchaseOrder', 'create']">New Purchase Order</a>
+                </li>
+                <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                  <a [routerLink]="['/', 'purchaseOrder', 'view']">View purchase Orders</a>
+                </li>
+              </ul>
+            </li>
+
+            <li
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              [ngClass]="{ active: currentActiveMenu == 'salesOrder' }"
+            >
+              <a class="has-arrow" (click)="activeInactiveMenu('salesOrder')">
+                <i class="icon fas fa-clipboard-list"></i>
+                <span>Sales Order</span></a
+              >
+              <ul *ngIf="currentActiveMenu == 'salesOrder'">
+                <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                  <a [routerLink]="['/', 'salesOrder', 'create']">New Sales Order</a>
+                </li>
+                <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                  <a [routerLink]="['/', 'salesOrder', 'view']">View Sales Orders</a>
+                </li>
+              </ul>
+            </li>
+
             <li class="nav-title">Admin</li>
             <li
               routerLinkActive="active"

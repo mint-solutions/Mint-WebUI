@@ -45,15 +45,20 @@ export class SupplierCreateComponent implements OnInit, AfterViewInit, OnDestroy
     private modalService: NgbModal,
     private supplierService: SupplierService,
     private route: Router
-  ) {}
+  ) {
+    if (this.route.getCurrentNavigation() != null) {
+      this.selectedRow = this.route.getCurrentNavigation().extras.state;
+    }
+  }
 
   ngOnInit() {
     this.createForm();
     if (this.selectedRow && this.selectedRow.mode === 'edit') {
+      console.log('state', this.selectedRow);
       this.mode = 'Update';
       this.breadcrumbItem.title = 'Edit Supplier';
       this.supplierForm.patchValue({
-        company: this.selectedRow.company,
+        company: this.selectedRow.companyname,
         mobilenumber: this.selectedRow.mobilenumber,
         email: this.selectedRow.email,
         address: this.selectedRow.address,

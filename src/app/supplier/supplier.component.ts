@@ -97,7 +97,7 @@ export class SupplierComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onEdit(data: any, mode: any) {
     data['mode'] = mode;
-
+    console.log(data);
     this.router.navigateByUrl('/supplier/create', { state: data });
   }
 
@@ -113,5 +113,25 @@ export class SupplierComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onDoDelete(event: any) {
     this.formLoading = true;
+
+    this.supplierService
+      .deletesupplier(this.selectedRow.id)
+      .pipe(
+        finalize(() => {
+          this.formLoading = false;
+          this.doDeleteModalRef.close();
+        })
+      )
+      .subscribe(
+        (res: any) => {
+          this.formLoading = false;
+          if (res.status !== true) {
+            return componentError(res.message, this.toastr);
+          }
+          this.getSuppliers();
+          this.toastr.success(res.message, 'Product');
+        },
+        error => serverError(error, this.toastr)
+      );
   }
 }

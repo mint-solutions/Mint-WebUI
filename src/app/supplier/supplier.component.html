@@ -27,13 +27,13 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let supplier of suppliers">
-                <td>{{ supplier.company }}</td>
+              <tr *ngFor="let supplier of suppliers; let i = index">
+                <th scope="row">{{ i + 1 }}</th>
+                <td>{{ supplier.companyname }}</td>
                 <td>{{ supplier.email }}</td>
                 <td>{{ supplier.mobilenumber }}</td>
-                <td scope="row">{{ supplier.address }}</td>
                 <td>
-                  <button class="btn btn-sm btn-link btn-clear px-2" (click)="onEdit(supplier, 'edith')">
+                  <button class="btn btn-sm btn-link btn-clear px-2" (click)="onEdit(supplier, 'edit')">
                     <i class="icon-software-pencil text-blue mr-1"></i>
                   </button>
                   <button class="btn btn-sm btn-link btn-clear px-2" (click)="onDelete(supplier, doDelete)">
@@ -50,6 +50,6 @@
 </div>
 
 <ng-template #doDelete let-c="close" let-d="dismiss">
-  <app-delete-modal [selectedRowData]="selectedRow.firstname" (onDelete)="onDoDelete()" [loader]="formLoading">
+  <app-delete-modal [selectedRowData]="selectedRow.companyname" (onDelete)="onDoDelete()" [loader]="formLoading">
   </app-delete-modal>
 </ng-template>
