@@ -6,7 +6,8 @@ import { BusinessLocationModel } from './business-location.model';
 
 const routes = {
   createBusinessLocation: '/businesslocation/stores',
-  getBusinessLocation: '/company/getallbusiness',
+  getAllBusiness: '/company/getallbusiness',
+  getBusinessLocation: '/businesslocation',
   updateBusinessLocation: '/businesslocation',
   deleteBusinessLocation: '/businesslocation'
 };
@@ -19,8 +20,11 @@ export class BusinessLocationService extends BaseService<BusinessLocationModel> 
     super(httpClient);
   }
 
-  getBusinessLocations(): Observable<any> {
-    return this.sendGet(routes.getBusinessLocation);
+  getAllBusiness(): Observable<any> {
+    return this.sendGet(routes.getAllBusiness);
+  }
+  getBusinessLocations(businessId: string): Observable<any> {
+    return this.sendGet(`${routes.getBusinessLocation}/${businessId}/true`);
   }
 
   createBusinessLocation(payload: BusinessLocationModel): Observable<any> {

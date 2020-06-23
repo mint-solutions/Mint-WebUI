@@ -116,6 +116,16 @@ export class ProductComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+  onViewDetails(event: any, modalView: any) {
+    this.selectedRow = event;
+    console.log(this.selectedRow);
+
+    this.modalRef = this.modalService.open(modalView, {
+      size: 'lg',
+      windowClass: 'search'
+    });
+  }
+
   onSubmit(status: boolean = true) {
     this.formLoading = true;
     const data = {

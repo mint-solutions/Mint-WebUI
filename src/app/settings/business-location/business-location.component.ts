@@ -23,6 +23,7 @@ export class BusinessLocationComponent implements OnInit {
   doDeleteModalRef: NgbModalRef;
   selectedRow: any;
   bussinessLocations: BusinessLocationModel[];
+  businesses: any[];
   businessLocationForm: FormGroup;
   mode: string = 'Create';
   formLoading = false;
@@ -41,7 +42,6 @@ export class BusinessLocationComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private toastr: ToastrService,
     private formBuilder: FormBuilder,
-    private formBuilder2: FormBuilder,
     private modalService: NgbModal,
     private categoryService: BusinessLocationService
   ) {}
@@ -54,7 +54,7 @@ export class BusinessLocationComponent implements OnInit {
   getBusinessLocation() {
     this.loader = true;
     this.categoryService
-      .getBusinessLocations()
+      .getAllBusiness()
       .pipe(
         finalize(() => {
           this.loader = false;
@@ -64,7 +64,7 @@ export class BusinessLocationComponent implements OnInit {
         res => {
           console.log('getCountries', res);
           if (res.status === true) {
-            this.bussinessLocations = res.result;
+            this.businesses = res.result;
           } else {
             componentError(res.message, this.toastr);
           }
@@ -151,6 +151,15 @@ export class BusinessLocationComponent implements OnInit {
   onDelete(category: any, doDelete: any) {
     this.selectedRow = category;
     this.doDeleteModalRef = this.modalService.open(doDelete, {
+      backdrop: true,
+      backdropClass: 'light-blue-backdrop',
+      size: 'sm',
+      windowClass: 'confirmModal'
+    });
+  }
+  onGetBusinessLocations(business: any, locationModal: any) {
+    this.selectedRow = business;
+    this.modalRef = this.modalService.open(locationModal, {
       backdrop: true,
       backdropClass: 'light-blue-backdrop',
       size: 'sm',
