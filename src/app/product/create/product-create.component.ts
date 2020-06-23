@@ -134,8 +134,8 @@ export class ProductCreateComponent implements OnInit, AfterViewInit, OnDestroy 
         itemcode: this.productForm.value.itemcode,
         description: this.productForm.value.description,
         categoryId: this.productForm.value.categoryId,
-        subcategoryId: this.productForm.value.subcategoryId
-        /*  productconfiguration: {
+        subcategoryId: this.productForm.value.subcategoryId,
+        productconfiguration: {
           pack: +this.productForm.value.pack,
           expiredenabled: this.productForm.value.canbepurchased,
           leadtime: +this.productForm.value.leadtime,
@@ -144,7 +144,7 @@ export class ProductCreateComponent implements OnInit, AfterViewInit, OnDestroy 
           canbepurchased: this.productForm.value.canbepurchased,
           anypromo: this.productForm.value.anypromo,
           imagelink: this.productForm.value.imagelink
-        } */
+        }
       };
       switch (this.mode) {
         case 'Create':
@@ -225,14 +225,14 @@ export class ProductCreateComponent implements OnInit, AfterViewInit, OnDestroy 
       itemcode: ['', [Validators.required]],
       categoryId: ['', Validators.required],
       description: [''],
-      subcategoryId: ['']
-      /* leadtime: [0],
+      subcategoryId: [''],
+      leadtime: [0],
       imagelink: [''],
       pack: [''],
       canexpire: [false],
       canbesold: [false],
       canbepurchased: [false],
-      anypromo: [false] */
+      anypromo: [false]
     });
   }
 
