@@ -54,9 +54,10 @@ export class SupplierCreateComponent implements OnInit, AfterViewInit, OnDestroy
   ngOnInit() {
     this.createForm();
     if (this.selectedRow && this.selectedRow.mode === 'edit') {
+      this.title = 'Update supplier';
       console.log('state', this.selectedRow);
       this.mode = 'Update';
-      this.breadcrumbItem.title = 'Edit Supplier';
+      this.breadcrumbItem[0].title = 'Edit Supplier';
       this.supplierForm.patchValue({
         company: this.selectedRow.companyname,
         mobilenumber: this.selectedRow.mobilenumber,
@@ -172,6 +173,8 @@ export class SupplierCreateComponent implements OnInit, AfterViewInit, OnDestroy
   resetForm() {
     this.supplierForm.reset();
     this.mode = 'Create';
+    this.title = 'Create New supplier';
+    this.breadcrumbItem[0].title = 'Create New Supplier';
     this.selectedRow = {};
   }
 }
