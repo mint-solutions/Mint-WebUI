@@ -55,7 +55,6 @@ export class SupplierCreateComponent implements OnInit, AfterViewInit, OnDestroy
     this.createForm();
     if (this.selectedRow && this.selectedRow.mode === 'edit') {
       this.title = 'Update supplier';
-      console.log('state', this.selectedRow);
       this.mode = 'Update';
       this.breadcrumbItem[0].title = 'Edit Supplier';
       this.supplierForm.patchValue({
@@ -69,9 +68,9 @@ export class SupplierCreateComponent implements OnInit, AfterViewInit, OnDestroy
         contactpersonemail: this.selectedRow.contactpersonemail,
         street: this.selectedRow.street,
         stateId: this.selectedRow.stateId,
-        facebooklink: this.selectedRow.facebooklink,
-        instagramlink: this.selectedRow.instagramlink,
-        twitterlink: this.selectedRow.twitterlink,
+        facebooklink: this.selectedRow.facebook,
+        instagramlink: this.selectedRow.instagram,
+        twitterlink: this.selectedRow.twitter,
         accountId: this.selectedRow.accountId
       });
     }

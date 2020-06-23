@@ -97,7 +97,6 @@ export class SupplierComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onEdit(data: any, mode: any) {
     data['mode'] = mode;
-    console.log(data);
     this.router.navigateByUrl('/supplier/create', { state: data });
   }
 
