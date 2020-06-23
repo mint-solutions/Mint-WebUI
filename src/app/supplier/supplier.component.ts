@@ -8,6 +8,7 @@ import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 import { componentError, serverError } from '@app/helper';
+import { Router } from '@angular/router';
 
 const log = new Logger('home');
 
@@ -43,9 +44,9 @@ export class SupplierComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(
     private toastr: ToastrService,
-    private formBuilder: FormBuilder,
     private modalService: NgbModal,
-    private supplierService: SupplierService
+    private supplierService: SupplierService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -72,7 +73,7 @@ export class SupplierComponent implements OnInit, AfterViewInit, OnDestroy {
       )
       .subscribe(
         res => {
-          console.log('getCountries', res);
+          console.log('getSuppliers', res);
           if (res.status === true) {
             this.suppliers = res.result;
             console.log(res);
@@ -95,7 +96,9 @@ export class SupplierComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onEdit(data: any, mode: any) {
-    this.supplierForm.patchValue({ name: data.name });
+    data['mode'] = mode;
+
+    this.router.navigateByUrl('/supplier/create', { state: data });
   }
 
   onDelete(data: any, doDelete: any) {

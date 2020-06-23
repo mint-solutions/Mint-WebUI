@@ -18,7 +18,7 @@ const log = new Logger('home');
   styleUrls: ['./supplier-create.component.scss']
 })
 export class SupplierCreateComponent implements OnInit, AfterViewInit, OnDestroy {
-  modalTitle = 'supplier';
+  modalTitle = 'Supplier';
   modalRef: NgbModalRef;
   doDeleteModalRef: NgbModalRef;
   selectedRow: any;
@@ -33,7 +33,7 @@ export class SupplierCreateComponent implements OnInit, AfterViewInit, OnDestroy
   public title = 'Create New supplier';
   public breadcrumbItem: any = [
     {
-      title: 'Create New supplier',
+      title: 'Create New Supplier',
       cssClass: 'active'
     }
   ];
@@ -49,6 +49,26 @@ export class SupplierCreateComponent implements OnInit, AfterViewInit, OnDestroy
 
   ngOnInit() {
     this.createForm();
+    if (this.selectedRow && this.selectedRow.mode === 'edit') {
+      this.mode = 'Update';
+      this.breadcrumbItem.title = 'Edit Supplier';
+      this.supplierForm.patchValue({
+        company: this.selectedRow.company,
+        mobilenumber: this.selectedRow.mobilenumber,
+        email: this.selectedRow.email,
+        address: this.selectedRow.address,
+        website: this.selectedRow.website,
+        contactpersonname: this.selectedRow.contactpersonname,
+        contactpersonphonenumber: this.selectedRow.contactpersonphonenumber,
+        contactpersonemail: this.selectedRow.contactpersonemail,
+        street: this.selectedRow.street,
+        stateId: this.selectedRow.stateId,
+        facebooklink: this.selectedRow.facebooklink,
+        instagramlink: this.selectedRow.instagramlink,
+        twitterlink: this.selectedRow.twitterlink,
+        accountId: this.selectedRow.accountId
+      });
+    }
   }
 
   ngAfterViewInit(): void {}
@@ -128,9 +148,19 @@ export class SupplierCreateComponent implements OnInit, AfterViewInit, OnDestroy
 
     this.supplierForm = this.formBuilder.group({
       company: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
       mobilenumber: ['', Validators.required],
-      address: ['', Validators.required]
+      email: ['', [Validators.required, Validators.email]],
+      address: ['', Validators.required],
+      website: ['', Validators.required],
+      contactpersonname: ['', Validators.required],
+      contactpersonphonenumber: ['', Validators.required],
+      contactpersonemail: ['', Validators.required],
+      street: ['', Validators.required],
+      stateId: ['', Validators.required],
+      facebooklink: [''],
+      instagramlink: [''],
+      twitterlink: [''],
+      accountId: ['', Validators.required]
     });
   }
 

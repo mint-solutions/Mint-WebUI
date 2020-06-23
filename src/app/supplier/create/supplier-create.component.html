@@ -16,124 +16,146 @@
 
         <div class="body">
           <form class="row" [formGroup]="supplierForm" (ngSubmit)="onSubmit()">
-            <div class="form-group col-lg-6">
-              <label for="name" class="control-label">Company Name</label>
-              <input
-                type="text"
-                class="form-control mb-0"
-                id="name"
-                placeholder="Eg. Anthony Ofor Limited"
-                formControlName="company"
-                [ngClass]="{
-                  'parsley-error':
-                    !supplierForm.controls.company.valid &&
-                    (supplierForm.controls.company.touched || supplierForm.controls.company.dirty),
-                  'parsley-success':
-                    supplierForm.controls.company.valid &&
-                    (supplierForm.controls.company.touched || supplierForm.controls.company.dirty)
-                }"
-              />
-              <ul
-                class="parsley-errors-list filled"
-                *ngIf="
-                  !supplierForm.controls.company.valid &&
-                  (supplierForm.controls.company.touched || supplierForm.controls.company.dirty)
-                "
-              >
-                <li class="parsley-required" *ngIf="supplierForm.controls.company.hasError('required')">
-                  Company name is required.
-                </li>
-              </ul>
+            <div class="col-lg-4">
+              <app-input
+                [required]="true"
+                label="Company Name"
+                id="company"
+                name="Company Name"
+                placeholder="Eg. Chidi and Sons LTD"
+                [control]="supplierForm.get('company')"
+              ></app-input>
             </div>
-            <div class="form-group col-lg-6">
-              <label for="name" class="control-label">Phone Number</label>
-              <input
-                type="text"
-                class="form-control mb-0"
-                id="name"
-                placeholder="Eg. 09039928432"
-                formControlName="mobilenumber"
-                [ngClass]="{
-                  'parsley-error':
-                    !supplierForm.controls.mobilenumber.valid &&
-                    (supplierForm.controls.mobilenumber.touched || supplierForm.controls.mobilenumber.dirty),
-                  'parsley-success':
-                    supplierForm.controls.mobilenumber.valid &&
-                    (supplierForm.controls.mobilenumber.touched || supplierForm.controls.mobilenumber.dirty)
-                }"
-              />
-              <ul
-                class="parsley-errors-list filled"
-                *ngIf="
-                  !supplierForm.controls.mobilenumber.valid &&
-                  (supplierForm.controls.mobilenumber.touched || supplierForm.controls.mobilenumber.dirty)
-                "
-              >
-                <li class="parsley-required" *ngIf="supplierForm.controls.mobilenumber.hasError('required')">
-                  Mobile number is required.
-                </li>
-              </ul>
+            <div class="col-lg-4">
+              <app-input
+                [required]="true"
+                label="Mobile Number"
+                id="mobilenumber"
+                name="Mobile Number"
+                placeholder="Eg. 09039929382"
+                [control]="supplierForm.get('mobilenumber')"
+              ></app-input>
             </div>
-            <div class="form-group col-lg-6">
-              <label for="name" class="control-label">Email</label>
-              <input
-                type="email"
-                class="form-control mb-0"
-                id="name"
-                placeholder="Eg. infor@ecorvids.com"
-                formControlName="email"
-                [ngClass]="{
-                  'parsley-error':
-                    !supplierForm.controls.email.valid &&
-                    (supplierForm.controls.email.touched || supplierForm.controls.email.dirty),
-                  'parsley-success':
-                    supplierForm.controls.email.valid &&
-                    (supplierForm.controls.email.touched || supplierForm.controls.email.dirty)
-                }"
-              />
-              <ul
-                class="parsley-errors-list filled"
-                *ngIf="
-                  !supplierForm.controls.email.valid &&
-                  (supplierForm.controls.email.touched || supplierForm.controls.email.dirty)
-                "
-              >
-                <li class="parsley-required" *ngIf="supplierForm.controls.email.hasError('required')">
-                  Email is required.
-                </li>
-                <li class="parsley-required" *ngIf="supplierForm.controls.email.hasError('email')">
-                  Not a valid email address.
-                </li>
-              </ul>
+            <div class="col-lg-4">
+              <app-input
+                [required]="true"
+                label="Email"
+                id="email"
+                name="Email"
+                placeholder="Eg. john@mint.com"
+                [control]="supplierForm.get('email')"
+              ></app-input>
             </div>
-            <div class="form-group col-lg-6">
-              <label for="address" class="control-label">Address</label>
-              <input
-                type="text"
-                class="form-control mb-0"
+            <div class="col-lg-4">
+              <app-input
+                [required]="true"
+                label="Address"
                 id="address"
-                placeholder="Eg. 49 Airport road, Ikeja, Lagos"
-                formControlName="address"
-                [ngClass]="{
-                  'parsley-error':
-                    !supplierForm.controls.address.valid &&
-                    (supplierForm.controls.address.touched || supplierForm.controls.address.dirty),
-                  'parsley-success':
-                    supplierForm.controls.address.valid &&
-                    (supplierForm.controls.address.touched || supplierForm.controls.address.dirty)
-                }"
-              />
-              <ul
-                class="parsley-errors-list filled"
-                *ngIf="
-                  !supplierForm.controls.address.valid &&
-                  (supplierForm.controls.address.touched || supplierForm.controls.address.dirty)
-                "
-              >
-                <li class="parsley-required" *ngIf="supplierForm.controls.address.hasError('required')">
-                  Address is required.
-                </li>
-              </ul>
+                name="Address"
+                placeholder="Eg. 7 mike thompson pack"
+                [control]="supplierForm.get('address')"
+              ></app-input>
+            </div>
+            <div class="col-lg-4">
+              <app-input
+                [required]="true"
+                label="Website"
+                id="website"
+                name="Website"
+                placeholder="Eg. http//chiandson.com"
+                [control]="supplierForm.get('website')"
+              ></app-input>
+            </div>
+            <div class="col-lg-4">
+              <app-input
+                [required]="true"
+                label="Contact Person Name"
+                id="contactpersonname"
+                name="Contact Person Name"
+                placeholder="Eg. Chidi"
+                [control]="supplierForm.get('contactpersonname')"
+              ></app-input>
+            </div>
+            <div class="col-lg-4">
+              <app-input
+                [required]="true"
+                label="Contact Person Phone Number"
+                id="contactpersonphonenumber"
+                name="Contact Person Phone Number"
+                placeholder="Eg. 040302293945"
+                [control]="supplierForm.get('contactpersonphonenumber')"
+              ></app-input>
+            </div>
+            <div class="col-lg-4">
+              <app-input
+                [required]="true"
+                label="Contact Person Email"
+                id="contactpersonemail"
+                name="Contact Person Email"
+                placeholder="Eg. chidi@chiandson.com"
+                [control]="supplierForm.get('contactpersonemail')"
+              ></app-input>
+            </div>
+            <div class="col-lg-4">
+              <app-input
+                [required]="true"
+                label="street"
+                id="street"
+                name="street"
+                placeholder="Eg. 7 nikon st. VI"
+                [control]="supplierForm.get('street')"
+              ></app-input>
+            </div>
+            <div class="col-lg-4">
+              <app-input
+                [required]="true"
+                label="State ID"
+                id="stateId"
+                name="State ID"
+                placeholder="Eg. lagos"
+                [control]="supplierForm.get('stateId')"
+              ></app-input>
+            </div>
+            <div class="col-lg-4">
+              <app-input
+                [required]="true"
+                label="Account ID"
+                id="accountId"
+                name="Account ID"
+                placeholder="Eg. lagos"
+                [control]="supplierForm.get('accountId')"
+              ></app-input>
+            </div>
+            <div class="col-lg-4">
+              <app-input
+                [required]="true"
+                label="Facebook Link"
+                id="facebooklink"
+                name="Facebook Link"
+                placeholder="Eg. https://facebook.com/chidi"
+                [control]="supplierForm.get('facebooklink')"
+              ></app-input>
+            </div>
+            <div class="col-lg-4">
+              <app-input
+                [required]="true"
+                label="Instagram Link"
+                id="instagramlink"
+                name="Instagram Link"
+                placeholder="Eg. Samsung TV"
+                [control]="supplierForm.get('instagramlink')"
+              ></app-input>
+            </div>
+
+            <div class="col-lg-4">
+              <app-input
+                [required]="true"
+                label="Twitter Link"
+                id="twitterlink"
+                name="Twitter Link"
+                placeholder="Eg. Samsung TV"
+                [control]="supplierForm.get('twitterlink')"
+              ></app-input>
             </div>
 
             <div class="form-group col-lg-4 pt-4 mt-1">

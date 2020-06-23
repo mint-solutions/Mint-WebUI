@@ -54,7 +54,7 @@ export class ProductCreateComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   ngOnInit() {
-    this.getPackings();
+    //this.getPackings();
     this.getCategories();
     this.createForm();
     if (this.selectedRow && this.selectedRow.mode === 'edit') {
