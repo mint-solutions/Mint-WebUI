@@ -20,6 +20,11 @@
 .sidebar-nav .metismenu a {
   cursor: pointer;
   color: #ffffff;
+  font-size: 13px;
+}
+
+.sidebar-nav .metismenu > li {
+  padding-bottom: 0;
 }
 
 .logo-account {
@@ -45,7 +50,7 @@
 
 .nav-title {
   padding-left: 1.3rem;
-  padding: 5px 1.3rem;
+  padding: 5px 1.3rem !important;
   border-bottom: 1px solid;
   border-top: 1px solid;
   font-size: 1rem;

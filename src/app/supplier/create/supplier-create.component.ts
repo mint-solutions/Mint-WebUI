@@ -157,7 +157,7 @@ export class SupplierCreateComponent implements OnInit, AfterViewInit, OnDestroy
       mobilenumber: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       address: ['', Validators.required],
-      website: ['', Validators.required],
+      website: [''],
       contactpersonname: [''],
       contactpersonphonenumber: [''],
       contactpersonemail: [''],

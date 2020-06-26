@@ -1,5 +1,12 @@
 <div class="container-fluid">
-  <app-block-header [title]="title" [breadcrumbItem]="breadcrumbItem"></app-block-header>
+  <app-block-header [title]="title" [breadcrumbItem]="breadcrumbItem">
+    <div>
+      <a class="btn btn-sm btn-outline-client" [routerLink]="['/customer/create']">
+        <i class="icon fas fa-plus"></i>
+        Add Customer
+      </a>
+    </div>
+  </app-block-header>
 
   <div class="row clearfix">
     <div class="col-lg-12">
@@ -7,17 +14,11 @@
         <app-loader [isLoading]="loader"></app-loader>
         <div class="header d-flex justify-content-between align-items-center pb-0">
           <h2>All Customers</h2>
-          <div class="">
-            <i class="icon datatable-icon-add"></i>
-            <span style="text-decoration: underline; cursor: pointer" [routerLink]="['/customer/create']"
-              >Add New Customer</span
-            >
-          </div>
         </div>
 
         <div class="body table-responsive">
           <table class="table table-bordered table-striped" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
-            <thead>
+            <thead class="thead-dark">
               <tr>
                 <th>#</th>
                 <th>Full NAME</th>

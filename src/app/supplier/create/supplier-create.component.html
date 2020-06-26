@@ -1,21 +1,22 @@
 <div class="container-fluid">
-  <app-block-header [title]="title" [breadcrumbItem]="breadcrumbItem"></app-block-header>
+  <app-block-header [title]="title" [breadcrumbItem]="breadcrumbItem">
+    <div>
+      <a class="btn btn-sm btn-outline-client" [routerLink]="['/product/view']">
+        <i class="icon fas fa-eye mr-1"></i>
+        View Suppliers
+      </a>
+    </div>
+  </app-block-header>
 
   <div class="row clearfix">
     <div class="col-lg-12">
       <div class="card">
         <div class="header d-flex justify-content-between align-items-center pb-0">
           <h2>{{ mode }} Supplier</h2>
-          <div class="">
-            <i class="icon datatable-icon-add"></i>
-            <span style="text-decoration: underline; cursor: pointer" [routerLink]="['/', 'supplier', 'view']"
-              >View all</span
-            >
-          </div>
         </div>
 
-        <div class="body">
-          <form class="row" [formGroup]="supplierForm" (ngSubmit)="onSubmit()">
+        <form [formGroup]="supplierForm" (ngSubmit)="onSubmit()">
+          <div class="body row">
             <div class="col-lg-4">
               <app-input
                 [required]="true"
@@ -46,7 +47,7 @@
                 [control]="supplierForm.get('email')"
               ></app-input>
             </div>
-            <div class="col-lg-4">
+            <div class="col-lg-8">
               <app-input
                 [required]="true"
                 label="Address"
@@ -58,7 +59,6 @@
             </div>
             <div class="col-lg-4">
               <app-input
-                [required]="true"
                 label="Website"
                 id="website"
                 name="Website"
@@ -66,42 +66,7 @@
                 [control]="supplierForm.get('website')"
               ></app-input>
             </div>
-            <div class="col-lg-4">
-              <app-input
-                label="Contact Person Name"
-                id="contactpersonname"
-                name="Contact Person Name"
-                placeholder="Eg. Chidi"
-                [control]="supplierForm.get('contactpersonname')"
-              ></app-input>
-            </div>
-            <div class="col-lg-4">
-              <app-input
-                label="Contact Person Phone Number"
-                id="contactpersonphonenumber"
-                name="Contact Person Phone Number"
-                placeholder="Eg. 040302293945"
-                [control]="supplierForm.get('contactpersonphonenumber')"
-              ></app-input>
-            </div>
-            <div class="col-lg-4">
-              <app-input
-                label="Contact Person Email"
-                id="contactpersonemail"
-                name="Contact Person Email"
-                placeholder="Eg. chidi@chiandson.com"
-                [control]="supplierForm.get('contactpersonemail')"
-              ></app-input>
-            </div>
-            <div class="col-lg-4">
-              <app-input
-                label="street"
-                id="street"
-                name="street"
-                placeholder="Eg. 7 nikon st. VI"
-                [control]="supplierForm.get('street')"
-              ></app-input>
-            </div>
+
             <!-- <div class="col-lg-4">
               <app-input
                 label="State ID"
@@ -120,6 +85,49 @@
                 [control]="supplierForm.get('accountId')"
               ></app-input>
             </div> -->
+          </div>
+
+          <!-- CONTACT PERSON -->
+          <div class="body row">
+            <div class="col-lg-3">
+              <app-input
+                label="Contact Person Name"
+                id="contactpersonname"
+                name="Contact Person Name"
+                placeholder="Eg. Chidi"
+                [control]="supplierForm.get('contactpersonname')"
+              ></app-input>
+            </div>
+            <div class="col-lg-3">
+              <app-input
+                label="Contact Person Phone Number"
+                id="contactpersonphonenumber"
+                name="Contact Person Phone Number"
+                placeholder="Eg. 040302293945"
+                [control]="supplierForm.get('contactpersonphonenumber')"
+              ></app-input>
+            </div>
+            <div class="col-lg-3">
+              <app-input
+                label="Contact Person Email"
+                id="contactpersonemail"
+                name="Contact Person Email"
+                placeholder="Eg. chidi@chiandson.com"
+                [control]="supplierForm.get('contactpersonemail')"
+              ></app-input>
+            </div>
+            <div class="col-lg-3">
+              <app-input
+                label="street"
+                id="street"
+                name="street"
+                placeholder="Eg. 7 nikon st. VI"
+                [control]="supplierForm.get('street')"
+              ></app-input>
+            </div>
+          </div>
+          <!-- SOCIAL LINKS -->
+          <div class="body row">
             <div class="col-lg-4">
               <app-input
                 label="Facebook Link"
@@ -149,7 +157,7 @@
               ></app-input>
             </div>
 
-            <div class="form-group col-lg-4 pt-4 mt-1">
+            <div class="form-group col-lg-4 pt-4 mt-1 float-right">
               <button
                 type="submit"
                 class="btn btn-client btn-round"
@@ -172,8 +180,8 @@
                 please wait
               </button>
             </div>
-          </form>
-        </div>
+          </div>
+        </form>
       </div>
     </div>
   </div>
