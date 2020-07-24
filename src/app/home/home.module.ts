@@ -17,7 +17,7 @@ import { CoreModule } from '@app/core/core.module';
 import { ChartsModule } from 'ng2-charts';
 
 @NgModule({
-  imports: [CommonModule, TranslateModule, CoreModule, SharedModule, HomeRoutingModule, NgxEchartsModule, ChartsModule],
+  imports: [CommonModule, TranslateModule, SharedModule, HomeRoutingModule, NgxEchartsModule, ChartsModule],
   declarations: [
     HomeComponent,
     DetailTilesComponent,

@@ -16,7 +16,7 @@ const routes = {
   deleteSubcategory: '/categorys'
 };
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class CategoryService extends BaseService<CategoryModel> {
   constructor(public httpClient: HttpClient) {
     super(httpClient);

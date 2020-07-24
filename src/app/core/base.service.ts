@@ -10,45 +10,35 @@ import { environment } from '@env/environment';
 export class BaseService<M> {
   constructor(public httpClient: HttpClient) {}
 
-  sendGet(url: any, useCache?: boolean): Observable<M> {
-    if (useCache) {
-      return this.httpClient
-        .cache()
-        .get(url)
-        .pipe(
-          map((body: any) => body),
-          catchError(this.handleError)
-        );
-    } else {
-      return this.httpClient.get(url).pipe(
-        map((body: any) => body),
-        catchError(this.handleError)
-      );
-    }
-  }
-
-  sendPost(url: any, payload: any): Observable<M> {
-    return this.httpClient.post(url, payload).pipe(
+  sendGet(url: any, otherData?: any): Observable<M> {
+    return this.httpClient.get(url, otherData).pipe(
       map((body: any) => body),
       catchError(this.handleError)
     );
   }
 
-  sendPatch(url: any, payload: any): Observable<M> {
-    return this.httpClient.patch(url, payload).pipe(
-      map((body: any) => body),
-      catchError(this.handleError)
-    );
-  }
-  sendPut(url: any, payload: any): Observable<M> {
-    return this.httpClient.put(url, payload).pipe(
+  sendPost(url: any, payload: any, otherData?: any): Observable<M> {
+    return this.httpClient.post(url, payload, otherData).pipe(
       map((body: any) => body),
       catchError(this.handleError)
     );
   }
 
-  sendDelete(url: any): Observable<M> {
-    return this.httpClient.delete(url).pipe(
+  sendPatch(url: any, payload: any, otherData?: any): Observable<M> {
+    return this.httpClient.patch(url, payload, otherData).pipe(
+      map((body: any) => body),
+      catchError(this.handleError)
+    );
+  }
+  sendPut(url: any, payload: any, otherData?: any): Observable<M> {
+    return this.httpClient.put(url, payload, otherData).pipe(
+      map((body: any) => body),
+      catchError(this.handleError)
+    );
+  }
+
+  sendDelete(url: any, otherData?: any): Observable<M> {
+    return this.httpClient.delete(url, otherData).pipe(
       map((body: any) => body),
       catchError(this.handleError)
     );

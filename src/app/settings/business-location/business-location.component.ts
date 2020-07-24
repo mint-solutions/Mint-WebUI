@@ -22,7 +22,7 @@ export class BusinessLocationComponent implements OnInit {
   modalRef: NgbModalRef;
   doDeleteModalRef: NgbModalRef;
   selectedRow: any;
-  bussinessLocations: BusinessLocationModel[];
+  businessLocations: BusinessLocationModel[];
   businesses: any[];
   businessLocationForm: FormGroup;
   mode: string = 'Create';
@@ -43,7 +43,7 @@ export class BusinessLocationComponent implements OnInit {
     private toastr: ToastrService,
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
-    private categoryService: BusinessLocationService
+    private businessLocationService: BusinessLocationService
   ) {}
 
   ngOnInit() {
@@ -53,7 +53,7 @@ export class BusinessLocationComponent implements OnInit {
 
   getBusinessLocation() {
     this.loader = true;
-    this.categoryService
+    this.businessLocationService
       .getAllBusiness()
       .pipe(
         finalize(() => {
@@ -62,7 +62,6 @@ export class BusinessLocationComponent implements OnInit {
       )
       .subscribe(
         res => {
-          console.log('getCountries', res);
           if (res.status === true) {
             this.businesses = res.result;
           } else {
@@ -100,7 +99,7 @@ export class BusinessLocationComponent implements OnInit {
   onCreate(data: any) {
     console.log(data);
 
-    this.categoryService
+    this.businessLocationService
       .createBusinessLocation(data)
       .pipe(
         finalize(() => {
@@ -120,6 +119,7 @@ export class BusinessLocationComponent implements OnInit {
         error => serverError(error, this.toastr)
       );
   }
+
   onUpdate(data: any) {
     console.log('onUpdate', data);
     const payload = {
@@ -127,7 +127,7 @@ export class BusinessLocationComponent implements OnInit {
       id: this.selectedRow.id
     };
 
-    this.categoryService
+    this.businessLocationService
       .updateBusinessLocation(payload)
       .pipe(
         finalize(() => {
@@ -143,6 +143,43 @@ export class BusinessLocationComponent implements OnInit {
           }
           this.getBusinessLocation();
           this.toastr.success(res.message, 'Category');
+        },
+        error => serverError(error, this.toastr)
+      );
+  }
+
+  onUpdateBusinessStatus(business: any) {
+    this.loader = true;
+    let status = true;
+    if (business.isDisabled) {
+      status = false;
+    }
+
+    console.log(business.isDisabled, status);
+
+    console.log('onUpdate', business);
+
+    const payload = {
+      status: status,
+      id: business.id
+    };
+
+    this.businessLocationService
+      .updateBusinessStatus(payload)
+      .pipe(
+        finalize(() => {
+          this.loader = false;
+          this.resetForm();
+        })
+      )
+      .subscribe(
+        (res: any) => {
+          this.loader = false;
+          if (res.status !== true) {
+            return componentError(res.message, this.toastr);
+          }
+          this.getBusinessLocation();
+          this.toastr.success(res.message, 'Business');
         },
         error => serverError(error, this.toastr)
       );
@@ -170,7 +207,7 @@ export class BusinessLocationComponent implements OnInit {
   onDoDelete(event: any) {
     this.formLoading = true;
 
-    this.categoryService
+    this.businessLocationService
       .deleteBusinessLocation(this.selectedRow.id)
       .pipe(
         finalize(() => {
@@ -181,7 +218,7 @@ export class BusinessLocationComponent implements OnInit {
       .subscribe(
         (res: any) => {
           if (res.status === true) {
-            this.bussinessLocations = removeDeletedItem(this.bussinessLocations, this.selectedRow.id);
+            this.businessLocations = removeDeletedItem(this.businessLocations, this.selectedRow.id);
             this.toastr.success(res.message, 'Category');
           } else {
             componentError(res.message, this.toastr);

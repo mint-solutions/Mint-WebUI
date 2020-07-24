@@ -7,21 +7,22 @@ import { finalize } from 'rxjs/operators';
 import { Logger } from '@app/core/logger.service';
 import { untilDestroyed } from '@app/core/until-destroyed';
 import { Router } from '@angular/router';
+import { SignupService } from './signup.service';
 
 const log = new Logger('Register');
 
 @Component({
-  selector: 'app-register',
-  templateUrl: './register.component.html',
-  styleUrls: ['./register.component.scss']
+  selector: 'app-signup',
+  templateUrl: './signup.component.html',
+  styleUrls: ['./signup.component.scss']
 })
-export class RegisterComponent implements OnInit, OnDestroy {
+export class SignupComponent implements OnInit, OnDestroy {
   public regForm: FormGroup;
   public alertMessage: IAlertMessage;
   isLoading = false;
 
   constructor(
-    private regService: RegisterService,
+    private regService: SignupService,
     private fb: FormBuilder,
     private toastr: ToastrService,
     private router: Router
@@ -37,7 +38,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     this.isLoading = true;
 
     if (this.regForm.valid) {
-      const resgister$ = this.regService.userRegistration(this.buildPayload(this.regForm.value));
+      const resgister$ = this.regService.adminRegistration(this.buildPayload(this.regForm.value));
       resgister$
         .pipe(
           finalize(() => {
@@ -65,7 +66,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
               });
             }
           },
-          err => {
+          (err: any) => {
             log.error(`userRegistration error: ${err}`);
           }
         );
@@ -82,36 +83,23 @@ export class RegisterComponent implements OnInit, OnDestroy {
       //company: new FormGroup({}),
       //contactPerson: new FormGroup({}),
 
-      comapanyName: new FormControl(null, Validators.required),
-      address: new FormControl(null, Validators.required),
       firstName: new FormControl(null, Validators.required),
       lastName: new FormControl(null, Validators.required),
       email: new FormControl(null, [Validators.required, Validators.email]),
       password: new FormControl(null, Validators.required),
-      confirmPassword: new FormControl(null, Validators.required),
-      phonenumber: new FormControl(null, Validators.required),
-      businesslocationName: new FormControl(null, Validators.required),
-      businessLocatonAddress: new FormControl(null, Validators.required)
+      confirmpassword: new FormControl(null, Validators.required),
+      phonenumber: new FormControl(null, Validators.required)
     });
   }
 
   private buildPayload(formDetails: any) {
     const payload = {
-      company: {
-        comapanyName: formDetails.comapanyName,
-        address: formDetails.address
-      },
-      contactPerson: {
-        firstName: formDetails.firstName,
-        lastName: formDetails.lastName,
-        email: formDetails.email,
-        password: formDetails.password,
-        phonenumber: formDetails.phonenumber
-      },
-      businesslocation: {
-        name: formDetails.businesslocationName,
-        address: formDetails.businessLocatonAddress
-      }
+      firstName: formDetails.firstName,
+      lastName: formDetails.lastName,
+      email: formDetails.email,
+      password: formDetails.password,
+      confirmpassword: formDetails.confirmpassword,
+      phonenumber: formDetails.phonenumber
     };
 
     return payload;

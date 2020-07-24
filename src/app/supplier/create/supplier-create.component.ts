@@ -119,7 +119,15 @@ export class SupplierCreateComponent implements OnInit, AfterViewInit, OnDestroy
           this.resetForm();
           this.route.navigate(['/', 'supplier', 'view']);
         },
-        error => serverError(error, this.toastr)
+        error => {
+          if (error.error.result && error.error.result.length > 0) {
+            error.error.result.forEach((err: any) => {
+              this.toastr.error(err.Message, err.Identifier);
+            });
+          }
+          console.log('error', error);
+          serverError(error, this.toastr);
+        }
       );
   }
   onUpdate(data: any) {
@@ -158,10 +166,10 @@ export class SupplierCreateComponent implements OnInit, AfterViewInit, OnDestroy
       email: ['', [Validators.required, Validators.email]],
       address: ['', Validators.required],
       website: [''],
-      contactpersonname: [''],
-      contactpersonphonenumber: [''],
-      contactpersonemail: [''],
-      street: [''],
+      contactpersonname: ['', Validators.required],
+      contactpersonphonenumber: ['', Validators.required],
+      contactpersonemail: ['', Validators.required],
+      street: ['', Validators.required],
       stateId: [''],
       facebooklink: [''],
       instagramlink: [''],

@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { HomeComponent } from './home.component';
 import { extract } from '@app/core/i18n.service';
+import { SignupComponent } from './signup/signup.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/home', pathMatch: 'full' },
-  { path: 'home', component: HomeComponent, data: { title: extract('Home') } }
+  //{ path: '', redirectTo: '/', pathMatch: 'full' },
+  { path: 'signup', component: SignupComponent, data: { title: extract('Admin Signup') } }
 ];
 
 @NgModule({
@@ -14,4 +14,4 @@ const routes: Routes = [
   exports: [RouterModule],
   providers: []
 })
-export class HomeRoutingModule {}
+export class AdminRoutingModule {}

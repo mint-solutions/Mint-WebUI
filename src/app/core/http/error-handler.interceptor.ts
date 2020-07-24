@@ -32,7 +32,7 @@ export class ErrorHandlerInterceptor implements HttpInterceptor {
     }*/
 
     if (response.status === 401 || response.status === 504) {
-      this.toastr.error(response.statusText, 'ERROR!');
+      this.toastr.error(response.error.message, 'ERROR!');
       console.log(response);
       this.logoutService.logout().subscribe();
     }

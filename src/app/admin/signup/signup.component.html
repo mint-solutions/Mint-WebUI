@@ -7,30 +7,9 @@
             <div class="row">
               <div class="col-lg-8">
                 <div class="body text-center pt-5">
-                  <h2 class="card-title mb-5">It is time to feel like home</h2>
+                  <h2 class="card-title mb-5">Admin Registration</h2>
                   <form class="form-auth-small" (ngSubmit)="onSubmit()" [formGroup]="regForm" novalidate>
                     <div class="row">
-                      <div class="form-group col-lg-6">
-                        <label for="company-name" class="control-label sr-only">Company Name</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="company-name"
-                          formControlName="comapanyName"
-                          placeholder="Company Name"
-                        />
-                      </div>
-                      <div class="form-group col-lg-6">
-                        <label for="company-address" class="control-label sr-only">Address</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="company-address"
-                          formControlName="address"
-                          placeholder="Address"
-                        />
-                      </div>
-
                       <div class="form-group col-lg-6">
                         <label for="signin-email" class="control-label sr-only">Firstname</label>
                         <input
@@ -87,33 +66,8 @@
                           type="password"
                           class="form-control"
                           id="confirm-signin-password"
-                          formControlName="confirmPassword"
+                          formControlName="confirmpassword"
                           placeholder="Confirm Password"
-                        />
-                      </div>
-                    </div>
-                    <h2 class="small text-muted text-left">Business Location</h2>
-                    <div class="row">
-                      <div class="form-group col-lg-6">
-                        <label for="businesslocationName" class="control-label sr-only">Business Location Name</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="businesslocationName"
-                          formControlName="businesslocationName"
-                          placeholder="Business Location Name"
-                        />
-                      </div>
-                      <div class="form-group col-lg-6">
-                        <label for="businessLocatonAddress" class="control-label sr-only"
-                          >Business Location Address</label
-                        >
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="businessLocatonAddress"
-                          formControlName="businessLocatonAddress"
-                          placeholder="Business Location Address"
                         />
                       </div>
                     </div>

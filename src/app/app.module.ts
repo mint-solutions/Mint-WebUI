@@ -1,61 +1,41 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { ServiceWorkerModule } from '@angular/service-worker';
-import { TranslateModule } from '@ngx-translate/core';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
-import { environment } from '@env/environment';
-import { SharedModule } from '@app/shared';
-import { HomeModule } from './home/home.module';
-import { ShellModule } from './shell/shell.module';
-import { LoginModule } from './login/login.module';
 import { AppComponent } from './app.component';
-import { AppRoutingModule } from './app-routing.module';
-import { RegisterModule } from '@app/register/register.module';
+
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateModule } from '@ngx-translate/core';
 import { ToastrModule } from 'ngx-toastr';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { SetpasswordModule } from '@app/setpassword/setpassword.module';
-import { CoreModule } from '@app/core/core.module';
-import { ForgetPasswordModule } from './forget-password/forget-password.module';
-import { VerifyEmailModule } from './verify-email/verify-email.module';
 import { ChartsModule } from 'ng2-charts';
-import { ProductModule } from './product/product.module';
+
+import { AppRoutingModule } from './app-routing.module';
+
+import { CoreModule } from '@app/core/core.module';
+import { SharedModule } from '@app/shared';
+import { ShellModule } from './shell/shell.module';
+
 import { ActivateAccountModule } from './activate-account/activate-account.module';
-import { CategoryModule } from './category/category.module';
-import { CustomerService } from './customer/customer.service';
-import { SupplierModule } from './supplier/supplier.module';
-import { SupplierService } from './supplier/supplier.service';
 
 @NgModule({
   imports: [
     BrowserModule,
-    ServiceWorkerModule.register('./ngsw-worker.js', { enabled: environment.production }),
+    BrowserAnimationsModule,
     FormsModule,
     HttpClientModule,
     TranslateModule.forRoot(),
     ToastrModule.forRoot(),
-    BrowserAnimationsModule,
     ChartsModule,
     NgbModule,
     CoreModule,
     SharedModule,
     ShellModule,
-    HomeModule,
-    CategoryModule,
-    LoginModule,
-    RegisterModule,
-    SetpasswordModule,
-    ForgetPasswordModule,
-    VerifyEmailModule,
-    ActivateAccountModule,
-    ProductModule,
-    SupplierModule,
     AppRoutingModule // must be imported as the last module as it contains the fallback route
   ],
   declarations: [AppComponent],
-  providers: [CustomerService, SupplierService],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

@@ -12,7 +12,7 @@ const routes = {
   deleteSupplier: '/supplier'
 };
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class SupplierService extends BaseService<SupplierModel> {
   constructor(public httpClient: HttpClient) {
     super(httpClient);
@@ -22,8 +22,8 @@ export class SupplierService extends BaseService<SupplierModel> {
     return this.sendGet(`${routes.getSupplier}/${id}`);
   }
 
-  getsuppliers(): Observable<any> {
-    return this.sendGet(routes.getSuppliers);
+  getsuppliers(pageNum = 1): Observable<any> {
+    return this.sendGet(routes.getSuppliers, { params: { page: pageNum } });
   }
 
   createsupplier(payload: SupplierModel): Observable<any> {

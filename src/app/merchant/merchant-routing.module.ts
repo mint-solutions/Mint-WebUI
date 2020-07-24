@@ -1,14 +1,17 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { RegisterComponent } from '@app/register/register.component';
 import { extract } from '@app/core/i18n.service';
+import { UserComponent } from './user/user.component';
 
-const routes: Routes = [{ path: '', component: RegisterComponent, data: { title: extract('Register') } }];
+const routes: Routes = [
+  { path: '', redirectTo: '/', pathMatch: 'full' },
+  { path: 'user', component: UserComponent, data: { title: extract('User') } }
+];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
   providers: []
 })
-export class RegisterRoutingModule {}
+export class MerchantRoutingModule {}

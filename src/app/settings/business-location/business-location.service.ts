@@ -9,7 +9,8 @@ const routes = {
   getAllBusiness: '/company/getallbusiness',
   getBusinessLocation: '/businesslocation',
   updateBusinessLocation: '/businesslocation',
-  deleteBusinessLocation: '/businesslocation'
+  deleteBusinessLocation: '/businesslocation',
+  activateBusiness: '/company/changecompanystatus'
 };
 
 @Injectable({
@@ -33,6 +34,10 @@ export class BusinessLocationService extends BaseService<BusinessLocationModel> 
 
   updateBusinessLocation(payload: BusinessLocationModel): Observable<any> {
     return this.sendPatch(`${routes.updateBusinessLocation}/${payload.id}/updateBusinessLocation`, payload);
+  }
+
+  updateBusinessStatus(payload: { id: string; status: boolean }): Observable<any> {
+    return this.sendPatch(`${routes.activateBusiness}/${payload.id}/${payload.status}`, payload);
   }
 
   deleteBusinessLocation(id: number): Observable<any> {

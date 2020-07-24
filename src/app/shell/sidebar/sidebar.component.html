@@ -1,7 +1,7 @@
 <div id="left-sidebar" class="sidebar" *ngIf="sidebarVisible" style="overflow-y:scroll;">
   <div class="sidebar-scroll">
     <div class="logo-account">
-      eCorvids
+      Mints
     </div>
     <!-- Tab panes -->
     <div class="tab-content p-l-0 p-r-0">
@@ -11,9 +11,9 @@
             <li
               routerLinkActive="active"
               [routerLinkActiveOptions]="{ exact: true }"
-              [ngClass]="{ active: currentActiveMenu == 'admin' }"
+              [ngClass]="{ active: currentActiveMenu == 'home' }"
             >
-              <a class="" (click)="activeInactiveMenu('admin')" [routerLink]="['/']"
+              <a class="" (click)="activeInactiveMenu('home')" [routerLink]="['/']"
                 ><i class="icon-home"></i> <span>Dashboard</span></a
               >
             </li>
@@ -79,9 +79,9 @@
             <li
               routerLinkActive="active"
               [routerLinkActiveOptions]="{ exact: true }"
-              [ngClass]="{ active: currentActiveMenu == 'admin-users' }"
+              [ngClass]="{ active: currentActiveMenu == 'merchant-user' }"
             >
-              <a class="" (click)="activeInactiveMenu('admin-users')" [routerLink]="['/', 'admin-users', 'view']"
+              <a class="" (click)="activeInactiveMenu('merchant-user')" [routerLink]="['/', 'merchant', 'user']"
                 ><i class="icon icon-users"></i> <span>User</span></a
               >
             </li>

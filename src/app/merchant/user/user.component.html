@@ -5,39 +5,60 @@
     <div class="col-lg-12">
       <div class="card">
         <div class="header d-flex justify-content-between align-items-center pb-0">
-          <h2>Add Business Location</h2>
+          <h2>Add User</h2>
         </div>
 
         <div class="body">
-          <form class="row" [formGroup]="businessLocationForm" novalidate (ngSubmit)="onSubmit()">
+          <form class="row" [formGroup]="userForm" novalidate (ngSubmit)="onSubmit()">
             <div class="col-lg-4">
               <app-input
                 [required]="true"
                 label="Name"
                 name="Name"
                 id="name"
-                placeholder="Eg. Electronics"
-                [control]="businessLocationForm.get('name')"
+                placeholder="Eg. James Michael"
+                [control]="userForm.get('name')"
               ></app-input>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-4">
               <app-input
                 [required]="true"
-                label="Address"
-                name="Address"
-                id="address"
-                placeholder="Eg. 7, airport road, ikeja"
-                [control]="businessLocationForm.get('address')"
+                label="Email"
+                name="Email"
+                id="email"
+                placeholder="Eg. joe@gmail.com"
+                [control]="userForm.get('email')"
               ></app-input>
+            </div>
+            <div class="form-group col-lg-4">
+              <label for="address" class="control-label">Business Location</label>
+              <select
+                name=""
+                id=""
+                class="form-control mb-0"
+                formControlName="businesslocationId"
+                [ngClass]="{
+                  'parsley-error':
+                    !userForm.controls.businesslocationId.valid &&
+                    (userForm.controls.businesslocationId.touched || userForm.controls.businesslocationId.dirty),
+                  'parsley-success':
+                    userForm.controls.businesslocationId.valid &&
+                    (userForm.controls.businesslocationId.touched || userForm.controls.businesslocationId.dirty)
+                }"
+              >
+                <option selected disabled value="">Select Business Location</option>
+                <option [value]="businessLocation.id" *ngFor="let businessLocation of businessLocations">{{
+                  businessLocation.name
+                }}</option>
+              </select>
+              <app-input-error
+                name="Business Location"
+                [control]="userForm.get('businesslocationId')"
+              ></app-input-error>
             </div>
 
             <div class="form-group col-lg-2 pt-4 mt-1">
-              <button
-                type="submit"
-                class="btn btn-client btn-round"
-                [disabled]="!businessLocationForm.valid"
-                *ngIf="!formLoading"
-              >
+              <button type="submit" class="btn btn-client btn-round" [disabled]="!userForm.valid" *ngIf="!formLoading">
                 {{ this.mode }}
               </button>
               <button
@@ -65,7 +86,7 @@
       <div class="card">
         <app-loader [isLoading]="loader"></app-loader>
         <div class="header d-flex justify-content-between align-items-center pb-0">
-          <h2>All Business Location</h2>
+          <h2>All Users</h2>
         </div>
 
         <div class="body table-responsive">
@@ -74,42 +95,22 @@
               <tr>
                 <th>#</th>
                 <th>Name</th>
+                <th>Email</th>
                 <th>Business Location</th>
-                <th>Status</th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let business of businesses; let i = index">
+              <tr *ngFor="let user of users; let i = index">
                 <th scope="row">{{ i + 1 }}</th>
-                <td>{{ business.name }}</td>
+                <td>{{ user.name }}</td>
+                <td>{{ user.email }}</td>
+                <td></td>
                 <td>
-                  <button
-                    class="btn btn-sm btn-link btn-clear px-2"
-                    (click)="onGetBusinessLocations(business, onViewLocationModal)"
-                  >
-                    Business Locations
-                  </button>
-                </td>
-                <td>
-                  <div class="custom-control custom-switch">
-                    <input
-                      type="checkbox"
-                      class="custom-control-input"
-                      id="activateSwitch{{ business.id }}"
-                      (click)="onUpdateBusinessStatus(business)"
-                      [checked]="!business.isDisabled"
-                    />
-                    <label class="custom-control-label" for="activateSwitch{{ business.id }}">{{
-                      !business.isDisabled ? 'Enabled' : 'Disabled'
-                    }}</label>
-                  </div>
-                </td>
-                <td>
-                  <button class="btn btn-sm btn-link btn-clear px-2" (click)="onEdit(business, 'edith')">
+                  <button class="btn btn-sm btn-link btn-clear px-2" (click)="onEdit(user, 'edith')">
                     <i class="icon-software-pencil text-blue mr-1"></i>
                   </button>
-                  <button class="btn btn-sm btn-link btn-clear px-2" (click)="onDelete(business, doDelete)">
+                  <button class="btn btn-sm btn-link btn-clear px-2" (click)="onDelete(user, doDelete)">
                     <i class="icon-basic-trashcan text-danger"></i>
                   </button>
                 </td>

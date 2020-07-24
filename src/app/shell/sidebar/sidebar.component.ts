@@ -35,8 +35,8 @@ export class SidebarComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loggedInUser = 'MgbakoCentric';
-    this.activeInactiveMenuEvent.emit({ item: 'admin' });
+    //this.loggedInUser = 'MgbakoCentric';
+    //this.activeInactiveMenuEvent.emit({ item: 'home' });
   }
 
   changeNavTab(tab: string) {

@@ -12,7 +12,7 @@ const routes = {
   deleteCustomer: '/partners/customer'
 };
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class CustomerService extends BaseService<CustomerModel> {
   constructor(public httpClient: HttpClient) {
     super(httpClient);
