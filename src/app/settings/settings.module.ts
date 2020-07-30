@@ -7,9 +7,10 @@ import { BusinessLocationComponent } from './business-location/business-location
 import { SharedModule } from '@app/shared';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DataTablesModule } from 'angular-datatables';
+import { TaxComponent } from './tax/tax.component';
 
 @NgModule({
-  declarations: [RolesComponent, BusinessLocationComponent],
+  declarations: [RolesComponent, BusinessLocationComponent, TaxComponent],
   imports: [CommonModule, ReactiveFormsModule, SharedModule, DataTablesModule, SettingsRoutingModule]
 })
 export class SettingsModule {}

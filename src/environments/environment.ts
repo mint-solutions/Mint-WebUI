@@ -9,12 +9,12 @@
 // Note that as usual, any environment variables you expose through it will end up in your
 // bundle, and you should not use it for any sensitive information like passwords or keys.
 //
-import env from './.env';
+//import env from './.env';
 
 export const environment = {
   production: false,
-  version: env.npm_package_version + '-dev',
-  serverUrl: '/api',
+  //version: env.npm_package_version + '-dev',
+  serverUrl: 'https://retail-pro.herokuapp.com/api',
   defaultLanguage: 'en-US',
   supportedLanguages: ['en-US', 'fr-FR']
 };
