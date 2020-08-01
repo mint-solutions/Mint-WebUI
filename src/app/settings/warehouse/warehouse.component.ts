@@ -9,6 +9,9 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { WarehouseService } from './warehouse.service';
 import { WarehouseModel } from './warehouse.model';
 
+import { BusinessLocationService } from '@app/settings/business-location/business-location.service';
+import { BusinessLocationModel } from '@app/settings/business-location/business-location.model';
+
 const log = new Logger('home');
 
 @Component({
@@ -23,6 +26,7 @@ export class WarehouseComponent implements OnInit {
   warehouse: WarehouseModel[];
   warehouses: any[];
   warehouseForm: FormGroup;
+  businessLocations: BusinessLocationModel[];
   mode = 'Create';
   formLoading = false;
   loader: boolean;
@@ -40,12 +44,14 @@ export class WarehouseComponent implements OnInit {
     private toastr: ToastrService,
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
-    private warehouseService: WarehouseService
+    private warehouseService: WarehouseService,
+    private businessLocationService: BusinessLocationService
   ) {}
 
   ngOnInit() {
     this.createForm();
     this.getAllWarehouses();
+    this.getBusinessLocation();
   }
 
   getAllWarehouses() {
@@ -73,6 +79,28 @@ export class WarehouseComponent implements OnInit {
       );
   }
 
+  getBusinessLocation() {
+    this.loader = true;
+    this.businessLocationService
+      .getAllBusiness()
+      .pipe(
+        finalize(() => {
+          this.loader = false;
+        })
+      )
+      .subscribe(
+        res => {
+          console.log('getBusinessLocation', res);
+          if (res.status === true) {
+            this.businessLocations = res.result[0].businessLocation;
+          } else {
+            componentError(res.message, this.toastr);
+          }
+        },
+        error => serverError(error, this.toastr)
+      );
+  }
+
   onSubmit() {
     this.formLoading = true;
 
@@ -94,7 +122,11 @@ export class WarehouseComponent implements OnInit {
   onEdit(data: any, mode: any) {
     this.mode = 'Update';
     this.selectedRow = data;
-    this.warehouseForm.patchValue({ name: this.selectedRow.name, address: this.selectedRow.address });
+    this.warehouseForm.patchValue({
+      name: this.selectedRow.name,
+      address: this.selectedRow.address,
+      businesslocationId: this.selectedRow.businesslocationId
+    });
   }
 
   onCreate(data: any) {
@@ -212,8 +244,8 @@ export class WarehouseComponent implements OnInit {
   createForm() {
     this.warehouseForm = this.formBuilder.group({
       name: ['', Validators.required],
-      code: ['', Validators.required],
-      value: ['', Validators.required]
+      address: ['', Validators.required],
+      businesslocationId: ['', Validators.required]
     });
   }
 

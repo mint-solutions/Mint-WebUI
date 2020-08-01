@@ -1,6 +1,6 @@
 export interface WarehouseModel {
   name: string;
   address: string;
-  businessLocationId: number;
+  businesslocationId: number;
   id: 0;
 }

@@ -94,7 +94,11 @@ export class TaxComponent implements OnInit {
   onEdit(data: any, mode: any) {
     this.mode = 'Update';
     this.selectedRow = data;
-    this.taxForm.patchValue({ name: this.selectedRow.name, address: this.selectedRow.address });
+    this.taxForm.patchValue({
+      name: this.selectedRow.name,
+      code: this.selectedRow.code,
+      value: this.selectedRow.value
+    });
   }
 
   onCreate(data: any) {

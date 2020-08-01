@@ -6,7 +6,7 @@ import { WarehouseModel } from './warehouse.model';
 
 const routes = {
   createWarehouse: '/warehouse/create',
-  getWarehouses: '/warehouse',
+  getWarehouses: '/warehouse/false',
   updateWarehouse: '/warehouse',
   deleteWarehouse: '/warehouse'
 };
