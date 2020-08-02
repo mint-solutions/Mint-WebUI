@@ -161,7 +161,7 @@ export class WarehouseComponent implements OnInit {
     const payload = {
       ...data,
       id: this.selectedRow.id,
-      isDefault: true
+      isDisabled: false
     };
 
     this.warehouseService
