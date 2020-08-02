@@ -160,7 +160,8 @@ export class WarehouseComponent implements OnInit {
     console.log('onUpdate', data);
     const payload = {
       ...data,
-      id: this.selectedRow.id
+      id: this.selectedRow.id,
+      isDefault: true
     };
 
     this.warehouseService
@@ -173,6 +174,7 @@ export class WarehouseComponent implements OnInit {
       )
       .subscribe(
         (res: any) => {
+          console.log('update res', res);
           this.loader = false;
           if (res.status !== true) {
             return componentError(res.message, this.toastr);

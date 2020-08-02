@@ -103,16 +103,16 @@
                 <th>#</th>
                 <th>Name</th>
                 <th>Addreess</th>
-                <th>Business Location</th>
+                <th>Created by</th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let warehouse of warehousees; let i = index">
+              <tr *ngFor="let warehouse of warehouses; let i = index">
                 <th scope="row">{{ i + 1 }}</th>
                 <td>{{ warehouse.name }}</td>
-                <td>{{ warehouse.addreess }}</td>
-                <td>{{ warehouse.businessLocation }}</td>
+                <td>{{ warehouse.address }}</td>
+                <td>{{ warehouse.createdby }}</td>
                 <td>
                   <button class="btn btn-sm btn-link btn-clear px-2" (click)="onEdit(warehouse, 'edit')">
                     <i class="icon-software-pencil text-blue mr-1"></i>

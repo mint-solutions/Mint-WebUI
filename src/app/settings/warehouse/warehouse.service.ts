@@ -32,6 +32,6 @@ export class WarehouseService extends BaseService<WarehouseModel> {
   }
 
   deleteWarehouse(id: number): Observable<any> {
-    return this.sendDelete(`${routes.deleteWarehouse}/deletwarehouse/${id}`);
+    return this.sendDelete(`${routes.deleteWarehouse}/deletewarehouse/${id}`);
   }
 }
