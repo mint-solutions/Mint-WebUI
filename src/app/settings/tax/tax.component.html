@@ -1,0 +1,118 @@
+<div class="container-fluid">
+  <app-block-header [title]="title" [breadcrumbItem]="breadcrumbItem"></app-block-header>
+
+  <div class="row clearfix">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="header d-flex justify-content-between align-items-center pb-0">
+          <h2>Add Tax</h2>
+        </div>
+
+        <div class="body">
+          <form class="row" [formGroup]="taxForm" novalidate (ngSubmit)="onSubmit()">
+            <div class="col-lg-4">
+              <app-input
+                [required]="true"
+                label="Name"
+                name="Name"
+                id="name"
+                placeholder="Tax name"
+                [control]="taxForm.get('name')"
+              ></app-input>
+            </div>
+            <div class="col-lg-4">
+              <app-input
+                [required]="true"
+                label="Code"
+                name="Code"
+                id="code"
+                placeholder="Tax code"
+                [control]="taxForm.get('code')"
+              ></app-input>
+            </div>
+            <div class="col-lg-4">
+              <app-input
+                [required]="true"
+                label="Value"
+                name="Value"
+                id="value"
+                placeholder="Value"
+                [control]="taxForm.get('value')"
+              ></app-input>
+            </div>
+
+            <div class="form-group col-lg-2 pt-4 mt-1">
+              <button type="submit" class="btn btn-client btn-round" [disabled]="!taxForm.valid" *ngIf="!formLoading">
+                {{ this.mode }}
+              </button>
+              <button
+                type="button"
+                class="btn btn-outline-client btn-round float-right"
+                (click)="resetForm()"
+                *ngIf="mode === 'Update'"
+              >
+                Cancel
+              </button>
+
+              <button class="btn btn-client btn-round" [disabled]="true" *ngIf="formLoading">
+                <i class="fa fa-spinner fa-spin" style="margin-right: 5px"></i>
+                please wait
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row clearfix">
+    <div class="col-lg-12">
+      <div class="card">
+        <app-loader [isLoading]="loader"></app-loader>
+        <div class="header d-flex justify-content-between align-items-center pb-0">
+          <h2>All Taxes</h2>
+        </div>
+
+        <div class="body table-responsive">
+          <table class="table table-bordered table-striped" datatable>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Code</th>
+                <th>Value</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let tax of taxes; let i = index">
+                <th scope="row">{{ i + 1 }}</th>
+                <td>{{ tax.name }}</td>
+                <td>{{ tax.code }}</td>
+                <td>{{ tax.value }}</td>
+                <td>
+                  <button class="btn btn-sm btn-link btn-clear px-2" (click)="onEdit(tax, 'edit')">
+                    <i class="icon-software-pencil text-blue mr-1"></i>
+                  </button>
+                  <button class="btn btn-sm btn-link btn-clear px-2" (click)="onDelete(tax, doDelete)">
+                    <i class="icon-basic-trashcan text-danger"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #onViewLocationModal let-c="close" let-d="dismiss">
+  <h2>Home</h2>
+  {{ selectedRow | json }}
+</ng-template>
+
+<ng-template #doDelete let-c="close" let-d="dismiss">
+  <app-delete-modal [selectedRowData]="selectedRow.name" (onDelete)="onDoDelete()" [loader]="formLoading">
+  </app-delete-modal>
+</ng-template>

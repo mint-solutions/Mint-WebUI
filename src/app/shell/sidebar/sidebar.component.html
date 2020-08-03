@@ -92,11 +92,17 @@
               [ngClass]="{ active: currentActiveMenu == 'store-setting' }"
             >
               <a class="has-arrow" (click)="activeInactiveMenu('store-setting')"
-                ><i class="icon-settings"></i> <span>Store Setting</span></a
+                ><i class="icon-settings"></i> <span>Setting</span></a
               >
               <ul *ngIf="currentActiveMenu == 'store-setting'">
                 <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-                  <a [routerLink]="['/settings/business-location']">Business Location</a>
+                  <a [routerLink]="['/settings/business-location']">Business Location Settings</a>
+                </li>
+                <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                  <a [routerLink]="['/settings/tax']">Tax Settings</a>
+                </li>
+                <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                  <a [routerLink]="['/settings/warehouse']">Warehouse Settings</a>
                 </li>
                 <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
                   <a [routerLink]="['/settings/view']">tags</a>

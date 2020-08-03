@@ -1,0 +1,141 @@
+<div class="container-fluid">
+  <app-block-header [title]="title" [breadcrumbItem]="breadcrumbItem"></app-block-header>
+
+  <div class="row clearfix">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="header d-flex justify-content-between align-items-center pb-0">
+          <h2>Add Warehouse</h2>
+        </div>
+
+        <div class="body">
+          <form class="row" [formGroup]="warehouseForm" novalidate (ngSubmit)="onSubmit()">
+            <div class="col-lg-4">
+              <app-input
+                [required]="true"
+                label="Name"
+                name="Name"
+                id="name"
+                placeholder="Warehouse name"
+                [control]="warehouseForm.get('name')"
+              ></app-input>
+            </div>
+            <div class="col-lg-4">
+              <app-input
+                [required]="true"
+                label="Address"
+                name="Address"
+                id="address"
+                placeholder="Warehouse address"
+                [control]="warehouseForm.get('address')"
+              ></app-input>
+            </div>
+            <div class="form-group col-lg-4">
+              <label for="address" class="control-label">Business Location</label>
+              <select
+                name=""
+                id=""
+                class="form-control mb-0"
+                formControlName="businesslocationId"
+                [ngClass]="{
+                  'parsley-error':
+                    !warehouseForm.controls.businesslocationId.valid &&
+                    (warehouseForm.controls.businesslocationId.touched ||
+                      warehouseForm.controls.businesslocationId.dirty),
+                  'parsley-success':
+                    warehouseForm.controls.businesslocationId.valid &&
+                    (warehouseForm.controls.businesslocationId.touched ||
+                      warehouseForm.controls.businesslocationId.dirty)
+                }"
+              >
+                <option selected disabled value="">Select Business Location</option>
+                <option [value]="businessLocation.id" *ngFor="let businessLocation of businessLocations">{{
+                  businessLocation.name
+                }}</option>
+              </select>
+              <app-input-error
+                name="Business Location"
+                [control]="warehouseForm.get('businesslocationId')"
+              ></app-input-error>
+            </div>
+
+            <div class="form-group col-lg-2 pt-4 mt-1">
+              <button
+                type="submit"
+                class="btn btn-client btn-round"
+                [disabled]="!warehouseForm.valid"
+                *ngIf="!formLoading"
+              >
+                {{ this.mode }}
+              </button>
+              <button
+                type="button"
+                class="btn btn-outline-client btn-round float-right"
+                (click)="resetForm()"
+                *ngIf="mode === 'Update'"
+              >
+                Cancel
+              </button>
+
+              <button class="btn btn-client btn-round" [disabled]="true" *ngIf="formLoading">
+                <i class="fa fa-spinner fa-spin" style="margin-right: 5px"></i>
+                please wait
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row clearfix">
+    <div class="col-lg-12">
+      <div class="card">
+        <app-loader [isLoading]="loader"></app-loader>
+        <div class="header d-flex justify-content-between align-items-center pb-0">
+          <h2>All Warehousees</h2>
+        </div>
+
+        <div class="body table-responsive">
+          <table class="table table-bordered table-striped" datatable>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Addreess</th>
+                <th>Created by</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let warehouse of warehouses; let i = index">
+                <th scope="row">{{ i + 1 }}</th>
+                <td>{{ warehouse.name }}</td>
+                <td>{{ warehouse.address }}</td>
+                <td>{{ warehouse.createdby }}</td>
+                <td>
+                  <button class="btn btn-sm btn-link btn-clear px-2" (click)="onEdit(warehouse, 'edit')">
+                    <i class="icon-software-pencil text-blue mr-1"></i>
+                  </button>
+                  <button class="btn btn-sm btn-link btn-clear px-2" (click)="onDelete(warehouse, doDelete)">
+                    <i class="icon-basic-trashcan text-danger"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #onViewLocationModal let-c="close" let-d="dismiss">
+  <h2>Home</h2>
+  {{ selectedRow | json }}
+</ng-template>
+
+<ng-template #doDelete let-c="close" let-d="dismiss">
+  <app-delete-modal [selectedRowData]="selectedRow.name" (onDelete)="onDoDelete()" [loader]="formLoading">
+  </app-delete-modal>
+</ng-template>
