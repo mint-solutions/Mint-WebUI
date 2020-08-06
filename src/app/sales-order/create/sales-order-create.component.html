@@ -3,8 +3,50 @@
   <mat-horizontal-stepper labelPosition="bottom" linear #stepper>
     <mat-step>
       <ng-template matStepLabel>Select Customer</ng-template>
-      <div>
-        Some page shj
+      <div class="row clearfix">
+        <div class="col-lg-12">
+          <div class="card">
+            <app-loader [isLoading]="loader"></app-loader>
+            <div class="header d-flex justify-content-between align-items-center pb-0">
+              <h2>All Customers</h2>
+              <div>
+                <a class="btn btn-sm btn-outline-client" [routerLink]="['/customer/create']">
+                  <i class="icon fas fa-plus"></i> Add New Customer
+                </a>
+              </div>
+            </div>
+
+            <div class="body table-responsive">
+              <table class="table table-bordered table-striped" datatable>
+                <thead class="thead-dark">
+                  <tr>
+                    <th>#</th>
+                    <th>Full NAME</th>
+                    <th>Email</th>
+                    <th>Phone Number</th>
+                    <th>ACTION</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let customer of customers">
+                    <th scope="row">{{ customer.birthmonth }}</th>
+                    <td>{{ customer.fullname }}</td>
+                    <td>{{ customer.email }}</td>
+                    <td>{{ customer.mobilenumber }}</td>
+                    <td>
+                      <button class="btn btn-sm btn-link btn-clear px-2" (click)="onEdit(customer, 'edith')">
+                        <i class="icon-software-pencil text-blue mr-1"></i>
+                      </button>
+                      <button class="btn btn-sm btn-link btn-clear px-2" (click)="onDelete(customer, doDelete)">
+                        <i class="icon-basic-trashcan text-danger"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       </div>
     </mat-step>
     <mat-step>
