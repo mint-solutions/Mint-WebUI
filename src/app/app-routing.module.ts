@@ -26,6 +26,10 @@ const routes: Routes = [
       loadChildren: 'app/purchase-order/purchase-order.module#PurchaseOrderModule'
     },
     {
+      path: 'salesOrder',
+      loadChildren: 'app/sales-order/sales-order.module#SalesOrderModule'
+    },
+    {
       path: 'settings',
       loadChildren: 'app/settings/settings.module#SettingsModule'
     },

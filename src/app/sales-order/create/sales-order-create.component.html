@@ -1,0 +1,23 @@
+<div class="container-fluid">
+  <app-block-header [title]="title" [breadcrumbItem]="breadcrumbItem"></app-block-header>
+  <mat-horizontal-stepper labelPosition="bottom" linear #stepper>
+    <mat-step>
+      <ng-template matStepLabel>Select Customer</ng-template>
+      <div>
+        Some page shj
+      </div>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>Select Product</ng-template>
+      <div>Select product</div>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>Additional Information</ng-template>
+      <div>Additional Information</div>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>Preview and Save</ng-template>
+      <div>Save Sales Order</div>
+    </mat-step>
+  </mat-horizontal-stepper>
+</div>

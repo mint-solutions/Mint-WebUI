@@ -1,0 +1,202 @@
+<div class="container-fluid">
+  <app-block-header [title]="title" [breadcrumbItem]="breadcrumbItem">
+    <div>
+      <a class="btn btn-sm btn-outline-client" [routerLink]="['/salesOrder/create']">
+        <i class="icon fas fa-plus"></i> Add Sales Order
+      </a>
+    </div>
+  </app-block-header>
+
+  <div class="row clearfix">
+    <div class="col-lg-12">
+      <div class="card">
+        <app-loader [isLoading]="loader"></app-loader>
+        <div class="header d-flex justify-content-between align-items-center pb-0">
+          <h2>All Sales Orders</h2>
+        </div>
+
+        <div class="body table-responsive">
+          <table
+            class="table table-bordered table-striped table-sm"
+            datatable
+            [dtOptions]="dtOptions"
+            [dtTrigger]="dtTrigger"
+          >
+            <caption>
+              List of Products
+            </caption>
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Date</th>
+                <th scope="col">Invoice Number</th>
+                <th scope="col">Business Location</th>
+                <th scope="col">Due Date</th>
+                <th scope="col">Actions Button</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let salesOrder of salesOrders; let i = index">
+                <th scope="row">{{ i + 1 }}</th>
+                <td class="pointer">{{ salesOrder.name }}</td>
+                <td>{{ salesOrder.itemcode }}</td>
+                <td>
+                  <button class="btn btn-sm btn-client">
+                    12/09/2020
+                  </button>
+                </td>
+                <td>
+                  <button class="btn btn-sm btn-client" (click)="onViewRow(salesOrder, productConfigModal, 'View')">
+                    Product Configurations
+                  </button>
+                </td>
+                <td>
+                  <button class="btn btn-sm btn-link btn-clear px-2" (click)="onEdit(salesOrder, 'edit')">
+                    <i class="icon-software-pencil text-blue mr-1"></i>
+                  </button>
+                  <button
+                    class="btn btn-sm btn-link btn-clear px-2"
+                    (click)="onDelete(salesOrder, doDeletePurchaseOrder)"
+                  >
+                    <i class="icon-basic-trashcan text-danger"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #productConfigModal let-c="close" let-d="dismiss">
+  <div class="container">
+    <div class="row clearfix">
+      <div class="col-lg-12">
+        <form class="" [formGroup]="salesOrderForm" (ngSubmit)="onSubmit()">
+          <div class="card">
+            <div class="header d-flex justify-content-between align-items-center pb-0">
+              <h2>Product Configurations</h2>
+            </div>
+
+            <div class="body row">
+              <div class="col-lg-3">
+                <app-input
+                  [required]="true"
+                  label="Pack"
+                  id="pack"
+                  placeholder="Eg. 12"
+                  [control]="salesOrderForm.get('pack')"
+                  type="number"
+                  validator="number"
+                ></app-input>
+              </div>
+
+              <div class="col-lg-3">
+                <app-input
+                  label="Lead Time"
+                  id="leadtime"
+                  placeholder="Eg. 3hr"
+                  [control]="salesOrderForm.get('leadtime')"
+                  type="number"
+                  validator="number"
+                ></app-input>
+              </div>
+              <div class="col-lg-6">
+                <app-input
+                  label="Image link"
+                  id="imagelink"
+                  placeholder="Eg. https://placeholder.com"
+                  [control]="salesOrderForm.get('imagelink')"
+                ></app-input>
+              </div>
+
+              <div class="form-group col-md-2 d-inline-block pt-4">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="canexpire" formControlName="canexpire" />
+                  <label class="custom-control-label pointer" for="canexpire">Can expire</label>
+                </div>
+              </div>
+
+              <div class="form-group col-md-3 d-inline-block pt-4">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="canbesold" formControlName="canbesold" />
+                  <label class="custom-control-label pointer" for="canbesold">Is Can be sold</label>
+                </div>
+              </div>
+
+              <div class="form-group col-md-3 d-inline-block pt-4">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="canbesalesd" formControlName="canbesalesd" />
+                  <label class="custom-control-label pointer" for="canbesalesd">Can be salesd</label>
+                </div>
+              </div>
+
+              <div class="form-group col-md-3 d-inline-block pt-4">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="anypromo" formControlName="anypromo" />
+                  <label class="custom-control-label pointer" for="anypromo">Any promo</label>
+                </div>
+              </div>
+
+              <div class="form-group col-lg-12 mt-2">
+                <button
+                  type="submit"
+                  class="btn btn-client btn-round float-right"
+                  [disabled]="!salesOrderForm.valid"
+                  *ngIf="!formLoading"
+                >
+                  Update
+                </button>
+                <button class="btn btn-client btn-round float-right" [disabled]="true" *ngIf="formLoading">
+                  <i class="fa fa-spinner fa-spin" style="margin-right: 5px"></i>
+                  please wait
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <button type="button" class="search-close" aria-label="Close search form" (click)="d('Cross click')">
+    <i class="fi flaticon-close"></i>
+  </button>
+</ng-template>
+
+<ng-template #productDetailModal let-c="close" let-d="dismiss">
+  <div class="container">
+    <div class="row clearfix">
+      <div class="col-lg-12">
+        <div class="card product">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-lg-6">
+                <img [src]="selectedRow.imagelink" alt="" class="img-fluid" />
+              </div>
+              <div class="col-lg-6">
+                <h2 class="product-title">{{ selectedRow.name }}</h2>
+                <small>Category: {{ selectedRow.category.name }} > {{ selectedRow.subCategory.name }}</small>
+                <p class="mb-1">{{ selectedRow.description }}</p>
+
+                <hr class="hw-100" />
+                <h3 class="product-subtitle">Product Configuration</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button type="button" class="search-close" aria-label="Close search form" (click)="d('Cross click')">
+    <i class="fi flaticon-close"></i>
+  </button>
+</ng-template>
+
+<ng-template #doDeletePurchaseOrder let-c="close" let-d="dismiss">
+  <app-delete-modal [selectedRowData]="selectedRow.name" (onDelete)="onDoDelete()" [loader]="formLoading">
+  </app-delete-modal>
+</ng-template>
