@@ -70,7 +70,7 @@ export class SalesOrderCreateComponent implements OnInit, AfterViewInit, OnDestr
     this.getProducts();
     if (this.selectedRow && this.selectedRow.mode === 'edit') {
       this.mode = 'Update';
-      this.cardTitle = 'Edit Purchase Order';
+      this.cardTitle = 'Edit Sales Order';
       this.salesOrderFormOne.patchValue({
         customerId: this.selectedRow.customerId
       });
@@ -216,11 +216,15 @@ export class SalesOrderCreateComponent implements OnInit, AfterViewInit, OnDestr
     this.salesOrderFormTwo = this.formBuilder.group({
       productId: ['', [Validators.required]]
     });
+    this.salesOrderFormThree = this.formBuilder.group({
+      paymenttermId: ['', [Validators.required]]
+    });
   }
 
   resetForm() {
     this.salesOrderFormOne.reset();
     this.salesOrderFormTwo.reset();
+    this.salesOrderFormThree.reset();
     this.mode = 'Create';
     this.selectedRow = {};
   }
