@@ -21,9 +21,20 @@ import { DeleteModalComponent } from './modals/delete-modal/delete-modal.compone
 import { AppModalComponent } from './modals/app-modal/app-modal/app-modal.component';
 import { InputComponent } from './input/input.component';
 import { InputErrorComponent } from './input-error/input-error.component';
+import { MatStepperModule, MatIconModule, MatButtonModule } from '@angular/material';
 
 @NgModule({
-  imports: [CommonModule, NgxEchartsModule, RouterModule, NgbModule, FormsModule, ReactiveFormsModule, ChartsModule],
+  imports: [
+    CommonModule,
+    NgxEchartsModule,
+    RouterModule,
+    NgbModule,
+    FormsModule,
+    ReactiveFormsModule,
+    ChartsModule,
+    MatStepperModule,
+    MatIconModule
+  ],
   declarations: [
     LoaderComponent,
     BtnLoaderComponent,
@@ -54,7 +65,10 @@ import { InputErrorComponent } from './input-error/input-error.component';
     DoughnutChartComponent,
     InputValidatorDirective,
     InputComponent,
-    InputErrorComponent
+    InputErrorComponent,
+    MatStepperModule,
+    MatIconModule,
+    MatButtonModule
   ]
 })
 export class SharedModule {}

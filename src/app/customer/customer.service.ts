@@ -5,9 +5,9 @@ import { BaseService } from '@app/core/base.service';
 import { CustomerModel } from './customer.model';
 
 const routes = {
-  createCustomer: '/partners/customer/creat',
-  getCustomer: '/partners/customer',
-  getCustomers: '/partners/customer/mycustomer',
+  createCustomer: '/customer/creat',
+  getCustomer: '/customer',
+  getCustomers: '/customer/mycustomer',
   updateCustomer: '/partners',
   deleteCustomer: '/partners/customer'
 };

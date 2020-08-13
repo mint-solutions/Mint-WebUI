@@ -5,20 +5,19 @@ import { Subject } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ProductService } from './product.service';
+import { SalesOrderService } from './sales-order.service';
 import { finalize } from 'rxjs/operators';
 import { componentError, serverError } from '@app/helper';
 import { Router } from '@angular/router';
-import { TaxService } from '../settings/tax/tax.service';
 
 const log = new Logger('home');
 
 @Component({
-  selector: 'app-product',
-  templateUrl: './product.component.html',
-  styleUrls: ['./product.component.scss']
+  selector: 'app-sales-order',
+  templateUrl: './sales-order.component.html',
+  styleUrls: ['./sales-order.component.scss']
 })
-export class ProductComponent implements OnInit, AfterViewInit, OnDestroy {
+export class SalesOrderComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(DataTableDirective, { read: false })
   dtElement: DataTableDirective;
 
@@ -29,34 +28,30 @@ export class ProductComponent implements OnInit, AfterViewInit, OnDestroy {
   doDeleteModalRef: NgbModalRef;
   selectedRow: any;
 
-  products: any[] = [];
-  productForm: FormGroup;
+  salesOrders: any[] = [];
+  salesOrderForm: FormGroup;
   formLoading: boolean;
   loader: boolean;
-  taxes: any[] = [];
 
   public sidebarVisible = true;
-  public title = 'Product';
+  public title = 'Sales Order';
   public breadcrumbItem: any = [
     {
-      title: 'Product',
+      title: 'Sales Order',
       cssClass: 'active'
     }
   ];
 
   constructor(
-    private cdr: ChangeDetectorRef,
     private toastr: ToastrService,
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
-    private productService: ProductService,
-    private router: Router,
-    private taxService: TaxService
+    private salesOrderService: SalesOrderService,
+    private router: Router
   ) {}
 
   ngOnInit() {
-    this.getProducts();
-    this.getAllTax();
+    this.getSalesOrders();
   }
 
   ngAfterViewInit(): void {
@@ -68,10 +63,10 @@ export class ProductComponent implements OnInit, AfterViewInit, OnDestroy {
     this.dtTrigger.unsubscribe();
   }
 
-  getAllTax() {
+  getSalesOrders() {
     this.loader = true;
-    this.taxService
-      .getAllTax()
+    this.salesOrderService
+      .getSalesOrders()
       .pipe(
         finalize(() => {
           this.loader = false;
@@ -79,34 +74,9 @@ export class ProductComponent implements OnInit, AfterViewInit, OnDestroy {
       )
       .subscribe(
         res => {
-          console.log('res', res);
+          console.log('getSalesOrders', res);
           if (res.status === true) {
-            this.taxes = res.result;
-          } else {
-            componentError(res.message, this.toastr);
-          }
-        },
-        error => {
-          console.log('errorss', error);
-          serverError(error, this.toastr);
-        }
-      );
-  }
-
-  getProducts() {
-    this.loader = true;
-    this.productService
-      .getProducts()
-      .pipe(
-        finalize(() => {
-          this.loader = false;
-        })
-      )
-      .subscribe(
-        res => {
-          console.log('getProducts', res);
-          if (res.status === true) {
-            this.products = res.result;
+            this.salesOrders = res.result;
             this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
               // Destroy the table first
               dtInstance.destroy();
@@ -122,22 +92,16 @@ export class ProductComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onViewRow(event: any, modalView: any) {
-    //this.productForm.reset();
+    //this.salesOrderForm.reset();
     this.createForm();
 
     this.selectedRow = event;
 
-    console.log('event', this.selectedRow);
-
-    this.productForm.patchValue({
-      imagelink: this.selectedRow.productconfiguration.imagelink,
-      leadtime: this.selectedRow.productconfiguration.leadtime,
-      pack: this.selectedRow.productconfiguration.pack,
-      canexpire: this.selectedRow.productconfiguration.canexpire,
-      canbesold: this.selectedRow.productconfiguration.canbesold,
-      salestaxId: this.selectedRow.productconfiguration.salestaxId,
-      canbepurchased: this.selectedRow.productconfiguration.canbepurchased,
-      anypromo: this.selectedRow.productconfiguration.anypromo
+    this.salesOrderForm.patchValue({
+      supplierId: this.selectedRow.supplierId,
+      invoiceNumber: this.selectedRow.invoiceNumber,
+      shiptobusinessId: this.selectedRow.shiptobusinessId,
+      duedate: this.selectedRow.duedate
     });
 
     this.modalRef = this.modalService.open(modalView, {
@@ -161,10 +125,9 @@ export class ProductComponent implements OnInit, AfterViewInit, OnDestroy {
   onSubmit(status: boolean = true) {
     this.formLoading = true;
     const data = {
-      ...this.productForm.value,
-      leadtime: +this.productForm.value.leadtime,
-      pack: +this.productForm.value.pack,
-      salestaxId: +this.productForm.value.salestaxId
+      ...this.salesOrderForm.value,
+      leadtime: +this.salesOrderForm.value.leadtime,
+      pack: +this.salesOrderForm.value.pack
     };
 
     const config = {
@@ -172,8 +135,8 @@ export class ProductComponent implements OnInit, AfterViewInit, OnDestroy {
       id: this.selectedRow.productconfiguration.id
     };
 
-    this.productService
-      .updateproductConfig(config, data)
+    this.salesOrderService
+      .updateSalesOrderConfig(config, data)
       .pipe(
         finalize(() => {
           this.formLoading = false;
@@ -187,8 +150,8 @@ export class ProductComponent implements OnInit, AfterViewInit, OnDestroy {
           if (res.status !== true) {
             return componentError(res.message, this.toastr);
           }
-          this.getProducts();
-          this.toastr.success(res.message, 'Product Configuration');
+          this.getSalesOrders();
+          this.toastr.success(res.message, 'Sales Order');
         },
         error => serverError(error, this.toastr)
       );
@@ -217,8 +180,8 @@ export class ProductComponent implements OnInit, AfterViewInit, OnDestroy {
   onDoDelete() {
     this.formLoading = true;
 
-    this.productService
-      .deleteproduct(this.selectedRow.id)
+    this.salesOrderService
+      .deleteSalesOrder(this.selectedRow.id)
       .pipe(
         finalize(() => {
           this.formLoading = false;
@@ -231,7 +194,7 @@ export class ProductComponent implements OnInit, AfterViewInit, OnDestroy {
           if (res.status !== true) {
             return componentError(res.message, this.toastr);
           }
-          this.getProducts();
+          this.getSalesOrders();
           this.toastr.success(res.message, 'Product');
         },
         error => serverError(error, this.toastr)
@@ -241,21 +204,16 @@ export class ProductComponent implements OnInit, AfterViewInit, OnDestroy {
   createForm(formMode: any = null) {
     let isDisabled = formMode === 'view' ? true : false;
 
-    this.productForm = this.formBuilder.group({
-      imagelink: [''],
-      leadtime: [0],
-      salestaxId: ['', Validators.required],
-      pack: [''],
-      canexpire: [false],
-      //expiredenabled: [ false ],
-      canbesold: [false],
-      canbepurchased: [false],
-      anypromo: [false]
+    this.salesOrderForm = this.formBuilder.group({
+      supplierId: ['', [Validators.required]],
+      invoiceNumber: ['', [Validators.required]],
+      shiptobusinessId: ['', [Validators.required]],
+      duedate: ['', [Validators.required]]
     });
   }
 
   resetForm() {
-    this.productForm.reset();
+    this.salesOrderForm.reset();
     this.selectedRow = {};
   }
 }

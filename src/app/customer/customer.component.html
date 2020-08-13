@@ -2,8 +2,7 @@
   <app-block-header [title]="title" [breadcrumbItem]="breadcrumbItem">
     <div>
       <a class="btn btn-sm btn-outline-client" [routerLink]="['/customer/create']">
-        <i class="icon fas fa-plus"></i>
-        Add Customer
+        <i class="icon fas fa-plus"></i> Add Customer
       </a>
     </div>
   </app-block-header>
@@ -17,7 +16,7 @@
         </div>
 
         <div class="body table-responsive">
-          <table class="table table-bordered table-striped" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+          <table class="table table-bordered table-striped" datatable>
             <thead class="thead-dark">
               <tr>
                 <th>#</th>

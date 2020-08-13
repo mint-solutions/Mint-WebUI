@@ -1,8 +1,8 @@
 <div class="container-fluid">
   <app-block-header [title]="title" [breadcrumbItem]="breadcrumbItem">
     <div>
-      <a class="btn btn-sm btn-outline-client" [routerLink]="['/product/create']">
-        <i class="icon fas fa-plus"></i> Add Product
+      <a class="btn btn-sm btn-outline-client" [routerLink]="['/salesOrder/create']">
+        <i class="icon fas fa-plus"></i> Add Sales Order
       </a>
     </div>
   </app-block-header>
@@ -12,7 +12,7 @@
       <div class="card">
         <app-loader [isLoading]="loader"></app-loader>
         <div class="header d-flex justify-content-between align-items-center pb-0">
-          <h2>All Products</h2>
+          <h2>All Sales Orders</h2>
         </div>
 
         <div class="body table-responsive">
@@ -28,27 +28,36 @@
             <thead class="thead-dark">
               <tr>
                 <th scope="col">#</th>
-                <th scope="col">Product Name</th>
-                <th scope="col">Item Code</th>
-                <th scope="col">Product Configurations</th>
+                <th scope="col">Date</th>
+                <th scope="col">Invoice Number</th>
+                <th scope="col">Business Location</th>
+                <th scope="col">Due Date</th>
                 <th scope="col">Actions Button</th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let product of products; let i = index">
+              <tr *ngFor="let salesOrder of salesOrders; let i = index">
                 <th scope="row">{{ i + 1 }}</th>
-                <td class="pointer" (click)="onViewDetails(product, productDetailModal)">{{ product.name }}</td>
-                <td>{{ product.itemcode }}</td>
+                <td class="pointer">{{ salesOrder.name }}</td>
+                <td>{{ salesOrder.itemcode }}</td>
                 <td>
-                  <button class="btn btn-sm btn-client" (click)="onViewRow(product, productConfigModal, 'View')">
+                  <button class="btn btn-sm btn-client">
+                    12/09/2020
+                  </button>
+                </td>
+                <td>
+                  <button class="btn btn-sm btn-client" (click)="onViewRow(salesOrder, productConfigModal, 'View')">
                     Product Configurations
                   </button>
                 </td>
                 <td>
-                  <button class="btn btn-sm btn-link btn-clear px-2" (click)="onEdit(product, 'edit')">
+                  <button class="btn btn-sm btn-link btn-clear px-2" (click)="onEdit(salesOrder, 'edit')">
                     <i class="icon-software-pencil text-blue mr-1"></i>
                   </button>
-                  <button class="btn btn-sm btn-link btn-clear px-2" (click)="onDelete(product, doDeleteProduct)">
+                  <button
+                    class="btn btn-sm btn-link btn-clear px-2"
+                    (click)="onDelete(salesOrder, doDeletePurchaseOrder)"
+                  >
                     <i class="icon-basic-trashcan text-danger"></i>
                   </button>
                 </td>
@@ -65,7 +74,7 @@
   <div class="container">
     <div class="row clearfix">
       <div class="col-lg-12">
-        <form class="" [formGroup]="productForm" (ngSubmit)="onSubmit()">
+        <form class="" [formGroup]="salesOrderForm" (ngSubmit)="onSubmit()">
           <div class="card">
             <div class="header d-flex justify-content-between align-items-center pb-0">
               <h2>Product Configurations</h2>
@@ -78,7 +87,7 @@
                   label="Pack"
                   id="pack"
                   placeholder="Eg. 12"
-                  [control]="productForm.get('pack')"
+                  [control]="salesOrderForm.get('pack')"
                   type="number"
                   validator="number"
                 ></app-input>
@@ -89,40 +98,17 @@
                   label="Lead Time"
                   id="leadtime"
                   placeholder="Eg. 3hr"
-                  [control]="productForm.get('leadtime')"
+                  [control]="salesOrderForm.get('leadtime')"
                   type="number"
                   validator="number"
                 ></app-input>
               </div>
-
-              <div class="form-group col-lg-3">
-                <label for="taxes" class="control-label">Taxes</label>
-                <select
-                  name=""
-                  id=""
-                  class="form-control mb-0"
-                  formControlName="salestaxId"
-                  [ngClass]="{
-                    'parsley-error':
-                      !productForm.controls.salestaxId.valid &&
-                      (productForm.controls.salestaxId.touched || productForm.controls.salestaxId.dirty),
-                    'parsley-success':
-                      productForm.controls.salestaxId.valid &&
-                      (productForm.controls.salestaxId.touched || productForm.controls.salestaxId.dirty)
-                  }"
-                >
-                  <option selected disabled value="">Select Sales Tax</option>
-                  <option [value]="tax.id" *ngFor="let tax of taxes">{{ tax.name }}</option>
-                </select>
-                <app-input-error name="Tax" [control]="productForm.get('salestaxId')"></app-input-error>
-              </div>
-
               <div class="col-lg-6">
                 <app-input
                   label="Image link"
                   id="imagelink"
                   placeholder="Eg. https://placeholder.com"
-                  [control]="productForm.get('imagelink')"
+                  [control]="salesOrderForm.get('imagelink')"
                 ></app-input>
               </div>
 
@@ -142,13 +128,8 @@
 
               <div class="form-group col-md-3 d-inline-block pt-4">
                 <div class="custom-control custom-checkbox">
-                  <input
-                    type="checkbox"
-                    class="custom-control-input"
-                    id="canbepurchased"
-                    formControlName="canbepurchased"
-                  />
-                  <label class="custom-control-label pointer" for="canbepurchased">Can be purchased</label>
+                  <input type="checkbox" class="custom-control-input" id="canbesalesd" formControlName="canbesalesd" />
+                  <label class="custom-control-label pointer" for="canbesalesd">Can be salesd</label>
                 </div>
               </div>
 
@@ -163,7 +144,7 @@
                 <button
                   type="submit"
                   class="btn btn-client btn-round float-right"
-                  [disabled]="!productForm.valid"
+                  [disabled]="!salesOrderForm.valid"
                   *ngIf="!formLoading"
                 >
                   Update
@@ -215,7 +196,7 @@
   </button>
 </ng-template>
 
-<ng-template #doDeleteProduct let-c="close" let-d="dismiss">
+<ng-template #doDeletePurchaseOrder let-c="close" let-d="dismiss">
   <app-delete-modal [selectedRowData]="selectedRow.name" (onDelete)="onDoDelete()" [loader]="formLoading">
   </app-delete-modal>
 </ng-template>
