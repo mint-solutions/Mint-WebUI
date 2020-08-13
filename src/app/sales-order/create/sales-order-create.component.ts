@@ -31,6 +31,7 @@ export class SalesOrderCreateComponent implements OnInit, AfterViewInit, OnDestr
 
   customers: any[] = [];
   products: any[] = [];
+  paymentTerms: any[] = [];
 
   mode = 'Create';
 
