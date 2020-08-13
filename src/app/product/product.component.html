@@ -2,8 +2,7 @@
   <app-block-header [title]="title" [breadcrumbItem]="breadcrumbItem">
     <div>
       <a class="btn btn-sm btn-outline-client" [routerLink]="['/product/create']">
-        <i class="icon fas fa-plus"></i>
-        Add Product
+        <i class="icon fas fa-plus"></i> Add Product
       </a>
     </div>
   </app-block-header>
@@ -95,6 +94,29 @@
                   validator="number"
                 ></app-input>
               </div>
+
+              <div class="form-group col-lg-3">
+                <label for="taxes" class="control-label">Taxes</label>
+                <select
+                  name=""
+                  id=""
+                  class="form-control mb-0"
+                  formControlName="salestaxId"
+                  [ngClass]="{
+                    'parsley-error':
+                      !productForm.controls.salestaxId.valid &&
+                      (productForm.controls.salestaxId.touched || productForm.controls.salestaxId.dirty),
+                    'parsley-success':
+                      productForm.controls.salestaxId.valid &&
+                      (productForm.controls.salestaxId.touched || productForm.controls.salestaxId.dirty)
+                  }"
+                >
+                  <option selected disabled value="">Select Sales Tax</option>
+                  <option [value]="tax.id" *ngFor="let tax of taxes">{{ tax.name }}</option>
+                </select>
+                <app-input-error name="Tax" [control]="productForm.get('salestaxId')"></app-input-error>
+              </div>
+
               <div class="col-lg-6">
                 <app-input
                   label="Image link"

@@ -43,7 +43,6 @@ export class SalesOrderComponent implements OnInit, AfterViewInit, OnDestroy {
   ];
 
   constructor(
-    private cdr: ChangeDetectorRef,
     private toastr: ToastrService,
     private formBuilder: FormBuilder,
     private modalService: NgbModal,

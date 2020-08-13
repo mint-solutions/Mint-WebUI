@@ -21,7 +21,7 @@ import { DeleteModalComponent } from './modals/delete-modal/delete-modal.compone
 import { AppModalComponent } from './modals/app-modal/app-modal/app-modal.component';
 import { InputComponent } from './input/input.component';
 import { InputErrorComponent } from './input-error/input-error.component';
-import { MatStepperModule, MatIconModule } from '@angular/material';
+import { MatStepperModule, MatIconModule, MatButtonModule } from '@angular/material';
 
 @NgModule({
   imports: [
@@ -67,7 +67,8 @@ import { MatStepperModule, MatIconModule } from '@angular/material';
     InputComponent,
     InputErrorComponent,
     MatStepperModule,
-    MatIconModule
+    MatIconModule,
+    MatButtonModule
   ]
 })
 export class SharedModule {}

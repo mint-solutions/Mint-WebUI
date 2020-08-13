@@ -7,34 +7,30 @@ import { finalize } from 'rxjs/operators';
 import { componentError, serverError } from '@app/helper';
 import { Router } from '@angular/router';
 import { DataTableDirective } from 'angular-datatables';
-import { Subject } from 'rxjs';
 import { SalesOrderService } from '../sales-order.service';
-import { SupplierService } from '@app/supplier/supplier.service';
-import { BusinessLocationService } from '@app/settings/business-location/business-location.service';
-import { BusinessLocationModel } from '@app/settings/business-location/business-location.model';
+import { CustomerService } from '../../customer/customer.service';
+import { ProductService } from '../../product/product.service';
 
 const log = new Logger('home');
 
 @Component({
   selector: 'app-sales-order-create',
   templateUrl: './sales-order-create.component.html',
-  styleUrls: ['./sales-order-create.component.scss']
+  styleUrls: ['./sales-order-create.component.scss'],
+  providers: [ProductService]
 })
 export class SalesOrderCreateComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(DataTableDirective, { read: false })
   cardTitle = 'New Sales Order';
-  salesOrderForm: FormGroup;
+  salesOrderFormOne: FormGroup;
+  salesOrderFormTwo: FormGroup;
+  salesOrderFormThree: FormGroup;
   formLoading: boolean;
   loader: boolean;
   suppliersLoader: boolean;
 
-  dtElement: DataTableDirective;
-
-  dtTrigger: Subject<any> = new Subject();
-  dtOptions: DataTables.Settings = {};
-  customerForm: FormGroup;
-
   customers: any[] = [];
+  products: any[] = [];
 
   mode = 'Create';
 
@@ -43,7 +39,6 @@ export class SalesOrderCreateComponent implements OnInit, AfterViewInit, OnDestr
   packings: any[] = [];
   suppliers: any[] = [];
   subcategories: any[] = [];
-  businesses: BusinessLocationModel[];
 
   public sidebarVisible = true;
   public title = 'Create New Sales Order';
@@ -60,8 +55,8 @@ export class SalesOrderCreateComponent implements OnInit, AfterViewInit, OnDestr
     private formBuilder: FormBuilder,
     private route: Router,
     private salesOrderService: SalesOrderService,
-    private businessLocationService: BusinessLocationService,
-    private supplierService: SupplierService
+    private customerService: CustomerService,
+    private productService: ProductService
   ) {
     if (this.route.getCurrentNavigation() != null) {
       this.selectedRow = this.route.getCurrentNavigation().extras.state;
@@ -70,18 +65,14 @@ export class SalesOrderCreateComponent implements OnInit, AfterViewInit, OnDestr
   }
 
   ngOnInit() {
-    //this.getPackings();
-    this.getSuppliers();
     this.createForm();
-    this.getBusinessess();
+    this.getCustomers();
+    this.getProducts();
     if (this.selectedRow && this.selectedRow.mode === 'edit') {
       this.mode = 'Update';
       this.cardTitle = 'Edit Purchase Order';
-      this.salesOrderForm.patchValue({
-        supplierId: this.selectedRow.supplierId,
-        invoiceNumber: this.selectedRow.invoiceNumber,
-        shiptobusinessId: this.selectedRow.shiptobusinessId,
-        duedate: this.selectedRow.duedate
+      this.salesOrderFormOne.patchValue({
+        customerId: this.selectedRow.customerId
       });
     }
   }
@@ -93,20 +84,20 @@ export class SalesOrderCreateComponent implements OnInit, AfterViewInit, OnDestr
 
   ngOnDestroy() {}
 
-  getSuppliers() {
-    this.suppliersLoader = true;
-    this.supplierService
-      .getsuppliers()
+  getCustomers() {
+    this.loader = true;
+    this.customerService
+      .getCustomers()
       .pipe(
         finalize(() => {
-          this.suppliersLoader = false;
+          this.loader = false;
         })
       )
       .subscribe(
         res => {
-          console.log('getSuppliers', res);
+          console.log('getCustomers', res);
           if (res.status === true) {
-            this.suppliers = res.result;
+            this.customers = res.result;
             console.log(res);
           } else {
             componentError(res.message, this.toastr);
@@ -116,10 +107,10 @@ export class SalesOrderCreateComponent implements OnInit, AfterViewInit, OnDestr
       );
   }
 
-  getBusinessess() {
+  getProducts() {
     this.loader = true;
-    this.businessLocationService
-      .getAllBusiness()
+    this.productService
+      .getProducts()
       .pipe(
         finalize(() => {
           this.loader = false;
@@ -127,9 +118,9 @@ export class SalesOrderCreateComponent implements OnInit, AfterViewInit, OnDestr
       )
       .subscribe(
         res => {
-          console.log('getBusinessess', res);
+          console.log('getProducts', res);
           if (res.status === true) {
-            this.businesses = res.result;
+            this.products = res.result;
           } else {
             componentError(res.message, this.toastr);
           }
@@ -142,12 +133,10 @@ export class SalesOrderCreateComponent implements OnInit, AfterViewInit, OnDestr
     this.formLoading = true;
     console.log('this.mode', this.mode);
 
-    if (this.salesOrderForm.valid) {
+    if (this.salesOrderFormOne.valid && this.salesOrderFormTwo.valid) {
       const data = {
-        supplierId: this.salesOrderForm.value.supplierId,
-        invoiceNumber: this.salesOrderForm.value.invoiceNumber,
-        shiptobusinessId: this.salesOrderForm.value.shiptobusinessId,
-        duedate: this.salesOrderForm.value.duedate
+        customerId: this.salesOrderFormOne.value.customerId,
+        productId: this.salesOrderFormTwo.value.productId
       };
       switch (this.mode) {
         case 'Create':
@@ -191,6 +180,7 @@ export class SalesOrderCreateComponent implements OnInit, AfterViewInit, OnDestr
         }
       );
   }
+
   onUpdate(data: any) {
     console.log('onUpdate', data);
     const payload = {
@@ -220,18 +210,17 @@ export class SalesOrderCreateComponent implements OnInit, AfterViewInit, OnDestr
   }
 
   createForm(formMode: any = null) {
-    let isDisabled = formMode === 'view' ? true : false;
-
-    this.salesOrderForm = this.formBuilder.group({
-      supplierId: ['', [Validators.required]],
-      invoiceNumber: ['', [Validators.required]],
-      shiptobusinessId: ['', [Validators.required]],
-      duedate: ['', [Validators.required]]
+    this.salesOrderFormOne = this.formBuilder.group({
+      customerId: ['', [Validators.required]]
+    });
+    this.salesOrderFormTwo = this.formBuilder.group({
+      productId: ['', [Validators.required]]
     });
   }
 
   resetForm() {
-    this.salesOrderForm.reset();
+    this.salesOrderFormOne.reset();
+    this.salesOrderFormTwo.reset();
     this.mode = 'Create';
     this.selectedRow = {};
   }

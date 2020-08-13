@@ -9,6 +9,7 @@ import { ProductService } from './product.service';
 import { finalize } from 'rxjs/operators';
 import { componentError, serverError } from '@app/helper';
 import { Router } from '@angular/router';
+import { TaxService } from '../settings/tax/tax.service';
 
 const log = new Logger('home');
 
@@ -32,6 +33,7 @@ export class ProductComponent implements OnInit, AfterViewInit, OnDestroy {
   productForm: FormGroup;
   formLoading: boolean;
   loader: boolean;
+  taxes: any[] = [];
 
   public sidebarVisible = true;
   public title = 'Product';
@@ -48,11 +50,13 @@ export class ProductComponent implements OnInit, AfterViewInit, OnDestroy {
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
     private productService: ProductService,
-    private router: Router
+    private router: Router,
+    private taxService: TaxService
   ) {}
 
   ngOnInit() {
     this.getProducts();
+    this.getAllTax();
   }
 
   ngAfterViewInit(): void {
@@ -62,6 +66,31 @@ export class ProductComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     // Do not forget to unsubscribe the event
     this.dtTrigger.unsubscribe();
+  }
+
+  getAllTax() {
+    this.loader = true;
+    this.taxService
+      .getAllTax()
+      .pipe(
+        finalize(() => {
+          this.loader = false;
+        })
+      )
+      .subscribe(
+        res => {
+          console.log('res', res);
+          if (res.status === true) {
+            this.taxes = res.result;
+          } else {
+            componentError(res.message, this.toastr);
+          }
+        },
+        error => {
+          console.log('errorss', error);
+          serverError(error, this.toastr);
+        }
+      );
   }
 
   getProducts() {
@@ -98,12 +127,15 @@ export class ProductComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.selectedRow = event;
 
+    console.log('event', this.selectedRow);
+
     this.productForm.patchValue({
       imagelink: this.selectedRow.productconfiguration.imagelink,
       leadtime: this.selectedRow.productconfiguration.leadtime,
       pack: this.selectedRow.productconfiguration.pack,
       canexpire: this.selectedRow.productconfiguration.canexpire,
       canbesold: this.selectedRow.productconfiguration.canbesold,
+      salestaxId: this.selectedRow.productconfiguration.salestaxId,
       canbepurchased: this.selectedRow.productconfiguration.canbepurchased,
       anypromo: this.selectedRow.productconfiguration.anypromo
     });
@@ -131,7 +163,8 @@ export class ProductComponent implements OnInit, AfterViewInit, OnDestroy {
     const data = {
       ...this.productForm.value,
       leadtime: +this.productForm.value.leadtime,
-      pack: +this.productForm.value.pack
+      pack: +this.productForm.value.pack,
+      salestaxId: +this.productForm.value.salestaxId
     };
 
     const config = {
@@ -211,6 +244,7 @@ export class ProductComponent implements OnInit, AfterViewInit, OnDestroy {
     this.productForm = this.formBuilder.group({
       imagelink: [''],
       leadtime: [0],
+      salestaxId: ['', Validators.required],
       pack: [''],
       canexpire: [false],
       //expiredenabled: [ false ],

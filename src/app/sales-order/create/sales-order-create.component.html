@@ -1,7 +1,7 @@
 <div class="container-fluid">
   <app-block-header [title]="title" [breadcrumbItem]="breadcrumbItem"></app-block-header>
   <mat-horizontal-stepper labelPosition="bottom" linear #stepper>
-    <mat-step>
+    <mat-step [stepControl]="salesOrderFormOne">
       <ng-template matStepLabel>Select Customer</ng-template>
       <div class="row clearfix">
         <div class="col-lg-12">
@@ -24,38 +24,171 @@
                     <th>Full NAME</th>
                     <th>Email</th>
                     <th>Phone Number</th>
-                    <th>ACTION</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let customer of customers">
-                    <th scope="row">{{ customer.birthmonth }}</th>
+                  <tr *ngFor="let customer of customers; let i = index">
+                    <th scope="row">{{ i + 1 }}</th>
                     <td>{{ customer.fullname }}</td>
                     <td>{{ customer.email }}</td>
                     <td>{{ customer.mobilenumber }}</td>
-                    <td>
-                      <button class="btn btn-sm btn-link btn-clear px-2" (click)="onEdit(customer, 'edith')">
-                        <i class="icon-software-pencil text-blue mr-1"></i>
-                      </button>
-                      <button class="btn btn-sm btn-link btn-clear px-2" (click)="onDelete(customer, doDelete)">
-                        <i class="icon-basic-trashcan text-danger"></i>
-                      </button>
-                    </td>
                   </tr>
                 </tbody>
               </table>
             </div>
           </div>
         </div>
+        <div class="col-lg-12">
+          <div class="card">
+            <div class="body table-responsive">
+              <form class="row" [formGroup]="salesOrderFormOne">
+                <div class="form-group col-lg-3">
+                  <select
+                    name=""
+                    id=""
+                    class="form-control mb-0"
+                    formControlName="customerId"
+                    [ngClass]="{
+                      'parsley-error':
+                        !salesOrderFormOne.controls.customerId.valid &&
+                        (salesOrderFormOne.controls.customerId.touched || salesOrderFormOne.controls.customerId.dirty),
+                      'parsley-success':
+                        salesOrderFormOne.controls.customerId.valid &&
+                        (salesOrderFormOne.controls.customerId.touched || salesOrderFormOne.controls.customerId.dirty)
+                    }"
+                  >
+                    <option selected disabled value="">Select Customer</option>
+                    <option [value]="customer.id" *ngFor="let customer of customers; let i = index">{{
+                      customer.fullname
+                    }}</option>
+                  </select>
+                  <app-input-error name="Customer" [control]="salesOrderFormOne.get('customerId')"></app-input-error>
+                </div>
+                <div class="col-lg-3">
+                  <button mat-button matStepperNext class="purple-bg">Next</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-step>
+    <mat-step [stepControl]="salesOrderFormTwo">
+      <ng-template matStepLabel>Select Product</ng-template>
+      <div class="row clearfix">
+        <div class="col-lg-12">
+          <div class="card">
+            <app-loader [isLoading]="loader"></app-loader>
+            <div class="header d-flex justify-content-between align-items-center pb-0">
+              <h2>All Products</h2>
+              <div>
+                <a class="btn btn-sm btn-outline-client" [routerLink]="['/product/create']">
+                  <i class="icon fas fa-plus"></i> Add New Product
+                </a>
+              </div>
+            </div>
+
+            <div class="body table-responsive">
+              <table class="table table-bordered table-striped" datatable>
+                <thead class="thead-dark">
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Product Name</th>
+                    <th scope="col">Item Code</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let product of products; let i = index">
+                    <th scope="row">{{ i + 1 }}</th>
+                    <td class="pointer">{{ product.name }}</td>
+                    <td>{{ product.itemcode }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-12">
+          <div class="card">
+            <div class="body table-responsive">
+              <form class="row" [formGroup]="salesOrderFormTwo">
+                <div class="form-group col-lg-3">
+                  <select
+                    name=""
+                    id=""
+                    class="form-control mb-0"
+                    formControlName="productId"
+                    [ngClass]="{
+                      'parsley-error':
+                        !salesOrderFormTwo.controls.productId.valid &&
+                        (salesOrderFormTwo.controls.productId.touched || salesOrderFormTwo.controls.productId.dirty),
+                      'parsley-success':
+                        salesOrderFormTwo.controls.productId.valid &&
+                        (salesOrderFormTwo.controls.productId.touched || salesOrderFormTwo.controls.productId.dirty)
+                    }"
+                  >
+                    <option selected disabled value="">Select Product</option>
+                    <option [value]="product.id" *ngFor="let product of products; let i = index">{{
+                      product.name
+                    }}</option>
+                  </select>
+                  <app-input-error name="Product" [control]="salesOrderFormTwo.get('productId')"></app-input-error>
+                </div>
+                <div class="col-lg-3">
+                  <button mat-button matStepperPrevious class="purple-bg">Previous</button>
+                </div>
+                <div class="col-lg-3">
+                  <button mat-button matStepperNext class="purple-bg">Next</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
       </div>
     </mat-step>
     <mat-step>
-      <ng-template matStepLabel>Select Product</ng-template>
-      <div>Select product</div>
-    </mat-step>
-    <mat-step>
       <ng-template matStepLabel>Additional Information</ng-template>
-      <div>Additional Information</div>
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="body table-responsive">
+            <form class="row" [formGroup]="salesOrderFormThree">
+              <div class="form-group col-lg-3">
+                <select
+                  name=""
+                  id=""
+                  class="form-control mb-0"
+                  formControlName="paymenttermId"
+                  [ngClass]="{
+                    'parsley-error':
+                      !salesOrderFormThree.controls.paymenttermId.valid &&
+                      (salesOrderFormThree.controls.paymenttermId.touched ||
+                        salesOrderFormThree.controls.paymenttermId.dirty),
+                    'parsley-success':
+                      salesOrderFormThree.controls.paymenttermId.valid &&
+                      (salesOrderFormThree.controls.paymenttermId.touched ||
+                        salesOrderFormThree.controls.paymenttermId.dirty)
+                  }"
+                >
+                  <option selected disabled value="">Select Payment Term</option>
+                  <option [value]="paymentTerm.id" *ngFor="let paymentTerm of paymentTerms; let i = index">{{
+                    paymentTerm.name
+                  }}</option>
+                </select>
+                <app-input-error
+                  name="PaymentTerm"
+                  [control]="salesOrderFormThree.get('paymenttermId')"
+                ></app-input-error>
+              </div>
+              <div class="col-lg-3">
+                <button mat-button matStepperPrevious class="purple-bg">Previous</button>
+              </div>
+              <div class="col-lg-3">
+                <button mat-button matStepperNext class="purple-bg">Next</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
     </mat-step>
     <mat-step>
       <ng-template matStepLabel>Preview and Save</ng-template>

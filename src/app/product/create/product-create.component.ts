@@ -9,6 +9,8 @@ import { componentError, serverError } from '@app/helper';
 import { Router } from '@angular/router';
 import { CategoryService } from '@app/category/category.service';
 
+import { TaxService } from '../../settings/tax/tax.service';
+
 const log = new Logger('home');
 
 @Component({
@@ -28,6 +30,7 @@ export class ProductCreateComponent implements OnInit, AfterViewInit, OnDestroy 
 
   packings: any[] = [];
   categories: any[] = [];
+  taxes: any[] = [];
   subcategories: any[] = [];
 
   public sidebarVisible = true;
@@ -45,7 +48,8 @@ export class ProductCreateComponent implements OnInit, AfterViewInit, OnDestroy 
     private formBuilder: FormBuilder,
     private route: Router,
     private productService: ProductService,
-    private categoryService: CategoryService
+    private categoryService: CategoryService,
+    private taxService: TaxService
   ) {
     if (this.route.getCurrentNavigation() != null) {
       this.selectedRow = this.route.getCurrentNavigation().extras.state;
@@ -56,6 +60,7 @@ export class ProductCreateComponent implements OnInit, AfterViewInit, OnDestroy 
   ngOnInit() {
     //this.getPackings();
     this.getCategories();
+    this.getAllTax();
     this.createForm();
     if (this.selectedRow && this.selectedRow.mode === 'edit') {
       this.mode = 'Update';
@@ -66,6 +71,7 @@ export class ProductCreateComponent implements OnInit, AfterViewInit, OnDestroy 
         description: this.selectedRow.description,
         packingtype: this.selectedRow.packingtype,
         pack: this.selectedRow.pack,
+        salestaxId: this.selectedRow.tax.id,
         categoryId: this.selectedRow.category.id,
         subcategoryId: this.selectedRow.subCategory ? this.selectedRow.subCategory.id : null,
         expiredenabled: this.selectedRow.expiredenabled
@@ -79,6 +85,31 @@ export class ProductCreateComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   ngOnDestroy() {}
+
+  getAllTax() {
+    this.loader = true;
+    this.taxService
+      .getAllTax()
+      .pipe(
+        finalize(() => {
+          this.loader = false;
+        })
+      )
+      .subscribe(
+        res => {
+          console.log('res', res);
+          if (res.status === true) {
+            this.taxes = res.result;
+          } else {
+            componentError(res.message, this.toastr);
+          }
+        },
+        error => {
+          console.log('errorss', error);
+          serverError(error, this.toastr);
+        }
+      );
+  }
 
   getPackings() {
     this.loader = true;
@@ -143,6 +174,7 @@ export class ProductCreateComponent implements OnInit, AfterViewInit, OnDestroy 
           canbesold: this.productForm.value.canbesold,
           canbepurchased: this.productForm.value.canbepurchased,
           anypromo: this.productForm.value.anypromo,
+          salestaxId: this.productForm.value.salestaxId,
           imagelink: this.productForm.value.imagelink
         }
       };
@@ -224,6 +256,7 @@ export class ProductCreateComponent implements OnInit, AfterViewInit, OnDestroy 
       name: ['', Validators.required],
       itemcode: ['', [Validators.required]],
       categoryId: ['', Validators.required],
+      salestaxId: ['', Validators.required],
       description: [''],
       subcategoryId: [''],
       leadtime: [0],
