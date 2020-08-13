@@ -10,6 +10,7 @@ import { DataTableDirective } from 'angular-datatables';
 import { SalesOrderService } from '../sales-order.service';
 import { CustomerService } from '../../customer/customer.service';
 import { ProductService } from '../../product/product.service';
+import { PaymentTermsService } from '../../settings/payment-terms/payment-terms.service';
 
 const log = new Logger('home');
 
@@ -32,6 +33,7 @@ export class SalesOrderCreateComponent implements OnInit, AfterViewInit, OnDestr
   customers: any[] = [];
   products: any[] = [];
   paymentTerms: any[] = [];
+  saleTypes = [{ name: 'Wholesale', enum: 1 }, { name: 'Retail', enum: 2 }];
 
   mode = 'Create';
 
@@ -51,13 +53,13 @@ export class SalesOrderCreateComponent implements OnInit, AfterViewInit, OnDestr
   ];
 
   constructor(
-    private cdr: ChangeDetectorRef,
     private toastr: ToastrService,
     private formBuilder: FormBuilder,
     private route: Router,
     private salesOrderService: SalesOrderService,
     private customerService: CustomerService,
-    private productService: ProductService
+    private productService: ProductService,
+    private paymentTermsService: PaymentTermsService
   ) {
     if (this.route.getCurrentNavigation() != null) {
       this.selectedRow = this.route.getCurrentNavigation().extras.state;
@@ -69,6 +71,7 @@ export class SalesOrderCreateComponent implements OnInit, AfterViewInit, OnDestr
     this.createForm();
     this.getCustomers();
     this.getProducts();
+    this.getPaymentTerms();
     if (this.selectedRow && this.selectedRow.mode === 'edit') {
       this.mode = 'Update';
       this.cardTitle = 'Edit Sales Order';
@@ -108,6 +111,29 @@ export class SalesOrderCreateComponent implements OnInit, AfterViewInit, OnDestr
       );
   }
 
+  getPaymentTerms() {
+    this.loader = true;
+    this.paymentTermsService
+      .getPaymentTerms()
+      .pipe(
+        finalize(() => {
+          this.loader = false;
+        })
+      )
+      .subscribe(
+        res => {
+          console.log('getPaymentTerms', res);
+          if (res.status === true) {
+            this.paymentTerms = res.result;
+            console.log(res);
+          } else {
+            componentError(res.message, this.toastr);
+          }
+        },
+        error => serverError(error, this.toastr)
+      );
+  }
+
   getProducts() {
     this.loader = true;
     this.productService
@@ -134,11 +160,24 @@ export class SalesOrderCreateComponent implements OnInit, AfterViewInit, OnDestr
     this.formLoading = true;
     console.log('this.mode', this.mode);
 
-    if (this.salesOrderFormOne.valid && this.salesOrderFormTwo.valid) {
+    if (this.salesOrderFormOne.valid && this.salesOrderFormTwo.valid && this.salesOrderFormThree.valid) {
+      const productId = this.salesOrderFormTwo.value.productId;
+      const product = this.products.find(item => item.id === productId);
+      const salesItems = [
+        {
+          ...product,
+          productId
+        }
+      ];
       const data = {
         customerId: this.salesOrderFormOne.value.customerId,
-        productId: this.salesOrderFormTwo.value.productId
+        paymentTermId: this.salesOrderFormThree.value.paymenttermId,
+        emailsaleOrder: this.salesOrderFormThree.value.emailsaleOrder,
+        saleType: this.salesOrderFormThree.value.saleType,
+        salesItems
       };
+
+      console.log('pament terms data', data);
       switch (this.mode) {
         case 'Create':
           this.onCreate(data);
@@ -218,7 +257,9 @@ export class SalesOrderCreateComponent implements OnInit, AfterViewInit, OnDestr
       productId: ['', [Validators.required]]
     });
     this.salesOrderFormThree = this.formBuilder.group({
-      paymenttermId: ['', [Validators.required]]
+      paymenttermId: ['', [Validators.required]],
+      emailsaleOrder: ['', [Validators.required]],
+      saleType: ['', [Validators.required]]
     });
   }
 

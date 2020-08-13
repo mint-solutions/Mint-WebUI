@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 
 const routes = {
   getproducts: '/product/getmyproducts',
+  getProductsForSale: '/product/getProductForSale',
   getpacking: '/product/getpacking',
   createproducts: '/product/create',
   updateproduct: '/product',
@@ -21,6 +22,9 @@ export class ProductService extends BaseService<ProductModel> {
 
   getProducts(): Observable<any> {
     return this.sendGet(`${routes.getproducts}`);
+  }
+  getProductsForSale(): Observable<any> {
+    return this.sendGet(`${routes.getProductsForSale}`);
   }
   getPacking(): Observable<any> {
     return this.sendGet(`${routes.getpacking}`);

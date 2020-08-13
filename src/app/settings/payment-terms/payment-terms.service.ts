@@ -5,16 +5,16 @@ import { PaymentTermsHeaderModel } from './payment-terms.model';
 import { Observable } from 'rxjs';
 
 const routes = {
-  getPaymentTerms: '/settings/paymentterms'
+  getPaymentTerms: '/settings/getpaymentterms'
 };
 
 @Injectable({ providedIn: 'root' })
-export class SalesOrderService extends BaseService<PaymentTermsHeaderModel> {
+export class PaymentTermsService extends BaseService<PaymentTermsHeaderModel> {
   constructor(public httpClient: HttpClient) {
     super(httpClient);
   }
 
-  getSalesOrders(): Observable<any> {
+  getPaymentTerms(): Observable<any> {
     return this.sendGet(`${routes.getPaymentTerms}`);
   }
 }
