@@ -8,6 +8,7 @@ const routes = {
   createBusinessLocation: '/businesslocation/stores',
   getAllBusiness: '/company/getallbusiness',
   getBusinessLocation: '/businesslocation',
+  getMyBusinessLocations: '/businesslocation/mybusinesslocations',
   updateBusinessLocation: '/businesslocation',
   deleteBusinessLocation: '/businesslocation',
   activateBusiness: '/company/changecompanystatus'
@@ -24,8 +25,13 @@ export class BusinessLocationService extends BaseService<BusinessLocationModel> 
   getAllBusiness(): Observable<any> {
     return this.sendGet(routes.getAllBusiness);
   }
+
   getBusinessLocations(businessId: string): Observable<any> {
     return this.sendGet(`${routes.getBusinessLocation}/${businessId}/true`);
+  }
+
+  getMyBusinessLocations(): Observable<any> {
+    return this.sendGet(routes.getMyBusinessLocations);
   }
 
   createBusinessLocation(payload: BusinessLocationModel): Observable<any> {
