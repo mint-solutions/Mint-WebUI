@@ -57,7 +57,7 @@ export class WarehouseComponent implements OnInit {
   getAllWarehouses() {
     this.loader = true;
     this.warehouseService
-      .getAllWarehouses()
+      .getWarehouseByBusinessLocation()
       .pipe(
         finalize(() => {
           this.loader = false;

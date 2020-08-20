@@ -5,7 +5,7 @@ import { PurchaseOrderHeaderModel } from './purchase-order.model';
 import { Observable } from 'rxjs';
 
 const routes = {
-  getpurchaseOrders: '/purchaseOrder/getmypurchaseOrders',
+  getpurchaseOrders: '/purchaseorder/getpurchaseinfo',
   getpacking: '/purchaseOrder/getpacking',
   createPurchaseOrder: '​/purchaseorder/creatpurchaseOrder',
   updatePurchaseOrder: '/purchaseOrder',
