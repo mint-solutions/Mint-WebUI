@@ -183,6 +183,8 @@ export class PurchaseOrderCreateComponent implements OnInit, AfterViewInit, OnDe
     console.log('this.mode', this.mode);
 
     if (this.purchaseOrderFormTwo.valid && this.purchaseOrderFormTwo.valid) {
+      const productId = this.purchaseOrderFormOne.value.productId;
+      const invoiceNumber = this.purchaseOrderFormTwo.value.invoiceNumber;
       const unitquantity = this.purchaseOrderFormTwo.value.unitquantity;
       const ctnquantity = this.purchaseOrderFormTwo.value.ctnquantity;
       const retailcost = this.purchaseOrderFormTwo.value.retailcost;
@@ -192,6 +194,7 @@ export class PurchaseOrderCreateComponent implements OnInit, AfterViewInit, OnDe
 
       const purchaseItems = [
         {
+          productId,
           unitquantity,
           ctnquantity,
           retailcost,
@@ -208,6 +211,8 @@ export class PurchaseOrderCreateComponent implements OnInit, AfterViewInit, OnDe
         duedate: this.purchaseOrderFormTwo.value.duedate,
         purchaseItems
       };
+
+      console.log(JSON.stringify(data));
       switch (this.mode) {
         case 'Create':
           this.onCreate(data);
@@ -291,7 +296,8 @@ export class PurchaseOrderCreateComponent implements OnInit, AfterViewInit, OnDe
       unitquantity: [{ value: '0' }, [Validators.required]],
       warehouseId: ['', [Validators.required]],
       wholesalecost: ['', [Validators.required]],
-      retailcost: ['', [Validators.required]]
+      retailcost: ['', [Validators.required]],
+      invoiceNumber: ['', [Validators.required]]
     });
   }
 

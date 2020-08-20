@@ -95,7 +95,7 @@
                     </div>
 
                     <div class="body row">
-                      <div class="form-group col-lg-3">
+                      <div class="form-group col-lg-4">
                         <label for="address" class="control-label">Supplier</label>
                         <select
                           name=""
@@ -124,7 +124,7 @@
                         ></app-input-error>
                       </div>
 
-                      <div class="form-group col-lg-3">
+                      <div class="form-group col-lg-4">
                         <label for="address" class="control-label">Business Locations</label>
                         <select
                           name=""
@@ -154,7 +154,7 @@
                         ></app-input-error>
                       </div>
 
-                      <div class="form-group col-lg-3">
+                      <div class="form-group col-lg-4">
                         <label for="address" class="control-label">Select Warehouse</label>
                         <select
                           name=""
@@ -183,7 +183,7 @@
                         ></app-input-error>
                       </div>
 
-                      <div class="col-lg-3">
+                      <div class="form-group col-lg-4">
                         <label for="ctnquantity" class="control-label">Quantity</label>
                         <input
                           [required]="true"
@@ -197,7 +197,7 @@
                         />
                       </div>
 
-                      <div class="col-lg-3">
+                      <div class="form-group col-lg-4">
                         <label for="unitquantity" class="control-label">Unit</label>
                         <input
                           [required]="true"
@@ -211,7 +211,7 @@
                         />
                       </div>
 
-                      <div class="col-lg-3">
+                      <div class="form-group col-lg-4">
                         <label for="wholesalecost" class="control-label">Wholesale Cost</label>
                         <input
                           [required]="true"
@@ -224,7 +224,7 @@
                         />
                       </div>
 
-                      <div class="col-lg-3">
+                      <div class="form-group col-lg-4">
                         <label for="retailcost" class="control-label">Retail Cost</label>
                         <input
                           [required]="true"
@@ -237,7 +237,19 @@
                         />
                       </div>
 
-                      <div class="form-group col-lg-3">
+                      <div class="form-group col-lg-4">
+                        <label for="retailcost" class="control-label">Invoice Number</label>
+                        <input
+                          [required]="true"
+                          id="invoiceNumber"
+                          name="Name"
+                          class="form-control mb-0"
+                          placeholder="Retail cost"
+                          [formControl]="purchaseOrderFormTwo.get('invoiceNumber')"
+                        />
+                      </div>
+
+                      <div class="form-group col-lg-4">
                         <label for="duedate" class="control-label">Set Due Date</label>
                         <input
                           [required]="true"
