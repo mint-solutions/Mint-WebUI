@@ -1,221 +1,392 @@
 <div class="container-fluid">
   <app-block-header [title]="title" [breadcrumbItem]="breadcrumbItem"></app-block-header>
 
-  <form class="" [formGroup]="purchaseOrderForm" (ngSubmit)="onSubmit()">
-    <div class="row clearfix">
-      <div class="col-lg-12">
-        <div class="card">
-          <div class="header d-flex justify-content-between align-items-center pb-0">
-            <h2>{{ cardTitle }}</h2>
-            <div class="">
-              <i class="icon datatable-icon-add"></i>
-              <span style="text-decoration: underline; cursor: pointer" [routerLink]="['/purchaseOrder/view']"
-                >View all</span
-              >
+  <mat-horizontal-stepper labelPosition="bottom" linear #stepper>
+    <mat-step [stepControl]="purchaseOrderFormOne">
+      <ng-template matStepLabel>Select Product</ng-template>
+      <div class="row clearfix">
+        <div class="col-lg-12">
+          <div class="card">
+            <app-loader [isLoading]="loader"></app-loader>
+            <div class="header d-flex justify-content-between align-items-center pb-0">
+              <h2>All Products</h2>
+              <div>
+                <a class="btn btn-sm btn-outline-client" [routerLink]="['/product/create']">
+                  <i class="icon fas fa-plus"></i> Add New Product
+                </a>
+              </div>
+            </div>
+
+            <div class="body table-responsive">
+              <table class="table table-bordered table-striped" datatable>
+                <thead class="thead-dark">
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Product Name</th>
+                    <th scope="col">Item Code</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let product of products; let i = index">
+                    <th scope="row">{{ i + 1 }}</th>
+                    <td class="pointer">{{ product.name }}</td>
+                    <td>{{ product.itemcode }}</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
-
-          <div class="body row">
-            <div class="col-lg-4">
-              <app-input
-                [required]="true"
-                label="Invoice Number"
-                id="invoiceNumber"
-                name="Invoice Number"
-                placeholder="Eg. INV001"
-                [control]="purchaseOrderForm.get('invoiceNumber')"
-              ></app-input>
-            </div>
-
-            <div class="form-group col-lg-4">
-              <label for="address" class="control-label">Supplier</label>
-              <select
-                name=""
-                id=""
-                class="form-control mb-0"
-                formControlName="supplierId"
-                [ngClass]="{
-                  'parsley-error':
-                    !purchaseOrderForm.controls.supplierId.valid &&
-                    (purchaseOrderForm.controls.supplierId.touched || purchaseOrderForm.controls.supplierId.dirty),
-                  'parsley-success':
-                    purchaseOrderForm.controls.supplierId.valid &&
-                    (purchaseOrderForm.controls.supplierId.touched || purchaseOrderForm.controls.supplierId.dirty)
-                }"
-              >
-                <option selected disabled value="">Select supplier</option>
-                <option [value]="supplier.id" *ngFor="let supplier of suppliers"
-                  >{{ supplier.companyname }} ({{ supplier.contactpersonname }})</option
-                >
-              </select>
-              <app-input-error name="Category" [control]="purchaseOrderForm.get('supplierId')"></app-input-error>
-            </div>
-
-            <div class="form-group col-lg-4">
-              <label for="address" class="control-label">Businesses</label>
-              <select
-                name=""
-                id=""
-                class="form-control mb-0"
-                formControlName="shiptobusinessId"
-                [ngClass]="{
-                  'parsley-error':
-                    !purchaseOrderForm.controls.shiptobusinessId.valid &&
-                    (purchaseOrderForm.controls.shiptobusinessId.touched ||
-                      purchaseOrderForm.controls.shiptobusinessId.dirty),
-                  'parsley-success':
-                    purchaseOrderForm.controls.shiptobusinessId.valid &&
-                    (purchaseOrderForm.controls.shiptobusinessId.touched ||
-                      purchaseOrderForm.controls.shiptobusinessId.dirty)
-                }"
-              >
-                <option selected disabled value="">Select business</option>
-                <option [value]="business.id" *ngFor="let business of businesses">{{ business.name }} </option>
-              </select>
-              <app-input-error
-                name="subcategory"
-                [control]="purchaseOrderForm.get('shiptobusinessId')"
-              ></app-input-error>
-            </div>
-
-            <div class="form-group col-lg-12">
-              <app-input
-                [required]="true"
-                label="Due Date"
-                id="duedate"
-                name="Due Date"
-                placeholder="Eg. 20/02/2021"
-                [control]="purchaseOrderForm.get('duedate')"
-              ></app-input>
-            </div>
-
-            <div class="form-group col-lg-12 mt-2">
-              <button
-                type="submit"
-                class="btn btn-client btn-round float-right"
-                [disabled]="!purchaseOrderForm.valid"
-                *ngIf="!formLoading"
-              >
-                {{ mode }}
-              </button>
-              <button class="btn btn-client btn-round float-right" [disabled]="true" *ngIf="formLoading">
-                <i class="fa fa-spinner fa-spin" style="margin-right: 5px"></i>
-                please wait
-              </button>
-
-              <button
-                type="button"
-                class="btn btn-outline-client btn-round"
-                (click)="resetForm()"
-                *ngIf="mode === 'Update'"
-              >
-                Cancel
-              </button>
+        </div>
+        <div class="col-lg-12">
+          <div class="card">
+            <div class="body table-responsive">
+              <form class="row" [formGroup]="purchaseOrderFormOne">
+                <div class="form-group col-lg-3">
+                  <select
+                    name=""
+                    id=""
+                    class="form-control mb-0"
+                    formControlName="productId"
+                    (change)="destructureProduct()"
+                    [ngClass]="{
+                      'parsley-error':
+                        !purchaseOrderFormOne.controls.productId.valid &&
+                        (purchaseOrderFormOne.controls.productId.touched ||
+                          purchaseOrderFormOne.controls.productId.dirty),
+                      'parsley-success':
+                        purchaseOrderFormOne.controls.productId.valid &&
+                        (purchaseOrderFormOne.controls.productId.touched ||
+                          purchaseOrderFormOne.controls.productId.dirty)
+                    }"
+                  >
+                    <option selected disabled value="">Select Product</option>
+                    <option [value]="product.id" *ngFor="let product of products; let i = index">{{
+                      product.name
+                    }}</option>
+                  </select>
+                  <app-input-error name="Product" [control]="purchaseOrderFormOne.get('productId')"></app-input-error>
+                </div>
+                <div class="col-lg-3">
+                  <button mat-button matStepperNext class="purple-bg">Next</button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
       </div>
-    </div>
-
-    <!-- PRODUCT CONFIGURATION -->
-    <!--  <div class="row clearfix" *ngIf="mode === 'Create'">
+    </mat-step>
+    <mat-step [stepControl]="purchaseOrderFormTwo">
+      <ng-template matStepLabel>Create Purchase Order</ng-template>
       <div class="col-lg-12">
         <div class="card">
-          <div class="header d-flex justify-content-between align-items-center pb-0">
-            <h2>Product Configurations</h2>
-          </div>
+          <div class="body table-responsive">
+            <form class="" [formGroup]="purchaseOrderFormTwo" (ngSubmit)="onSubmit()">
+              <div class="row clearfix">
+                <div class="col-lg-12">
+                  <div class="card">
+                    <div class="header d-flex justify-content-between align-items-center pb-0">
+                      <h2>{{ cardTitle }}</h2>
+                      <div class="">
+                        <i class="icon datatable-icon-add"></i>
+                        <span style="text-decoration: underline; cursor: pointer" [routerLink]="['/purchaseOrder/view']"
+                          >View all</span
+                        >
+                      </div>
+                    </div>
 
-          <div class="body row">
-            <div class="col-lg-3">
-              <app-input
-                [required]="true"
-                label="Packing Quantity"
-                id="pack"
-                placeholder="Eg. 12"
-                [control]="purchaseOrderForm.get('pack')"
-                type="number"
-                validator="number"
-              ></app-input>
-            </div>
+                    <div class="body row">
+                      <div class="form-group col-lg-3">
+                        <label for="address" class="control-label">Supplier</label>
+                        <select
+                          name=""
+                          id=""
+                          class="form-control mb-0"
+                          formControlName="supplierId"
+                          [ngClass]="{
+                            'parsley-error':
+                              !purchaseOrderFormTwo.controls.supplierId.valid &&
+                              (purchaseOrderFormTwo.controls.supplierId.touched ||
+                                purchaseOrderFormTwo.controls.supplierId.dirty),
+                            'parsley-success':
+                              purchaseOrderFormTwo.controls.supplierId.valid &&
+                              (purchaseOrderFormTwo.controls.supplierId.touched ||
+                                purchaseOrderFormTwo.controls.supplierId.dirty)
+                          }"
+                        >
+                          <option selected disabled value="">Select supplier</option>
+                          <option [value]="supplier.id" *ngFor="let supplier of suppliers"
+                            >{{ supplier.companyname }} ({{ supplier.contactpersonname }})</option
+                          >
+                        </select>
+                        <app-input-error
+                          name="Category"
+                          [control]="purchaseOrderFormTwo.get('supplierId')"
+                        ></app-input-error>
+                      </div>
 
-            <div class="col-lg-3">
-              <app-input
-                label="Lead Time"
-                id="leadtime"
-                placeholder="Eg. 3hr"
-                [control]="purchaseOrderForm.get('leadtime')"
-                type="number"
-                validator="number"
-              ></app-input>
-            </div>
-            <div class="col-lg-5">
-              <app-input
-                label="Image link"
-                id="imagelink"
-                placeholder="Eg. https://placeholder.com"
-                [control]="purchaseOrderForm.get('imagelink')"
-              ></app-input>
-            </div>
+                      <div class="form-group col-lg-3">
+                        <label for="address" class="control-label">Business Locations</label>
+                        <select
+                          name=""
+                          id=""
+                          class="form-control mb-0"
+                          formControlName="shiptobusinessId"
+                          (change)="getWarehouses($event)"
+                          [ngClass]="{
+                            'parsley-error':
+                              !purchaseOrderFormTwo.controls.shiptobusinessId.valid &&
+                              (purchaseOrderFormTwo.controls.shiptobusinessId.touched ||
+                                purchaseOrderFormTwo.controls.shiptobusinessId.dirty),
+                            'parsley-success':
+                              purchaseOrderFormTwo.controls.shiptobusinessId.valid &&
+                              (purchaseOrderFormTwo.controls.shiptobusinessId.touched ||
+                                purchaseOrderFormTwo.controls.shiptobusinessId.dirty)
+                          }"
+                        >
+                          <option selected disabled value="">Select business Location</option>
+                          <option [value]="businessLocation.id" *ngFor="let businessLocation of businessLocations"
+                            >{{ businessLocation.name }}
+                          </option>
+                        </select>
+                        <app-input-error
+                          name="subcategory"
+                          [control]="purchaseOrderFormTwo.get('shiptobusinessId')"
+                        ></app-input-error>
+                      </div>
 
-            <div class="form-group col-md-2 d-inline-block pt-4">
-              <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" id="canexpire" formControlName="canexpire" />
-                <label class="custom-control-label pointer" for="canexpire">Can expire</label>
+                      <div class="form-group col-lg-3">
+                        <label for="address" class="control-label">Select Warehouse</label>
+                        <select
+                          name=""
+                          id=""
+                          class="form-control mb-0"
+                          formControlName="warehouseId"
+                          [ngClass]="{
+                            'parsley-error':
+                              !purchaseOrderFormTwo.controls.warehouseId.valid &&
+                              (purchaseOrderFormTwo.controls.warehouseId.touched ||
+                                purchaseOrderFormTwo.controls.warehouseId.dirty),
+                            'parsley-success':
+                              purchaseOrderFormTwo.controls.warehouseId.valid &&
+                              (purchaseOrderFormTwo.controls.warehouseId.touched ||
+                                purchaseOrderFormTwo.controls.warehouseId.dirty)
+                          }"
+                        >
+                          <option selected disabled value="">Select Warehouses</option>
+                          <option [value]="warehouse.id" *ngFor="let warehouse of warehouses"
+                            >{{ warehouse.name }}
+                          </option>
+                        </select>
+                        <app-input-error
+                          name="subcategory"
+                          [control]="purchaseOrderFormTwo.get('warehouseId')"
+                        ></app-input-error>
+                      </div>
+
+                      <div class="col-lg-3">
+                        <label for="ctnquantity" class="control-label">Quantity</label>
+                        <input
+                          [required]="true"
+                          id="ctnquantity"
+                          name="Name"
+                          class="form-control mb-0"
+                          placeholder="Quantity"
+                          type="number"
+                          (keyup)="setUnitQuantity($event)"
+                          [formControl]="purchaseOrderFormTwo.get('ctnquantity')"
+                        />
+                      </div>
+
+                      <div class="col-lg-3">
+                        <label for="unitquantity" class="control-label">Unit</label>
+                        <input
+                          [required]="true"
+                          id="unitquantity"
+                          name="Name"
+                          class="form-control mb-0"
+                          placeholder="Unit Quantity"
+                          type="number"
+                          [formControl]="purchaseOrderFormTwo.get('unitquantity')"
+                          readonly
+                        />
+                      </div>
+
+                      <div class="col-lg-3">
+                        <label for="wholesalecost" class="control-label">Wholesale Cost</label>
+                        <input
+                          [required]="true"
+                          id="wholesalecost"
+                          name="Name"
+                          class="form-control mb-0"
+                          placeholder="Wholesale cost"
+                          type="number"
+                          [formControl]="purchaseOrderFormTwo.get('wholesalecost')"
+                        />
+                      </div>
+
+                      <div class="col-lg-3">
+                        <label for="retailcost" class="control-label">Retail Cost</label>
+                        <input
+                          [required]="true"
+                          id="retailcost"
+                          name="Name"
+                          class="form-control mb-0"
+                          placeholder="Retail cost"
+                          type="number"
+                          [formControl]="purchaseOrderFormTwo.get('retailcost')"
+                        />
+                      </div>
+
+                      <div class="form-group col-lg-3">
+                        <label for="duedate" class="control-label">Set Due Date</label>
+                        <input
+                          [required]="true"
+                          label="Due Date"
+                          id="duedate"
+                          name="Due Date"
+                          class="form-control mb-0"
+                          placeholder="Eg. 20/02/2021"
+                          [formControl]="purchaseOrderFormTwo.get('duedate')"
+                          matInput
+                          [matDatepicker]="duedate"
+                        />
+                        <mat-datepicker-toggle matSuffix [for]="duedate"></mat-datepicker-toggle>
+                        <mat-datepicker #duedate color="primary"></mat-datepicker>
+                      </div>
+
+                      <div class="form-group col-lg-12 mt-2">
+                        <button mat-button matStepperPrevious class="purple-bg">Previous</button>
+                        <button
+                          type="submit"
+                          class="btn btn-client btn-round float-right"
+                          [disabled]="!purchaseOrderFormTwo.valid"
+                          *ngIf="!formLoading"
+                        >
+                          {{ mode }}
+                        </button>
+                        <button class="btn btn-client btn-round float-right" [disabled]="true" *ngIf="formLoading">
+                          <i class="fa fa-spinner fa-spin" style="margin-right: 5px"></i>
+                          please wait
+                        </button>
+
+                        <button
+                          type="button"
+                          class="btn btn-outline-client btn-round"
+                          (click)="resetForm()"
+                          *ngIf="mode === 'Update'"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
 
-            <div class="form-group col-md-2 d-inline-block pt-4">
-              <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" id="canbesold" formControlName="canbesold" />
-                <label class="custom-control-label pointer" for="canbesold">Is Can be sold</label>
-              </div>
-            </div>
-
-            <div class="form-group col-md-2 d-inline-block pt-4">
-              <div class="custom-control custom-checkbox">
-                <input
-                  type="checkbox"
-                  class="custom-control-input"
-                  id="canbepurchased"
-                  formControlName="canbepurchased"
-                />
-                <label class="custom-control-label pointer" for="canbepurchased">Can be purchased</label>
-              </div>
-            </div>
-
-            <div class="form-group col-md-2 d-inline-block pt-4">
-              <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" id="anypromo" formControlName="anypromo" />
-                <label class="custom-control-label pointer" for="anypromo">Any promo</label>
-              </div>
-            </div>
-
-            <div class="form-group col-lg-3 mt-2">
-              <button
-                type="submit"
-                class="btn btn-client btn-round float-right"
-                [disabled]="!purchaseOrderForm.valid"
-                *ngIf="!formLoading"
-              >
-                {{ this.mode }}
-              </button>
-              <button class="btn btn-client btn-round float-right" [disabled]="true" *ngIf="formLoading">
-                <i class="fa fa-spinner fa-spin" style="margin-right: 5px"></i>
-                please wait
-              </button>
-
-              <button
-                type="button"
-                class="btn btn-outline-client btn-round"
-                (click)="resetForm()"
-                *ngIf="mode === 'Update'"
-              >
-                Cancel
-              </button>
-            </div>
+              <!-- PRODUCT CONFIGURATION -->
+              <!--  <div class="row clearfix" *ngIf="mode === 'Create'">
+                <div class="col-lg-12">
+                  <div class="card">
+                    <div class="header d-flex justify-content-between align-items-center pb-0">
+                      <h2>Product Configurations</h2>
+                    </div>
+          
+                    <div class="body row">
+                      <div class="col-lg-3">
+                        <app-input
+                          [required]="true"
+                          label="Packing Quantity"
+                          id="pack"
+                          placeholder="Eg. 12"
+                          [control]="purchaseOrderFormTwo.get('pack')"
+                          type="number"
+                          validator="number"
+                        ></app-input>
+                      </div>
+          
+                      <div class="col-lg-3">
+                        <app-input
+                          label="Lead Time"
+                          id="leadtime"
+                          placeholder="Eg. 3hr"
+                          [control]="purchaseOrderFormTwo.get('leadtime')"
+                          type="number"
+                          validator="number"
+                        ></app-input>
+                      </div>
+                      <div class="col-lg-5">
+                        <app-input
+                          label="Image link"
+                          id="imagelink"
+                          placeholder="Eg. https://placeholder.com"
+                          [control]="purchaseOrderFormTwo.get('imagelink')"
+                        ></app-input>
+                      </div>
+          
+                      <div class="form-group col-md-2 d-inline-block pt-4">
+                        <div class="custom-control custom-checkbox">
+                          <input type="checkbox" class="custom-control-input" id="canexpire" formControlName="canexpire" />
+                          <label class="custom-control-label pointer" for="canexpire">Can expire</label>
+                        </div>
+                      </div>
+          
+                      <div class="form-group col-md-2 d-inline-block pt-4">
+                        <div class="custom-control custom-checkbox">
+                          <input type="checkbox" class="custom-control-input" id="canbesold" formControlName="canbesold" />
+                          <label class="custom-control-label pointer" for="canbesold">Is Can be sold</label>
+                        </div>
+                      </div>
+          
+                      <div class="form-group col-md-2 d-inline-block pt-4">
+                        <div class="custom-control custom-checkbox">
+                          <input
+                            type="checkbox"
+                            class="custom-control-input"
+                            id="canbepurchased"
+                            formControlName="canbepurchased"
+                          />
+                          <label class="custom-control-label pointer" for="canbepurchased">Can be purchased</label>
+                        </div>
+                      </div>
+          
+                      <div class="form-group col-md-2 d-inline-block pt-4">
+                        <div class="custom-control custom-checkbox">
+                          <input type="checkbox" class="custom-control-input" id="anypromo" formControlName="anypromo" />
+                          <label class="custom-control-label pointer" for="anypromo">Any promo</label>
+                        </div>
+                      </div>
+          
+                      <div class="form-group col-lg-3 mt-2">
+                        <button
+                          type="submit"
+                          class="btn btn-client btn-round float-right"
+                          [disabled]="!purchaseOrderFormTwo.valid"
+                          *ngIf="!formLoading"
+                        >
+                          {{ this.mode }}
+                        </button>
+                        <button class="btn btn-client btn-round float-right" [disabled]="true" *ngIf="formLoading">
+                          <i class="fa fa-spinner fa-spin" style="margin-right: 5px"></i>
+                          please wait
+                        </button>
+          
+                        <button
+                          type="button"
+                          class="btn btn-outline-client btn-round"
+                          (click)="resetForm()"
+                          *ngIf="mode === 'Update'"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div> -->
+            </form>
           </div>
         </div>
       </div>
-    </div> -->
-  </form>
+    </mat-step>
+  </mat-horizontal-stepper>
 </div>
