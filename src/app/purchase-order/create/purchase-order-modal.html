@@ -1,0 +1,27 @@
+<h1 mat-dialog-title>Customize Your Order</h1>
+<div mat-dialog-content>
+  <mat-form-field>
+    <mat-label>Product Name</mat-label>
+    <input matInput [(ngModel)]="data.name" readonly />
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Quantity</mat-label>
+    <input matInput type="number" [(ngModel)]="data.ctnQuantity" />
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Wholesale Cost</mat-label>
+    <input matInput type="number" [(ngModel)]="data.wholesaleCost" />
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Retail Cost</mat-label>
+    <input matInput type="number" [(ngModel)]="data.retailCost" />
+  </mat-form-field>
+</div>
+<div mat-dialog-actions class="row btn-div">
+  <div class="col-lg-10">
+    <button mat-button (click)="onNoClick(data)" class="black-bg">Cancel</button>
+  </div>
+  <div class="col-lg-2">
+    <button mat-button [mat-dialog-close]="data" cdkFocusInitial class="purple-bg">Save</button>
+  </div>
+</div>
