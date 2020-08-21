@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, AfterViewInit, ViewChild, Inject } from '@angular/core';
 import EChartOption = echarts.EChartOption;
 import { Logger } from '@app/core/logger.service';
 import { ToastrService } from 'ngx-toastr';
@@ -14,10 +14,11 @@ import { ProductService } from '../../product/product.service';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource } from '@angular/material';
 import { MatPaginator } from '@angular/material/paginator';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 const log = new Logger('home');
 
-export interface PeriodicElement {
+export interface SelectedElement {
   name: string;
   position: number;
   itemCode: number;
@@ -29,8 +30,30 @@ export interface PeriodicElement {
   pack: number;
 }
 
-const PRODUCT_TABLE_DATA: PeriodicElement[] = [];
-const SELECTED_TABLE_DATA: PeriodicElement[] = [];
+const PRODUCT_TABLE_DATA: SelectedElement[] = [];
+const SELECTED_TABLE_DATA: SelectedElement[] = [];
+
+let TEMP_SELECTION: string;
+
+@Component({
+  selector: 'purchase-order-modal',
+  templateUrl: 'purchase-order-modal.html',
+  styleUrls: ['./purchase-order-create.component.scss']
+})
+export class PurchaseOrderModalComponent {
+  constructor(
+    public dialogRef: MatDialogRef<PurchaseOrderModalComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: SelectedElement
+  ) {}
+
+  onNoClick(data: SelectedElement): void {
+    const tempSelection = JSON.parse(TEMP_SELECTION);
+    Object.keys(data).forEach(key => {
+      data[key] = tempSelection[key];
+    });
+    this.dialogRef.close();
+  }
+}
 
 @Component({
   selector: 'app-purchase-order-create',
@@ -42,8 +65,8 @@ export class PurchaseOrderCreateComponent implements OnInit, AfterViewInit, OnDe
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   products: any[] = [];
-  dataSource = new MatTableDataSource<PeriodicElement>(PRODUCT_TABLE_DATA);
-  selectedSource = new MatTableDataSource<PeriodicElement>(SELECTED_TABLE_DATA);
+  dataSource = new MatTableDataSource<SelectedElement>(PRODUCT_TABLE_DATA);
+  selectedSource = new MatTableDataSource<SelectedElement>(SELECTED_TABLE_DATA);
   displayedColumns: string[] = ['select', 'position', 'itemCode', 'name', 'pack'];
   displayedSelectedColumns: string[] = [
     'position',
@@ -55,7 +78,7 @@ export class PurchaseOrderCreateComponent implements OnInit, AfterViewInit, OnDe
     'unitQuantity',
     'action'
   ];
-  selection = new SelectionModel<PeriodicElement>(true, []);
+  selection = new SelectionModel<SelectedElement>(true, []);
 
   cardTitle = 'New Purchase Order';
   purchaseOrderFormOne: FormGroup;
@@ -91,7 +114,8 @@ export class PurchaseOrderCreateComponent implements OnInit, AfterViewInit, OnDe
     private businessLocationService: BusinessLocationService,
     private supplierService: SupplierService,
     private productService: ProductService,
-    private warehouseService: WarehouseService
+    private warehouseService: WarehouseService,
+    public modal: MatDialog
   ) {
     if (this.route.getCurrentNavigation() != null) {
       this.selectedRow = this.route.getCurrentNavigation().extras.state;
@@ -142,7 +166,7 @@ export class PurchaseOrderCreateComponent implements OnInit, AfterViewInit, OnDe
   }
 
   /** The label for the checkbox on the passed row */
-  checkboxLabel(row?: PeriodicElement): string {
+  checkboxLabel(row?: SelectedElement): string {
     if (!row) {
       return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
     }
@@ -151,6 +175,18 @@ export class PurchaseOrderCreateComponent implements OnInit, AfterViewInit, OnDe
 
   useSelectedProducts() {
     this.selectedSource.data = this.selection.selected.map(product => product);
+  }
+
+  openDialog(data: any): void {
+    TEMP_SELECTION = JSON.stringify(data);
+    const dialogRef = this.modal.open(PurchaseOrderModalComponent, {
+      width: '500px',
+      data
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      // Do nothing
+    });
   }
 
   getSuppliers() {
@@ -269,26 +305,34 @@ export class PurchaseOrderCreateComponent implements OnInit, AfterViewInit, OnDe
     console.log('this.mode', this.mode);
 
     if (this.purchaseOrderFormTwo.valid && this.purchaseOrderFormTwo.valid) {
-      const productId = this.purchaseOrderFormOne.value.productId;
-      const invoiceNumber = this.purchaseOrderFormTwo.value.invoiceNumber;
-      const unitquantity = this.purchaseOrderFormTwo.value.unitquantity;
-      const ctnquantity = this.purchaseOrderFormTwo.value.ctnquantity;
-      const retailcost = this.purchaseOrderFormTwo.value.retailcost;
-      const wholesalecost = this.purchaseOrderFormTwo.value.wholesalecost;
-      const linewholesalecost = wholesalecost * ctnquantity;
-      const lineretailcost = retailcost * unitquantity;
+      const purchaseItems = this.selection.selected
+        .map(selected => {
+          const {
+            productId,
+            ctnQuantity: ctnquantity,
+            retailCost: retailcost,
+            wholesaleCost: wholesalecost,
+            pack
+          } = selected;
+          const unitquantity = ctnquantity * pack;
+          const linewholesalecost = wholesalecost * ctnquantity;
+          const lineretailcost = retailcost * unitquantity;
+          return {
+            productId,
+            unitquantity,
+            ctnquantity,
+            retailcost,
+            wholesalecost,
+            linewholesalecost,
+            lineretailcost
+          };
+        })
+        .filter(selected => selected.ctnquantity);
 
-      const purchaseItems = [
-        {
-          productId,
-          unitquantity,
-          ctnquantity,
-          retailcost,
-          wholesalecost,
-          linewholesalecost,
-          lineretailcost
-        }
-      ];
+      if (!purchaseItems.length) {
+        return this.toastr.error('Customize your orders and try again', 'Invalid Purchase Order');
+      }
+
       const data = {
         supplierId: this.purchaseOrderFormTwo.value.supplierId,
         invoiceNumber: this.purchaseOrderFormTwo.value.invoiceNumber,
@@ -298,7 +342,6 @@ export class PurchaseOrderCreateComponent implements OnInit, AfterViewInit, OnDe
         purchaseItems
       };
 
-      console.log(JSON.stringify(data));
       switch (this.mode) {
         case 'Create':
           this.onCreate(data);
@@ -378,11 +421,7 @@ export class PurchaseOrderCreateComponent implements OnInit, AfterViewInit, OnDe
       supplierId: ['', [Validators.required]],
       shiptobusinessId: ['', [Validators.required]],
       duedate: ['', [Validators.required]],
-      ctnquantity: ['', [Validators.required]],
-      unitquantity: [{ value: '0' }, [Validators.required]],
       warehouseId: ['', [Validators.required]],
-      wholesalecost: ['', [Validators.required]],
-      retailcost: ['', [Validators.required]],
       invoiceNumber: ['', [Validators.required]]
     });
   }

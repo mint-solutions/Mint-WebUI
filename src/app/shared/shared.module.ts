@@ -21,6 +21,7 @@ import { DeleteModalComponent } from './modals/delete-modal/delete-modal.compone
 import { AppModalComponent } from './modals/app-modal/app-modal/app-modal.component';
 import { InputComponent } from './input/input.component';
 import { InputErrorComponent } from './input-error/input-error.component';
+import { PurchaseOrderModalComponent } from '@app/purchase-order/create/purchase-order-create.component';
 import {
   MatStepperModule,
   MatIconModule,
@@ -31,7 +32,8 @@ import {
   MatTableModule,
   MatCheckboxModule,
   MatInputModule,
-  MatPaginatorModule
+  MatPaginatorModule,
+  MatDialogModule
 } from '@angular/material';
 
 @NgModule({
@@ -48,24 +50,8 @@ import {
     MatTableModule,
     MatCheckboxModule,
     MatInputModule,
-    MatPaginatorModule
-  ],
-  declarations: [
-    LoaderComponent,
-    BtnLoaderComponent,
-    AlertMessageComponent,
-    AppModalComponent,
-    ActivityPostComponent,
-    BlockHeaderComponent,
-    DataTableComponent,
-    DeleteModalComponent,
-    SortableDirective,
-    GroupByPipe,
-    LineChartComponent,
-    DoughnutChartComponent,
-    InputValidatorDirective,
-    InputComponent,
-    InputErrorComponent
+    MatPaginatorModule,
+    MatDialogModule
   ],
   exports: [
     LoaderComponent,
@@ -91,7 +77,27 @@ import {
     MatTableModule,
     MatCheckboxModule,
     MatInputModule,
-    MatPaginatorModule
-  ]
+    MatPaginatorModule,
+    MatDialogModule
+  ],
+  declarations: [
+    LoaderComponent,
+    BtnLoaderComponent,
+    AlertMessageComponent,
+    AppModalComponent,
+    ActivityPostComponent,
+    BlockHeaderComponent,
+    DataTableComponent,
+    DeleteModalComponent,
+    SortableDirective,
+    GroupByPipe,
+    LineChartComponent,
+    DoughnutChartComponent,
+    InputValidatorDirective,
+    InputComponent,
+    InputErrorComponent,
+    PurchaseOrderModalComponent
+  ],
+  entryComponents: [PurchaseOrderModalComponent]
 })
 export class SharedModule {}
