@@ -27,7 +27,11 @@ import {
   MatButtonModule,
   MatDatepickerModule,
   MatFormFieldModule,
-  MatNativeDateModule
+  MatNativeDateModule,
+  MatTableModule,
+  MatCheckboxModule,
+  MatInputModule,
+  MatPaginatorModule
 } from '@angular/material';
 
 @NgModule({
@@ -40,7 +44,11 @@ import {
     ReactiveFormsModule,
     ChartsModule,
     MatStepperModule,
-    MatIconModule
+    MatIconModule,
+    MatTableModule,
+    MatCheckboxModule,
+    MatInputModule,
+    MatPaginatorModule
   ],
   declarations: [
     LoaderComponent,
@@ -79,7 +87,11 @@ import {
     MatDatepickerModule,
     MatFormFieldModule,
     MatNativeDateModule,
-    FormsModule
+    FormsModule,
+    MatTableModule,
+    MatCheckboxModule,
+    MatInputModule,
+    MatPaginatorModule
   ]
 })
 export class SharedModule {}

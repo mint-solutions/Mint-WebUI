@@ -2,8 +2,8 @@
   <app-block-header [title]="title" [breadcrumbItem]="breadcrumbItem"></app-block-header>
 
   <mat-horizontal-stepper labelPosition="bottom" linear #stepper>
-    <mat-step [stepControl]="purchaseOrderFormOne">
-      <ng-template matStepLabel>Select Product</ng-template>
+    <mat-step>
+      <ng-template matStepLabel>Select Product(s)</ng-template>
       <div class="row clearfix">
         <div class="col-lg-12">
           <div class="card">
@@ -17,23 +17,72 @@
               </div>
             </div>
 
-            <div class="body table-responsive">
-              <table class="table table-bordered table-striped" datatable>
-                <thead class="thead-dark">
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Product Name</th>
-                    <th scope="col">Item Code</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let product of products; let i = index">
-                    <th scope="row">{{ i + 1 }}</th>
-                    <td class="pointer">{{ product.name }}</td>
-                    <td>{{ product.itemcode }}</td>
-                  </tr>
-                </tbody>
+            <div class="body table-responsive row">
+              <mat-form-field class="col-lg-12" appearance="outline">
+                <mat-label>Search Product</mat-label>
+                <mat-icon matPrefix>search</mat-icon>
+                <input
+                  #searchInput
+                  matInput
+                  (keyup)="applyFilter($event.target.value)"
+                  placeholder="Type product name here"
+                />
+              </mat-form-field>
+              <table mat-table [dataSource]="dataSource" class="mat-elevation-z0 col-lg-12">
+                <!-- Checkbox Column -->
+                <ng-container matColumnDef="select">
+                  <th mat-header-cell *matHeaderCellDef>
+                    <mat-checkbox
+                      (change)="$event ? masterToggle() : null"
+                      [checked]="selection.hasValue() && isAllSelected()"
+                      [indeterminate]="selection.hasValue() && !isAllSelected()"
+                    >
+                    </mat-checkbox>
+                  </th>
+                  <td mat-cell *matCellDef="let row">
+                    <mat-checkbox
+                      (click)="$event.stopPropagation()"
+                      (change)="$event ? selection.toggle(row) : null"
+                      [checked]="selection.isSelected(row)"
+                    >
+                    </mat-checkbox>
+                  </td>
+                </ng-container>
+
+                <!-- Position Column -->
+                <ng-container matColumnDef="position">
+                  <th mat-header-cell *matHeaderCellDef>No.</th>
+                  <td mat-cell *matCellDef="let element">{{ element.position }}</td>
+                </ng-container>
+
+                <!-- Name Column -->
+                <ng-container matColumnDef="name">
+                  <th mat-header-cell *matHeaderCellDef>Name</th>
+                  <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+                </ng-container>
+
+                <!-- Name Column -->
+                <ng-container matColumnDef="pack">
+                  <th mat-header-cell *matHeaderCellDef>Unit per pack</th>
+                  <td mat-cell *matCellDef="let element">{{ element.pack }}</td>
+                </ng-container>
+
+                <!-- ItemCode Column -->
+                <ng-container matColumnDef="itemCode">
+                  <th mat-header-cell *matHeaderCellDef>Item code</th>
+                  <td mat-cell *matCellDef="let element">{{ element.itemCode }}</td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="selection.toggle(row)"></tr>
               </table>
+
+              <mat-paginator
+                [length]="products.length"
+                [pageSize]="5"
+                [pageSizeOptions]="[5, 10, 15, 20, products.length]"
+              >
+              </mat-paginator>
             </div>
           </div>
         </div>
@@ -41,33 +90,8 @@
           <div class="card">
             <div class="body table-responsive">
               <form class="row" [formGroup]="purchaseOrderFormOne">
-                <div class="form-group col-lg-3">
-                  <select
-                    name=""
-                    id=""
-                    class="form-control mb-0"
-                    formControlName="productId"
-                    (change)="destructureProduct()"
-                    [ngClass]="{
-                      'parsley-error':
-                        !purchaseOrderFormOne.controls.productId.valid &&
-                        (purchaseOrderFormOne.controls.productId.touched ||
-                          purchaseOrderFormOne.controls.productId.dirty),
-                      'parsley-success':
-                        purchaseOrderFormOne.controls.productId.valid &&
-                        (purchaseOrderFormOne.controls.productId.touched ||
-                          purchaseOrderFormOne.controls.productId.dirty)
-                    }"
-                  >
-                    <option selected disabled value="">Select Product</option>
-                    <option [value]="product.id" *ngFor="let product of products; let i = index">{{
-                      product.name
-                    }}</option>
-                  </select>
-                  <app-input-error name="Product" [control]="purchaseOrderFormOne.get('productId')"></app-input-error>
-                </div>
-                <div class="col-lg-3">
-                  <button mat-button matStepperNext class="purple-bg">Next</button>
+                <div class="col-lg-2">
+                  <button mat-button matStepperNext class="purple-bg" (click)="useSelectedProducts()">Next</button>
                 </div>
               </form>
             </div>
@@ -75,6 +99,102 @@
         </div>
       </div>
     </mat-step>
+
+    <mat-step>
+      <ng-template matStepLabel>Customize Order</ng-template>
+      <div class="row clearfix">
+        <div class="col-lg-12">
+          <div class="card">
+            <app-loader [isLoading]="loader"></app-loader>
+            <div class="header d-flex justify-content-between align-items-center pb-0">
+              <h2 *ngIf="this.selection.selected.length">Product(s) selected by you</h2>
+              <h2 *ngIf="!this.selection.selected.length">You did not select any product</h2>
+            </div>
+
+            <div class="body table-responsive row">
+              <table mat-table [dataSource]="selectedSource" class="mat-elevation-z0 col-lg-12">
+                <!-- Position Column -->
+                <ng-container matColumnDef="position">
+                  <th mat-header-cell *matHeaderCellDef>No.</th>
+                  <td mat-cell *matCellDef="let element">{{ element.position }}</td>
+                </ng-container>
+
+                <!-- Name Column -->
+                <ng-container matColumnDef="name">
+                  <th mat-header-cell *matHeaderCellDef>Name</th>
+                  <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+                </ng-container>
+
+                <!-- Name Column -->
+                <ng-container matColumnDef="pack">
+                  <th mat-header-cell *matHeaderCellDef>Unit per Pack</th>
+                  <td mat-cell *matCellDef="let element">{{ element.pack }}</td>
+                </ng-container>
+
+                <!-- Wholesale Cost Column -->
+                <ng-container matColumnDef="wholesaleCost">
+                  <th mat-header-cell *matHeaderCellDef>Wholesale Cost</th>
+                  <td mat-cell *matCellDef="let element">{{ element.wholesaleCost }}</td>
+                </ng-container>
+
+                <!-- Retail Cost Column -->
+                <ng-container matColumnDef="retailCost">
+                  <th mat-header-cell *matHeaderCellDef>Retail Cost</th>
+                  <td mat-cell *matCellDef="let element">{{ element.retailCost }}</td>
+                </ng-container>
+
+                <!-- Carton Quantity Column -->
+                <ng-container matColumnDef="ctnQuantity">
+                  <th mat-header-cell *matHeaderCellDef>Quantity Ordered (CTN)</th>
+                  <td mat-cell *matCellDef="let element">{{ element.ctnQuantity }}</td>
+                </ng-container>
+
+                <!-- Unit Quantity Column -->
+                <ng-container matColumnDef="unitQuantity">
+                  <th mat-header-cell *matHeaderCellDef>Quantity Ordered (UNIT)</th>
+                  <td mat-cell *matCellDef="let element">{{ element.unitQuantity }}</td>
+                </ng-container>
+
+                <!-- Action Column -->
+                <ng-container matColumnDef="action">
+                  <th mat-header-cell *matHeaderCellDef>Action</th>
+                  <td mat-cell *matCellDef="let element">
+                    <button mat-button class="black-bg">Customize Order</button>
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedSelectedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedSelectedColumns"></tr>
+              </table>
+
+              <mat-paginator
+                [length]="selection.selected.length"
+                [pageSize]="5"
+                [pageSizeOptions]="[5, 10, 15, 20, selection.selected.length]"
+              >
+              </mat-paginator>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-12">
+          <div class="card">
+            <div class="body table-responsive">
+              <form class="row" [formGroup]="purchaseOrderFormOne">
+                <div class="col-lg-10">
+                  <button mat-button matStepperPrevious class="purple-bg" (click)="useSelectedProducts()">
+                    Previous
+                  </button>
+                </div>
+                <div class="col-lg-2">
+                  <button mat-button matStepperNext class="purple-bg" (click)="useSelectedProducts()">Next</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-step>
+
     <mat-step [stepControl]="purchaseOrderFormTwo">
       <ng-template matStepLabel>Create Purchase Order</ng-template>
       <div class="col-lg-12">
@@ -149,7 +269,7 @@
                           </option>
                         </select>
                         <app-input-error
-                          name="subcategory"
+                          name="Business Location"
                           [control]="purchaseOrderFormTwo.get('shiptobusinessId')"
                         ></app-input-error>
                       </div>
@@ -178,63 +298,9 @@
                           </option>
                         </select>
                         <app-input-error
-                          name="subcategory"
+                          name="Warehouse"
                           [control]="purchaseOrderFormTwo.get('warehouseId')"
                         ></app-input-error>
-                      </div>
-
-                      <div class="form-group col-lg-4">
-                        <label for="ctnquantity" class="control-label">Quantity</label>
-                        <input
-                          [required]="true"
-                          id="ctnquantity"
-                          name="Name"
-                          class="form-control mb-0"
-                          placeholder="Quantity"
-                          type="number"
-                          (keyup)="setUnitQuantity()"
-                          [formControl]="purchaseOrderFormTwo.get('ctnquantity')"
-                        />
-                      </div>
-
-                      <div class="form-group col-lg-4">
-                        <label for="unitquantity" class="control-label">Unit</label>
-                        <input
-                          [required]="true"
-                          id="unitquantity"
-                          name="Name"
-                          class="form-control mb-0"
-                          placeholder="Unit Quantity"
-                          type="number"
-                          [formControl]="purchaseOrderFormTwo.get('unitquantity')"
-                          readonly
-                        />
-                      </div>
-
-                      <div class="form-group col-lg-4">
-                        <label for="wholesalecost" class="control-label">Wholesale Cost</label>
-                        <input
-                          [required]="true"
-                          id="wholesalecost"
-                          name="Name"
-                          class="form-control mb-0"
-                          placeholder="Wholesale cost"
-                          type="number"
-                          [formControl]="purchaseOrderFormTwo.get('wholesalecost')"
-                        />
-                      </div>
-
-                      <div class="form-group col-lg-4">
-                        <label for="retailcost" class="control-label">Retail Cost</label>
-                        <input
-                          [required]="true"
-                          id="retailcost"
-                          name="Name"
-                          class="form-control mb-0"
-                          placeholder="Retail cost"
-                          type="number"
-                          [formControl]="purchaseOrderFormTwo.get('retailcost')"
-                        />
                       </div>
 
                       <div class="form-group col-lg-4">
@@ -244,7 +310,7 @@
                           id="invoiceNumber"
                           name="Name"
                           class="form-control mb-0"
-                          placeholder="Retail cost"
+                          placeholder="Invoice number"
                           [formControl]="purchaseOrderFormTwo.get('invoiceNumber')"
                         />
                       </div>

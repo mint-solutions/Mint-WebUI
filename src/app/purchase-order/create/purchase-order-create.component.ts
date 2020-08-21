@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, AfterViewInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import EChartOption = echarts.EChartOption;
 import { Logger } from '@app/core/logger.service';
 import { ToastrService } from 'ngx-toastr';
@@ -11,8 +11,26 @@ import { SupplierService } from '@app/supplier/supplier.service';
 import { BusinessLocationService } from '@app/settings/business-location/business-location.service';
 import { WarehouseService } from '@app/settings/warehouse/warehouse.service';
 import { ProductService } from '../../product/product.service';
+import { SelectionModel } from '@angular/cdk/collections';
+import { MatTableDataSource } from '@angular/material';
+import { MatPaginator } from '@angular/material/paginator';
 
 const log = new Logger('home');
+
+export interface PeriodicElement {
+  name: string;
+  position: number;
+  itemCode: number;
+  wholesaleCost: number;
+  retailCost: number;
+  productId: number;
+  ctnQuantity: number;
+  unitQuantity: number;
+  pack: number;
+}
+
+const PRODUCT_TABLE_DATA: PeriodicElement[] = [];
+const SELECTED_TABLE_DATA: PeriodicElement[] = [];
 
 @Component({
   selector: 'app-purchase-order-create',
@@ -21,14 +39,30 @@ const log = new Logger('home');
   providers: [ProductService]
 })
 export class PurchaseOrderCreateComponent implements OnInit, AfterViewInit, OnDestroy {
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+
+  products: any[] = [];
+  dataSource = new MatTableDataSource<PeriodicElement>(PRODUCT_TABLE_DATA);
+  selectedSource = new MatTableDataSource<PeriodicElement>(SELECTED_TABLE_DATA);
+  displayedColumns: string[] = ['select', 'position', 'itemCode', 'name', 'pack'];
+  displayedSelectedColumns: string[] = [
+    'position',
+    'name',
+    'wholesaleCost',
+    'retailCost',
+    'pack',
+    'ctnQuantity',
+    'unitQuantity',
+    'action'
+  ];
+  selection = new SelectionModel<PeriodicElement>(true, []);
+
   cardTitle = 'New Purchase Order';
   purchaseOrderFormOne: FormGroup;
   purchaseOrderFormTwo: FormGroup;
   formLoading: boolean;
   loader: boolean;
   suppliersLoader: boolean;
-  products: any[] = [];
-
   mode: string = 'Create';
 
   selectedRow: any;
@@ -67,6 +101,8 @@ export class PurchaseOrderCreateComponent implements OnInit, AfterViewInit, OnDe
 
   ngOnInit() {
     //this.getPackings();
+    this.dataSource.paginator = this.paginator;
+    this.selectedSource.paginator = this.paginator;
     this.getSuppliers();
     this.createForm();
     this.getBusinessLocations();
@@ -88,6 +124,34 @@ export class PurchaseOrderCreateComponent implements OnInit, AfterViewInit, OnDe
   }
 
   ngOnDestroy() {}
+
+  applyFilter(filterValue: string) {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  /** Whether the number of selected elements matches the total number of rows. */
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.data.length;
+    return numSelected === numRows;
+  }
+
+  /** Selects all rows if they are not all selected; otherwise clear selection. */
+  masterToggle() {
+    this.isAllSelected() ? this.selection.clear() : this.dataSource.data.forEach(row => this.selection.select(row));
+  }
+
+  /** The label for the checkbox on the passed row */
+  checkboxLabel(row?: PeriodicElement): string {
+    if (!row) {
+      return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
+    }
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
+  }
+
+  useSelectedProducts() {
+    this.selectedSource.data = this.selection.selected.map(product => product);
+  }
 
   getSuppliers() {
     this.suppliersLoader = true;
@@ -137,7 +201,7 @@ export class PurchaseOrderCreateComponent implements OnInit, AfterViewInit, OnDe
   getWarehouses(data: any) {
     this.loader = true;
     this.warehouseService
-      .getwarehousebybusinesslocationId(data.target.value)
+      .getWarehouseByBusinessLocationId(data.target.value)
       .pipe(
         finalize(() => {
           this.loader = false;
@@ -170,6 +234,28 @@ export class PurchaseOrderCreateComponent implements OnInit, AfterViewInit, OnDe
           console.log('getProductsForPurchase', res);
           if (res.status === true) {
             this.products = res.result;
+            this.dataSource.data = this.products.map((product, index) => {
+              const position = index + 1;
+              const {
+                name,
+                itemcode: itemCode,
+                id: productId,
+                productconfiguration: { pack }
+              } = product;
+              const { priceconfiguration } = product;
+              const { unitcostprice: retailCost, wholesalecostprice: wholesaleCost } = priceconfiguration[0];
+              return {
+                position,
+                name,
+                itemCode,
+                retailCost,
+                wholesaleCost,
+                productId,
+                pack,
+                unitQuantity: 0,
+                ctnQuantity: 0
+              };
+            });
           } else {
             componentError(res.message, this.toastr);
           }

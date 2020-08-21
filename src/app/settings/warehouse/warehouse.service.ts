@@ -8,7 +8,7 @@ const routes = {
   createWarehouse: '/warehouse/create',
   getWarehouses: '/warehouse/false',
   getWareHouseByBusinessLocationId: '/warehouse/getwarehousebybusinesslocationId',
-  getWareHouseByBusinessLocation: '/api/warehouse/getwarehousebybusinesslocation/false',
+  getWareHouseByBusinessLocation: '/warehouse/getwarehousebybusinesslocation/false',
   updateWarehouse: '/warehouse',
   deleteWarehouse: '/warehouse'
 };
@@ -25,11 +25,11 @@ export class WarehouseService extends BaseService<WarehouseModel> {
     return this.sendGet(routes.getWarehouses);
   }
 
-  getAllWarehouseByBusinessLocation(): Observable<any> {
+  getWarehouseByBusinessLocation(): Observable<any> {
     return this.sendGet(routes.getWareHouseByBusinessLocation);
   }
 
-  getwarehousebybusinesslocationId(businessLocationId: number): Observable<any> {
+  getWarehouseByBusinessLocationId(businessLocationId: number): Observable<any> {
     return this.sendGet(`${routes.getWareHouseByBusinessLocationId}/${businessLocationId}`);
   }
 
