@@ -1,0 +1,15 @@
+<h1 mat-dialog-title>All fields are required</h1>
+<div mat-dialog-content>
+  <mat-form-field>
+    <mat-label>Invoice Number</mat-label>
+    <input matInput [(ngModel)]="data.invoiceNumber" />
+  </mat-form-field>
+  <div mat-dialog-actions class="row btn-div">
+    <div class="col-lg-10">
+      <button mat-button (click)="onNoClick(data)" class="black-bg">Cancel</button>
+    </div>
+    <div class="col-lg-2">
+      <button mat-button [mat-dialog-close]="data" cdkFocusInitial class="purple-bg">Save</button>
+    </div>
+  </div>
+</div>

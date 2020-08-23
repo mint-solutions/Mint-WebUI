@@ -23,6 +23,11 @@ import { InputComponent } from './input/input.component';
 import { InputErrorComponent } from './input-error/input-error.component';
 import { PurchaseOrderModalComponent } from '@app/purchase-order/create/purchase-order-create.component';
 import {
+  DateRangeSearchModalComponent,
+  SupplierSearchModalComponent,
+  InvoiceNumberSearchModalComponent
+} from '@app/purchase-order/purchase-order.component';
+import {
   MatStepperModule,
   MatIconModule,
   MatButtonModule,
@@ -33,10 +38,41 @@ import {
   MatCheckboxModule,
   MatInputModule,
   MatPaginatorModule,
-  MatDialogModule
+  MatDialogModule,
+  MatRadioModule,
+  MatOptionModule,
+  MatSelectModule,
+  MatMenuModule
 } from '@angular/material';
 
 @NgModule({
+  declarations: [
+    LoaderComponent,
+    BtnLoaderComponent,
+    AlertMessageComponent,
+    AppModalComponent,
+    ActivityPostComponent,
+    BlockHeaderComponent,
+    DataTableComponent,
+    DeleteModalComponent,
+    SortableDirective,
+    GroupByPipe,
+    LineChartComponent,
+    DoughnutChartComponent,
+    InputValidatorDirective,
+    InputComponent,
+    InputErrorComponent,
+    PurchaseOrderModalComponent,
+    DateRangeSearchModalComponent,
+    SupplierSearchModalComponent,
+    InvoiceNumberSearchModalComponent
+  ],
+  entryComponents: [
+    PurchaseOrderModalComponent,
+    DateRangeSearchModalComponent,
+    SupplierSearchModalComponent,
+    InvoiceNumberSearchModalComponent
+  ],
   imports: [
     CommonModule,
     NgxEchartsModule,
@@ -51,7 +87,12 @@ import {
     MatCheckboxModule,
     MatInputModule,
     MatPaginatorModule,
-    MatDialogModule
+    MatDialogModule,
+    MatRadioModule,
+    MatDatepickerModule,
+    MatOptionModule,
+    MatSelectModule,
+    MatMenuModule
   ],
   exports: [
     LoaderComponent,
@@ -77,27 +118,12 @@ import {
     MatTableModule,
     MatCheckboxModule,
     MatInputModule,
+    MatOptionModule,
     MatPaginatorModule,
-    MatDialogModule
-  ],
-  declarations: [
-    LoaderComponent,
-    BtnLoaderComponent,
-    AlertMessageComponent,
-    AppModalComponent,
-    ActivityPostComponent,
-    BlockHeaderComponent,
-    DataTableComponent,
-    DeleteModalComponent,
-    SortableDirective,
-    GroupByPipe,
-    LineChartComponent,
-    DoughnutChartComponent,
-    InputValidatorDirective,
-    InputComponent,
-    InputErrorComponent,
-    PurchaseOrderModalComponent
-  ],
-  entryComponents: [PurchaseOrderModalComponent]
+    MatDialogModule,
+    MatRadioModule,
+    MatSelectModule,
+    MatMenuModule
+  ]
 })
 export class SharedModule {}

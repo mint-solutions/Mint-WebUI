@@ -19,8 +19,8 @@ export class PurchaseOrderService extends BaseService<PurchaseOrderHeaderModel> 
     super(httpClient);
   }
 
-  getPurchaseOrders(): Observable<any> {
-    return this.sendGet(`${routes.getpurchaseOrders}`);
+  getPurchaseOrders(payload: any): Observable<any> {
+    return this.sendPost(routes.getpurchaseOrders, payload);
   }
   getPacking(): Observable<any> {
     return this.sendGet(`${routes.getpacking}`);
