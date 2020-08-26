@@ -81,11 +81,15 @@
                   <mat-icon>more_vert</mat-icon>
                 </button>
                 <mat-menu #menu="matMenu">
-                  <button mat-menu-item>
+                  <button mat-menu-item [routerLink]="['/purchaseOrder/view/' + element.invoiceNumber]">
                     <mat-icon>preview</mat-icon>
                     <span>Preview</span>
                   </button>
-                  <button mat-menu-item [disabled]="element.transactionStatusId > 1">
+                  <button
+                    mat-menu-item
+                    [disabled]="element.transactionStatusId > 1"
+                    [routerLink]="['/purchaseOrder/update/' + element.invoiceNumber]"
+                  >
                     <mat-icon>create</mat-icon>
                     <span>Update</span>
                   </button>
@@ -98,7 +102,7 @@
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="selection.toggle(row)"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
           </table>
 
           <div *ngIf="!purchaseOrders.length" class="header d-flex justify-content-between align-items-center pb-0">
@@ -115,139 +119,3 @@
     </div>
   </div>
 </div>
-
-<ng-template #productConfigModal let-c="close" let-d="dismiss">
-  <div class="container">
-    <div class="row clearfix">
-      <div class="col-lg-12">
-        <form class="" [formGroup]="purchaseOrderForm" (ngSubmit)="onSubmit()">
-          <div class="card">
-            <div class="header d-flex justify-content-between align-items-center pb-0">
-              <h2>Product Configurations</h2>
-            </div>
-
-            <div class="body row">
-              <div class="col-lg-3">
-                <app-input
-                  [required]="true"
-                  label="Pack"
-                  id="pack"
-                  placeholder="Eg. 12"
-                  [control]="purchaseOrderForm.get('pack')"
-                  type="number"
-                  validator="number"
-                ></app-input>
-              </div>
-
-              <div class="col-lg-3">
-                <app-input
-                  label="Lead Time"
-                  id="leadtime"
-                  placeholder="Eg. 3hr"
-                  [control]="purchaseOrderForm.get('leadtime')"
-                  type="number"
-                  validator="number"
-                ></app-input>
-              </div>
-              <div class="col-lg-6">
-                <app-input
-                  label="Image link"
-                  id="imagelink"
-                  placeholder="Eg. https://placeholder.com"
-                  [control]="purchaseOrderForm.get('imagelink')"
-                ></app-input>
-              </div>
-
-              <div class="form-group col-md-2 d-inline-block pt-4">
-                <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="canexpire" formControlName="canexpire" />
-                  <label class="custom-control-label pointer" for="canexpire">Can expire</label>
-                </div>
-              </div>
-
-              <div class="form-group col-md-3 d-inline-block pt-4">
-                <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="canbesold" formControlName="canbesold" />
-                  <label class="custom-control-label pointer" for="canbesold">Is Can be sold</label>
-                </div>
-              </div>
-
-              <div class="form-group col-md-3 d-inline-block pt-4">
-                <div class="custom-control custom-checkbox">
-                  <input
-                    type="checkbox"
-                    class="custom-control-input"
-                    id="canbepurchased"
-                    formControlName="canbepurchased"
-                  />
-                  <label class="custom-control-label pointer" for="canbepurchased">Can be purchased</label>
-                </div>
-              </div>
-
-              <div class="form-group col-md-3 d-inline-block pt-4">
-                <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="anypromo" formControlName="anypromo" />
-                  <label class="custom-control-label pointer" for="anypromo">Any promo</label>
-                </div>
-              </div>
-
-              <div class="form-group col-lg-12 mt-2">
-                <button
-                  type="submit"
-                  class="btn btn-client btn-round float-right"
-                  [disabled]="!purchaseOrderForm.valid"
-                  *ngIf="!formLoading"
-                >
-                  Update
-                </button>
-                <button class="btn btn-client btn-round float-right" [disabled]="true" *ngIf="formLoading">
-                  <i class="fa fa-spinner fa-spin" style="margin-right: 5px"></i>
-                  please wait
-                </button>
-              </div>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-
-  <button type="button" class="search-close" aria-label="Close search form" (click)="d('Cross click')">
-    <i class="fi flaticon-close"></i>
-  </button>
-</ng-template>
-
-<ng-template #productDetailModal let-c="close" let-d="dismiss">
-  <div class="container">
-    <div class="row clearfix">
-      <div class="col-lg-12">
-        <div class="card product">
-          <div class="card-body">
-            <div class="row">
-              <div class="col-lg-6">
-                <img [src]="selectedRow.imagelink" alt="" class="img-fluid" />
-              </div>
-              <div class="col-lg-6">
-                <h2 class="product-title">{{ selectedRow.name }}</h2>
-                <small>Category: {{ selectedRow.category.name }} > {{ selectedRow.subCategory.name }}</small>
-                <p class="mb-1">{{ selectedRow.description }}</p>
-
-                <hr class="hw-100" />
-                <h3 class="product-subtitle">Product Configuration</h3>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <button type="button" class="search-close" aria-label="Close search form" (click)="d('Cross click')">
-    <i class="fi flaticon-close"></i>
-  </button>
-</ng-template>
-
-<ng-template #doDeletePurchaseOrder let-c="close" let-d="dismiss">
-  <app-delete-modal [selectedRowData]="selectedRow.name" (onDelete)="onDoDelete()" [loader]="formLoading">
-  </app-delete-modal>
-</ng-template>

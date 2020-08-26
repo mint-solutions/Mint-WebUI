@@ -6,6 +6,7 @@ import { SharedModule } from '@app/shared';
 import { DataTablesModule } from 'angular-datatables';
 import { ReactiveFormsModule } from '@angular/forms';
 import { PurchaseOrderCreateComponent } from './create/purchase-order-create.component';
+import { PurchaseOrderViewComponent } from './view/view.component';
 import { PurchaseOrderRoutingModule } from './purchase-order-routing.module';
 import { PurchaseOrderComponent } from './purchase-order.component';
 
@@ -18,7 +19,7 @@ import { PurchaseOrderComponent } from './purchase-order.component';
     DataTablesModule,
     ReactiveFormsModule
   ],
-  declarations: [PurchaseOrderComponent, PurchaseOrderCreateComponent],
+  declarations: [PurchaseOrderComponent, PurchaseOrderCreateComponent, PurchaseOrderViewComponent],
   providers: []
 })
 export class PurchaseOrderModule {}

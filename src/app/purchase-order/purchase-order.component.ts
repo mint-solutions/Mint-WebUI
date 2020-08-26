@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material';
 import { MatPaginator } from '@angular/material/paginator';
 import { SupplierService } from '@app/supplier/supplier.service';
+import { SharedService } from '../shared/shared.service';
 
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
@@ -146,7 +147,8 @@ export class PurchaseOrderComponent implements OnInit, AfterViewInit, OnDestroy 
     private purchaseOrderService: PurchaseOrderService,
     private supplierService: SupplierService,
     private router: Router,
-    public modal: MatDialog
+    public modal: MatDialog,
+    private sharedService: SharedService
   ) {}
 
   ngOnInit() {
@@ -237,6 +239,7 @@ export class PurchaseOrderComponent implements OnInit, AfterViewInit, OnDestroy 
           console.log('getPurchaseOrders', res);
           if (res.status === true) {
             this.purchaseOrders = res.result;
+            this.sharedService.nextPurchaseOrders(this.purchaseOrders);
             this.dataSource.data = this.purchaseOrders.map((orders, index) => {
               const {
                 invoiceNumber,

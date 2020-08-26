@@ -14,6 +14,7 @@ import { AppRoutingModule } from './app-routing.module';
 
 import { CoreModule } from '@app/core/core.module';
 import { SharedModule } from '@app/shared';
+import { SharedService } from './shared/shared.service';
 import { ShellModule } from './shell/shell.module';
 
 import { ActivateAccountModule } from './activate-account/activate-account.module';
@@ -33,7 +34,7 @@ import { ActivateAccountModule } from './activate-account/activate-account.modul
     AppRoutingModule // must be imported as the last module as it contains the fallback route
   ],
   declarations: [AppComponent],
-  providers: [],
+  providers: [SharedService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
