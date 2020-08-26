@@ -5,7 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
 import { componentError, serverError } from '@app/helper';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { PurchaseOrderService } from '../purchase-order.service';
 import { SupplierService } from '@app/supplier/supplier.service';
 import { BusinessLocationService } from '@app/settings/business-location/business-location.service';
@@ -15,6 +15,8 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource } from '@angular/material';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { SharedService } from '../../shared/shared.service';
+import { Subscription } from 'rxjs';
 
 const log = new Logger('home');
 
@@ -79,6 +81,7 @@ export class PurchaseOrderCreateComponent implements OnInit, AfterViewInit, OnDe
     'action'
   ];
   selection = new SelectionModel<SelectedElement>(true, []);
+  sharedServiceSubsscription: Subscription;
 
   cardTitle = 'New Purchase Order';
   purchaseOrderFormOne: FormGroup;
@@ -87,6 +90,7 @@ export class PurchaseOrderCreateComponent implements OnInit, AfterViewInit, OnDe
   loader: boolean;
   suppliersLoader: boolean;
   mode: string = 'Create';
+  purchaseOrder: any[] = [];
 
   selectedRow: any;
 
@@ -109,37 +113,24 @@ export class PurchaseOrderCreateComponent implements OnInit, AfterViewInit, OnDe
     private cdr: ChangeDetectorRef,
     private toastr: ToastrService,
     private formBuilder: FormBuilder,
-    private route: Router,
+    private router: Router,
     private purchaseOrderService: PurchaseOrderService,
     private businessLocationService: BusinessLocationService,
     private supplierService: SupplierService,
     private productService: ProductService,
     private warehouseService: WarehouseService,
-    public modal: MatDialog
-  ) {
-    if (this.route.getCurrentNavigation() != null) {
-      this.selectedRow = this.route.getCurrentNavigation().extras.state;
-      console.log('state', this.selectedRow);
-    }
-  }
+    public modal: MatDialog,
+    private routes: ActivatedRoute,
+    private sharedService: SharedService
+  ) {}
 
   ngOnInit() {
-    //this.getPackings();
     this.dataSource.paginator = this.paginator;
     this.selectedSource.paginator = this.paginator;
     this.getSuppliers();
     this.createForm();
     this.getBusinessLocations();
     this.getProducts();
-    if (this.selectedRow && this.selectedRow.mode === 'edit') {
-      this.mode = 'Update';
-      this.cardTitle = 'Edit Purchase Order';
-      this.purchaseOrderFormTwo.patchValue({
-        supplierId: this.selectedRow.supplierId,
-        shiptobusinessId: this.selectedRow.shiptobusinessId,
-        duedate: this.selectedRow.duedate
-      });
-    }
   }
 
   ngAfterViewInit(): void {
@@ -186,6 +177,65 @@ export class PurchaseOrderCreateComponent implements OnInit, AfterViewInit, OnDe
 
     dialogRef.afterClosed().subscribe(result => {
       // Do nothing
+    });
+  }
+
+  getParams() {
+    this.routes.params.subscribe(params => {
+      const { invoiceNumber } = params;
+      if (!invoiceNumber) {
+        return;
+      }
+      this.getPurchaseOrderByInvoiceNumber(invoiceNumber);
+    });
+  }
+
+  getPurchaseOrderByInvoiceNumber(invoiceNumber: string) {
+    this.sharedServiceSubsscription = this.sharedService.sharedPurchaseOrders.subscribe(purchaseOrders => {
+      this.purchaseOrder = purchaseOrders.filter(purchaseOrder => purchaseOrder.invoiceNumber === invoiceNumber);
+      if (!this.purchaseOrder.length) {
+        this.router.navigateByUrl('/purchaseOrder/create');
+        return;
+      }
+
+      this.title = `Update Purchase Order`;
+      this.mode = 'Update';
+      this.cardTitle = 'Edit Purchase Order';
+      console.log('purchaseOrder update', this.purchaseOrder);
+      const {
+        supplier: { id: supplierId },
+        dueDate: duedate
+      } = this.purchaseOrder[0];
+      const data = { invoiceNumber, supplierId, businessLocation: 'N/A', warehouse: 'N/A', duedate };
+      this.purchaseOrderFormTwo.patchValue({
+        supplierId,
+        invoiceNumber,
+        duedate
+      });
+
+      this.purchaseOrder[0].orderitem.forEach((item: any) => {
+        const {
+          product: {
+            name,
+            itemCode,
+            id: { productId }
+          },
+          unitqty: unitQuantity,
+          ctnqty: ctnQuantity,
+          wholesalecost: wholesaleCost,
+          retailcost: retailCost
+        } = item;
+        const validProduct = this.dataSource.data.find(product => product.productId === item.product.id);
+        if (validProduct) {
+          validProduct.wholesaleCost = wholesaleCost;
+          validProduct.ctnQuantity = ctnQuantity;
+          validProduct.itemCode = itemCode;
+          validProduct.unitQuantity = unitQuantity;
+          validProduct.retailCost = retailCost;
+
+          this.selection.select(validProduct);
+        }
+      });
     });
   }
 
@@ -292,6 +342,8 @@ export class PurchaseOrderCreateComponent implements OnInit, AfterViewInit, OnDe
                 ctnQuantity: 0
               };
             });
+
+            this.getParams();
           } else {
             componentError(res.message, this.toastr);
           }
@@ -376,7 +428,7 @@ export class PurchaseOrderCreateComponent implements OnInit, AfterViewInit, OnDe
           }
           this.toastr.success(res.message, 'Purchase Order');
           this.resetForm();
-          this.route.navigate(['/', 'purchaseOrder', 'view']);
+          this.router.navigate(['/', 'purchaseOrder', 'view']);
         },
         error => {
           serverError(error, this.toastr);
@@ -405,7 +457,7 @@ export class PurchaseOrderCreateComponent implements OnInit, AfterViewInit, OnDe
             return componentError(res.message, this.toastr);
           }
           this.toastr.success(res.message, 'Purchase Order');
-          this.route.navigate(['/', 'purchaseOrder', 'view']);
+          this.router.navigate(['/', 'purchaseOrder', 'view']);
         },
         error => serverError(error, this.toastr)
       );
