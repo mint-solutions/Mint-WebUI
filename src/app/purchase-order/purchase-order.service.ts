@@ -8,7 +8,7 @@ const routes = {
   getpurchaseOrders: '/purchaseorder/getpurchaseinfo',
   getpacking: '/purchaseOrder/getpacking',
   createPurchaseOrder: '​/purchaseorder/creatpurchaseOrder',
-  updatePurchaseOrder: '/purchaseOrder',
+  updatePurchaseOrder: '/purchaseorder',
   deletePurchaseOrder: '/purchaseOrder',
   updatePurchaseOrderConfig: '/purchaseOrder'
 };
@@ -29,7 +29,7 @@ export class PurchaseOrderService extends BaseService<PurchaseOrderHeaderModel> 
     return this.sendPost('/purchaseorder/creatpurchaseOrder', payload);
   }
   updatePurchaseOrder(payload: PurchaseOrderHeaderModel): Observable<any> {
-    return this.sendPatch(`${routes.updatePurchaseOrder}/${payload.id}/updatepurchaseOrder`, payload);
+    return this.sendPost(`${routes.updatePurchaseOrder}/${payload.id}/updatepurchaseOrder`, payload);
   }
   deletePurchaseOrder(id: string): Observable<any> {
     return this.sendDelete(`${routes.deletePurchaseOrder}/${id}/deletepurchaseOrder`);

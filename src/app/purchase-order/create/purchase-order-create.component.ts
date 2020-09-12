@@ -204,13 +204,19 @@ export class PurchaseOrderCreateComponent implements OnInit, AfterViewInit, OnDe
       console.log('purchaseOrder update', this.purchaseOrder);
       const {
         supplier: { id: supplierId },
-        dueDate: duedate
+        dueDate: duedate,
+        shipbusinesslocation: { id: shiptobusinessId },
+        warehouse: { id: warehouseId }
       } = this.purchaseOrder[0];
-      const data = { invoiceNumber, supplierId, businessLocation: 'N/A', warehouse: 'N/A', duedate };
+      const data = { invoiceNumber, supplierId, shiptobusinessId, warehouseId, duedate };
+      console.log('datas', data);
+      this.getWarehouses(shiptobusinessId);
       this.purchaseOrderFormTwo.patchValue({
         supplierId,
         invoiceNumber,
-        duedate
+        duedate,
+        shiptobusinessId,
+        warehouseId
       });
 
       this.purchaseOrder[0].orderitem.forEach((item: any) => {
@@ -284,10 +290,14 @@ export class PurchaseOrderCreateComponent implements OnInit, AfterViewInit, OnDe
       );
   }
 
-  getWarehouses(data: any) {
+  onGetWarehouses(event: any) {
+    this.getWarehouses(event.target.value);
+  }
+
+  getWarehouses(businessLoacationId: number) {
     this.loader = true;
     this.warehouseService
-      .getWarehouseByBusinessLocationId(data.target.value)
+      .getWarehouseByBusinessLocationId(businessLoacationId)
       .pipe(
         finalize(() => {
           this.loader = false;
@@ -436,10 +446,9 @@ export class PurchaseOrderCreateComponent implements OnInit, AfterViewInit, OnDe
       );
   }
   onUpdate(data: any) {
-    console.log('onUpdate', data);
     const payload = {
       ...data,
-      id: this.selectedRow.id
+      id: this.purchaseOrder[0]['id']
     };
 
     this.purchaseOrderService
@@ -447,7 +456,6 @@ export class PurchaseOrderCreateComponent implements OnInit, AfterViewInit, OnDe
       .pipe(
         finalize(() => {
           this.formLoading = false;
-          this.resetForm();
         })
       )
       .subscribe(
