@@ -126,9 +126,11 @@ export class PurchaseOrderViewComponent implements OnInit, AfterViewInit, OnDest
       this.orderDataSource.data = this.purchaseOrder.map(order => {
         const {
           supplier: { companyname: supplier },
-          dueDate
+          dueDate,
+          shipbusinesslocation: { name: businessLocation },
+          warehouse: { name: warehouse }
         } = order;
-        return { invoiceNumber, supplier, businessLocation: 'N/A', warehouse: 'N/A', dueDate };
+        return { invoiceNumber, supplier, businessLocation, warehouse, dueDate };
       });
 
       this.orderItemsDataSource.data = this.purchaseOrder[0].orderitem.map((item: any, index: string) => {
