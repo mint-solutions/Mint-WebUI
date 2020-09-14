@@ -246,6 +246,7 @@ export class PurchaseOrderComponent implements OnInit, AfterViewInit, OnDestroy 
                 dateCreated,
                 dueDate,
                 totalCostPrice,
+                transactionstatus: transactionStatus,
                 transactionstatusId: transactionStatusId,
                 supplier: { companyname: supplierName }
               } = orders;
@@ -255,6 +256,7 @@ export class PurchaseOrderComponent implements OnInit, AfterViewInit, OnDestroy 
                 dateCreated,
                 dueDate,
                 transactionStatusId,
+                transactionStatus,
                 totalCostPrice,
                 supplierName
               };
