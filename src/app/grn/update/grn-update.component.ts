@@ -6,7 +6,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
 import { componentError, serverError } from '@app/helper';
 import { Router, ActivatedRoute } from '@angular/router';
-import { PurchaseOrderService } from '../purchase-order.service';
+import { PurchaseOrderService } from '../grn.service';
 import { SupplierService } from '@app/supplier/supplier.service';
 import { BusinessLocationService } from '@app/settings/business-location/business-location.service';
 import { WarehouseService } from '@app/settings/warehouse/warehouse.service';
@@ -38,13 +38,13 @@ const SELECTED_TABLE_DATA: SelectedElement[] = [];
 let TEMP_SELECTION: string;
 
 @Component({
-  selector: 'purchase-order-modal',
-  templateUrl: 'purchase-order-modal.html',
-  styleUrls: ['./purchase-order-create.component.scss']
+  selector: 'grn-modal',
+  templateUrl: 'grn-modal.html',
+  styleUrls: ['./grn-update.component.scss']
 })
-export class PurchaseOrderModalComponent {
+export class GrnModalComponent {
   constructor(
-    public dialogRef: MatDialogRef<PurchaseOrderModalComponent>,
+    public dialogRef: MatDialogRef<GrnModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: SelectedElement
   ) {}
 
@@ -58,12 +58,12 @@ export class PurchaseOrderModalComponent {
 }
 
 @Component({
-  selector: 'app-purchase-order-create',
-  templateUrl: './purchase-order-create.component.html',
-  styleUrls: ['./purchase-order-create.component.scss'],
+  selector: 'app-grn-update',
+  templateUrl: './grn-update.component.html',
+  styleUrls: ['./grn-update.component.scss'],
   providers: [ProductService]
 })
-export class PurchaseOrderCreateComponent implements OnInit, AfterViewInit, OnDestroy {
+export class GrnUpdateComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   products: any[] = [];
@@ -83,7 +83,7 @@ export class PurchaseOrderCreateComponent implements OnInit, AfterViewInit, OnDe
   selection = new SelectionModel<SelectedElement>(true, []);
   sharedServiceSubsscription: Subscription;
 
-  cardTitle = 'New Purchase Order';
+  cardTitle = 'Edit GRN';
   purchaseOrderFormOne: FormGroup;
   purchaseOrderFormTwo: FormGroup;
   formLoading: boolean;
@@ -101,10 +101,10 @@ export class PurchaseOrderCreateComponent implements OnInit, AfterViewInit, OnDe
   warehouses: any[] = [];
 
   public sidebarVisible = true;
-  public title = 'Create New Purchase Order';
+  public title = 'Edit GRN';
   public breadcrumbItem: any = [
     {
-      title: 'Create New Purchase Order',
+      title: 'Edit GRN',
       cssClass: 'active'
     }
   ];
@@ -170,7 +170,7 @@ export class PurchaseOrderCreateComponent implements OnInit, AfterViewInit, OnDe
 
   openDialog(data: any): void {
     TEMP_SELECTION = JSON.stringify(data);
-    const dialogRef = this.modal.open(PurchaseOrderModalComponent, {
+    const dialogRef = this.modal.open(GrnModalComponent, {
       width: '500px',
       data
     });
@@ -219,6 +219,10 @@ export class PurchaseOrderCreateComponent implements OnInit, AfterViewInit, OnDe
         warehouseId
       });
 
+      this.dataSource.data = this.dataSource.data.filter(item => {
+        return this.purchaseOrder[0].orderitem.find((x: any) => x.product.id === item.productId);
+      });
+
       this.purchaseOrder[0].orderitem.forEach((item: any) => {
         const {
           product: {
@@ -243,6 +247,8 @@ export class PurchaseOrderCreateComponent implements OnInit, AfterViewInit, OnDe
         }
       });
     });
+
+    this.cdr.detectChanges();
   }
 
   getSuppliers() {

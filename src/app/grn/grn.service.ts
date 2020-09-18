@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BaseService } from '@app/core/base.service';
-import { PurchaseOrderHeaderModel } from './purchase-order.model';
+import { PurchaseOrderHeaderModel } from './grn.model';
 import { Observable } from 'rxjs';
 
 const routes = {
-  getpurchaseOrders: '/purchaseorder/getpurchaseinfo',
+  getGrns: '/purchaseorder/getpurchaseinfo',
   getpacking: '/purchaseOrder/getpacking',
   createPurchaseOrder: '​/purchaseorder/creatpurchaseOrder',
   updatePurchaseOrder: '/purchaseorder',
@@ -21,8 +21,8 @@ export class PurchaseOrderService extends BaseService<PurchaseOrderHeaderModel> 
     super(httpClient);
   }
 
-  getPurchaseOrders(payload: any): Observable<any> {
-    return this.sendPost(routes.getpurchaseOrders, payload);
+  getGrns(payload: any): Observable<any> {
+    return this.sendPost(routes.getGrns, payload);
   }
   getPacking(): Observable<any> {
     return this.sendGet(`${routes.getpacking}`);
