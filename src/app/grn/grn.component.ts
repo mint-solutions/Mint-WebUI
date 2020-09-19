@@ -5,7 +5,7 @@ import { Subject } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { PurchaseOrderService } from './purchase-order.service';
+import { PurchaseOrderService } from './grn.service';
 import { finalize } from 'rxjs/operators';
 import { componentError, serverError } from '@app/helper';
 import { Router } from '@angular/router';
@@ -13,9 +13,6 @@ import { MatTableDataSource } from '@angular/material';
 import { MatPaginator } from '@angular/material/paginator';
 import { SupplierService } from '@app/supplier/supplier.service';
 import { SharedService } from '../shared/shared.service';
-
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-
 const log = new Logger('home');
 
 export interface PurchaseOrderElement {
@@ -23,74 +20,14 @@ export interface PurchaseOrderElement {
   invoiceNumber: string;
 }
 
-export interface OrderTypeDataElement {
-  supplierId: string;
-  startDate: string;
-  endDate: string;
-  suppliers: any;
-  postedBy: string;
-  invoiceNumber: string;
-  cancel: boolean;
-}
-
 const PURCHASE_ORDER_TABLE_DATA: PurchaseOrderElement[] = [];
 
 @Component({
-  selector: 'supplier-search-modal',
-  templateUrl: 'supplier-search-modal.html',
-  styleUrls: ['./purchase-order.component.scss']
+  selector: 'app-grn',
+  templateUrl: './grn.component.html',
+  styleUrls: ['./grn.component.scss']
 })
-export class SupplierSearchModalComponent {
-  constructor(
-    public dialogRef: MatDialogRef<SupplierSearchModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: OrderTypeDataElement
-  ) {}
-  onNoClick(data: OrderTypeDataElement): void {
-    data['cancel'] = true;
-    this.dialogRef.close();
-  }
-}
-
-@Component({
-  selector: 'date-range-search-modal',
-  templateUrl: 'date-range-search-modal.html',
-  styleUrls: ['./purchase-order.component.scss']
-})
-export class DateRangeSearchModalComponent {
-  constructor(
-    public dialogRef: MatDialogRef<DateRangeSearchModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: OrderTypeDataElement
-  ) {}
-
-  onNoClick(data: OrderTypeDataElement): void {
-    data['cancel'] = true;
-    this.dialogRef.close();
-  }
-}
-
-@Component({
-  selector: 'invoice-number-search-modal',
-  templateUrl: 'invoice-number-search-modal.html',
-  styleUrls: ['./purchase-order.component.scss']
-})
-export class InvoiceNumberSearchModalComponent {
-  constructor(
-    public dialogRef: MatDialogRef<InvoiceNumberSearchModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: OrderTypeDataElement
-  ) {}
-
-  onNoClick(data: OrderTypeDataElement): void {
-    data['cancel'] = true;
-    this.dialogRef.close();
-  }
-}
-
-@Component({
-  selector: 'app-purchase-order',
-  templateUrl: './purchase-order.component.html',
-  styleUrls: ['./purchase-order.component.scss']
-})
-export class PurchaseOrderComponent implements OnInit, AfterViewInit, OnDestroy {
+export class GrnComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(DataTableDirective, { read: false })
   @ViewChild(MatPaginator)
   paginator: MatPaginator;
@@ -109,16 +46,6 @@ export class PurchaseOrderComponent implements OnInit, AfterViewInit, OnDestroy 
   formLoading: boolean;
   loader: boolean;
   orderType: number;
-  orderTypeData: OrderTypeDataElement = {
-    supplierId: '',
-    suppliers: [],
-    startDate: '',
-    endDate: '',
-    cancel: false,
-    postedBy: '',
-    invoiceNumber: ''
-  };
-
   dataSource = new MatTableDataSource<PurchaseOrderElement>(PURCHASE_ORDER_TABLE_DATA);
   displayedColumns: string[] = [
     'position',
@@ -131,10 +58,10 @@ export class PurchaseOrderComponent implements OnInit, AfterViewInit, OnDestroy 
   ];
 
   public sidebarVisible = true;
-  public title = 'Purchase Order';
+  public title = 'GRN';
   public breadcrumbItem: any = [
     {
-      title: 'Purchase Order',
+      title: 'GRN',
       cssClass: 'active'
     }
   ];
@@ -145,17 +72,14 @@ export class PurchaseOrderComponent implements OnInit, AfterViewInit, OnDestroy 
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
     private purchaseOrderService: PurchaseOrderService,
-    private supplierService: SupplierService,
-    private router: Router,
-    public modal: MatDialog,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private router: Router
   ) {}
 
   ngOnInit() {
     this.orderType = 0;
     this.dataSource.paginator = this.paginator;
     this.getPurchaseOrders();
-    this.getSuppliers();
   }
 
   ngAfterViewInit(): void {
@@ -171,64 +95,11 @@ export class PurchaseOrderComponent implements OnInit, AfterViewInit, OnDestroy 
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  onHandleRadioChange({ value }: any) {
-    this.orderType = parseInt(value, 10);
-    const dialogTypes = ['1', '2', '3'];
-    if (dialogTypes.includes(value)) {
-      return this.openDialog();
-    }
-    this.getPurchaseOrders();
-  }
-
-  openDialog(): void {
-    this.orderTypeData.cancel = false;
-    const dialogRef = this.modal.open(
-      this.orderType === 1
-        ? InvoiceNumberSearchModalComponent
-        : this.orderType === 2
-        ? SupplierSearchModalComponent
-        : DateRangeSearchModalComponent,
-      {
-        width: '500px',
-        data: this.orderTypeData
-      }
-    );
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result.cancel) {
-        return;
-      }
-      this.getPurchaseOrders();
-    });
-  }
-
-  getSuppliers() {
-    this.supplierService
-      .getsuppliers()
-      .pipe(finalize(() => {}))
-      .subscribe(
-        res => {
-          console.log('getSuppliers', res);
-          if (res.status === true) {
-            this.orderTypeData['suppliers'] = res.result;
-            console.log(res);
-          } else {
-            componentError(res.message, this.toastr);
-          }
-        },
-        error => serverError(error, this.toastr)
-      );
-  }
-
   getPurchaseOrders() {
     this.loader = true;
-
-    const searchData = this.getSearchData();
-
-    console.log(searchData);
-
+    const searchData = { searchtype: 0 };
     this.purchaseOrderService
-      .getPurchaseOrders(searchData)
+      .getGrns(searchData)
       .pipe(
         finalize(() => {
           this.loader = false;
@@ -240,54 +111,37 @@ export class PurchaseOrderComponent implements OnInit, AfterViewInit, OnDestroy 
           if (res.status === true) {
             this.purchaseOrders = res.result;
             this.sharedService.nextPurchaseOrders(this.purchaseOrders);
-            this.dataSource.data = this.purchaseOrders.map((orders, index) => {
-              const {
-                invoiceNumber,
-                dateCreated,
-                dueDate,
-                totalCostPrice,
-                doctypeId,
-                transactionstatus: transactionStatus,
-                transactionstatusId: transactionStatusId,
-                supplier: { companyname: supplierName }
-              } = orders;
-              return {
-                position: index + 1,
-                invoiceNumber,
-                dateCreated,
-                dueDate,
-                doctypeId,
-                transactionStatusId,
-                transactionStatus,
-                totalCostPrice,
-                supplierName
-              };
-            });
+            this.dataSource.data = this.purchaseOrders
+              .filter(order => order.doctypeId === 6)
+              .map((order, index) => {
+                const {
+                  invoiceNumber,
+                  dateCreated,
+                  dueDate,
+                  totalCostPrice,
+                  doctypeId,
+                  transactionstatus: transactionStatus,
+                  transactionstatusId: transactionStatusId,
+                  supplier: { companyname: supplierName }
+                } = order;
+                return {
+                  position: index + 1,
+                  invoiceNumber,
+                  dateCreated,
+                  dueDate,
+                  doctypeId,
+                  transactionStatusId,
+                  transactionStatus,
+                  totalCostPrice,
+                  supplierName
+                };
+              });
           } else {
             componentError(res.message, this.toastr);
           }
         },
         error => serverError(error, this.toastr)
       );
-  }
-
-  getSearchData() {
-    const { startDate, endDate, supplierId, postedBy, invoiceNumber } = this.orderTypeData;
-
-    return {
-      postedBy,
-      invoiceNumber,
-      searchtype: this.orderType,
-      supplierSearch: {
-        supplierId,
-        startDate,
-        endDate
-      },
-      daterangeSearch: {
-        startDate,
-        endDate
-      }
-    };
   }
 
   onViewRow(event: any, modalView: any) {

@@ -1,0 +1,365 @@
+<div class="container-fluid">
+  <app-block-header [title]="title" [breadcrumbItem]="breadcrumbItem"></app-block-header>
+
+  <mat-horizontal-stepper labelPosition="bottom" linear #stepper>
+    <mat-step>
+      <ng-template matStepLabel>Edit</ng-template>
+      <div *ngIf="dataSource.data.length" class="row clearfix">
+        <div class="col-lg-12">
+          <div class="card">
+            <app-loader [isLoading]="loader"></app-loader>
+            <div class="header d-flex justify-content-between align-items-center pb-0">
+              <h2 *ngIf="selection.selected.length">
+                All items received
+              </h2>
+              <h2 *ngIf="!selection.selected.length">You did not select any product</h2>
+            </div>
+
+            <div class="body table-responsive row">
+              <table mat-table [dataSource]="dataSource" class="mat-elevation-z0 col-lg-12">
+                <!-- Position Column -->
+                <ng-container matColumnDef="position">
+                  <th mat-header-cell *matHeaderCellDef>No.</th>
+                  <td mat-cell *matCellDef="let element">{{ element.position }}</td>
+                </ng-container>
+
+                <!-- Name Column -->
+                <ng-container matColumnDef="name">
+                  <th mat-header-cell *matHeaderCellDef>Name</th>
+                  <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+                </ng-container>
+
+                <!-- Name Column -->
+                <ng-container matColumnDef="pack">
+                  <th mat-header-cell *matHeaderCellDef>Unit per Pack</th>
+                  <td mat-cell *matCellDef="let element">{{ element.pack }}</td>
+                </ng-container>
+
+                <!-- Wholesale Cost Column -->
+                <ng-container matColumnDef="wholesaleCost">
+                  <th mat-header-cell *matHeaderCellDef>Wholesale Cost</th>
+                  <td mat-cell *matCellDef="let element">{{ element.wholesaleCost }}</td>
+                </ng-container>
+
+                <!-- Retail Cost Column -->
+                <ng-container matColumnDef="retailCost">
+                  <th mat-header-cell *matHeaderCellDef>Retail Cost</th>
+                  <td mat-cell *matCellDef="let element">{{ element.retailCost }}</td>
+                </ng-container>
+
+                <!-- Carton Quantity Column -->
+                <ng-container matColumnDef="ctnQuantity">
+                  <th mat-header-cell *matHeaderCellDef>Quantity Ordered (CTN)</th>
+                  <td mat-cell *matCellDef="let element">{{ element.ctnQuantity }}</td>
+                </ng-container>
+
+                <!-- Unit Quantity Column -->
+                <ng-container matColumnDef="unitQuantity">
+                  <th mat-header-cell *matHeaderCellDef>Quantity Ordered (UNIT)</th>
+                  <td mat-cell *matCellDef="let element">{{ element.ctnQuantity * element.pack }}</td>
+                </ng-container>
+
+                <!-- Action Column -->
+                <ng-container matColumnDef="action">
+                  <th mat-header-cell *matHeaderCellDef>Action</th>
+                  <td mat-cell *matCellDef="let element">
+                    <button mat-button class="black-bg" (click)="openDialog(element)">Customize Order</button>
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedSelectedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedSelectedColumns"></tr>
+              </table>
+
+              <mat-paginator
+                [length]="dataSource.data.length"
+                [pageSize]="5"
+                [pageSizeOptions]="[5, 10, 15, 20, dataSource.data.length]"
+              >
+              </mat-paginator>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-12">
+          <div class="card">
+            <div class="body table-responsive">
+              <form class="row" [formGroup]="purchaseOrderFormOne" (ngSubmit)="onSubmit()">
+                <div class="form-group row col-lg-12 mt-2">
+                  <div class="col-lg-10"></div>
+                  <button
+                    type="submit"
+                    class="btn btn-client btn-round float-right"
+                    [disabled]="!purchaseOrderFormTwo.valid"
+                    *ngIf="!formLoading"
+                  >
+                    {{ mode }}
+                  </button>
+                  <button class="btn btn-client btn-round float-right" [disabled]="true" *ngIf="formLoading">
+                    <i class="fa fa-spinner fa-spin" style="margin-right: 5px"></i>
+                    please wait
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-step>
+
+    <mat-step [stepControl]="purchaseOrderFormTwo">
+      <ng-template matStepLabel>Out of bound Fields</ng-template>
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="body table-responsive">
+            <form class="" [formGroup]="purchaseOrderFormTwo">
+              <div class="row clearfix">
+                <div class="col-lg-12">
+                  <div class="card">
+                    <div class="header d-flex justify-content-between align-items-center pb-0">
+                      <h2>{{ cardTitle }}</h2>
+                      <div class="">
+                        <i class="icon datatable-icon-add"></i>
+                        <span style="text-decoration: underline; cursor: pointer" [routerLink]="['/purchaseOrder/view']"
+                          >View all</span
+                        >
+                      </div>
+                    </div>
+
+                    <div class="body row">
+                      <div class="form-group col-lg-4">
+                        <label for="address" class="control-label">Supplier</label>
+                        <select
+                          name=""
+                          id=""
+                          class="form-control mb-0"
+                          formControlName="supplierId"
+                          [ngClass]="{
+                            'parsley-error':
+                              !purchaseOrderFormTwo.controls.supplierId.valid &&
+                              (purchaseOrderFormTwo.controls.supplierId.touched ||
+                                purchaseOrderFormTwo.controls.supplierId.dirty),
+                            'parsley-success':
+                              purchaseOrderFormTwo.controls.supplierId.valid &&
+                              (purchaseOrderFormTwo.controls.supplierId.touched ||
+                                purchaseOrderFormTwo.controls.supplierId.dirty)
+                          }"
+                          readonly
+                        >
+                          <option selected disabled value="">Select supplier</option>
+                          <option [value]="supplier.id" *ngFor="let supplier of suppliers"
+                            >{{ supplier.companyname }} ({{ supplier.contactpersonname }})</option
+                          >
+                        </select>
+                        <app-input-error
+                          name="Category"
+                          [control]="purchaseOrderFormTwo.get('supplierId')"
+                        ></app-input-error>
+                      </div>
+
+                      <div class="form-group col-lg-4">
+                        <label for="address" class="control-label">Business Locations</label>
+                        <select
+                          name=""
+                          id=""
+                          class="form-control mb-0"
+                          formControlName="shiptobusinessId"
+                          (change)="onGetWarehouses($event)"
+                          [ngClass]="{
+                            'parsley-error':
+                              !purchaseOrderFormTwo.controls.shiptobusinessId.valid &&
+                              (purchaseOrderFormTwo.controls.shiptobusinessId.touched ||
+                                purchaseOrderFormTwo.controls.shiptobusinessId.dirty),
+                            'parsley-success':
+                              purchaseOrderFormTwo.controls.shiptobusinessId.valid &&
+                              (purchaseOrderFormTwo.controls.shiptobusinessId.touched ||
+                                purchaseOrderFormTwo.controls.shiptobusinessId.dirty)
+                          }"
+                          readonly
+                        >
+                          <option selected disabled value="">Select business Location</option>
+                          <option [value]="businessLocation.id" *ngFor="let businessLocation of businessLocations"
+                            >{{ businessLocation.name }}
+                          </option>
+                        </select>
+                        <app-input-error
+                          name="Business Location"
+                          [control]="purchaseOrderFormTwo.get('shiptobusinessId')"
+                        ></app-input-error>
+                      </div>
+
+                      <div class="form-group col-lg-4">
+                        <label for="address" class="control-label">Select Warehouse</label>
+                        <select
+                          name=""
+                          id=""
+                          class="form-control mb-0"
+                          formControlName="warehouseId"
+                          [ngClass]="{
+                            'parsley-error':
+                              !purchaseOrderFormTwo.controls.warehouseId.valid &&
+                              (purchaseOrderFormTwo.controls.warehouseId.touched ||
+                                purchaseOrderFormTwo.controls.warehouseId.dirty),
+                            'parsley-success':
+                              purchaseOrderFormTwo.controls.warehouseId.valid &&
+                              (purchaseOrderFormTwo.controls.warehouseId.touched ||
+                                purchaseOrderFormTwo.controls.warehouseId.dirty)
+                          }"
+                          readonly
+                        >
+                          <option selected disabled value="">Select Warehouses</option>
+                          <option [value]="warehouse.id" *ngFor="let warehouse of warehouses"
+                            >{{ warehouse.name }}
+                          </option>
+                        </select>
+                        <app-input-error
+                          name="Warehouse"
+                          [control]="purchaseOrderFormTwo.get('warehouseId')"
+                        ></app-input-error>
+                      </div>
+
+                      <div class="form-group col-lg-4">
+                        <label for="retailcost" class="control-label">Invoice Number</label>
+                        <input
+                          [required]="true"
+                          id="invoiceNumber"
+                          name="Name"
+                          class="form-control mb-0"
+                          placeholder="Invoice number"
+                          [formControl]="purchaseOrderFormTwo.get('invoiceNumber')"
+                          readonly
+                        />
+                      </div>
+
+                      <div class="form-group col-lg-4">
+                        <label for="duedate" class="control-label">Set Due Date</label>
+                        <input
+                          [required]="true"
+                          label="Due Date"
+                          id="duedate"
+                          name="Due Date"
+                          class="form-control mb-0"
+                          placeholder="Eg. 20/02/2021"
+                          [formControl]="purchaseOrderFormTwo.get('duedate')"
+                          matInput
+                          [matDatepicker]="duedate"
+                          readonly
+                        />
+                        <mat-datepicker-toggle matSuffix [for]="duedate"></mat-datepicker-toggle>
+                        <mat-datepicker #duedate color="primary"></mat-datepicker>
+                      </div>
+
+                      <div class="form-group col-lg-12 mt-2">
+                        <button mat-button matStepperPrevious class="purple-bg">Previous</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- PRODUCT CONFIGURATION -->
+              <!--  <div class="row clearfix" *ngIf="mode === 'Create'">
+                <div class="col-lg-12">
+                  <div class="card">
+                    <div class="header d-flex justify-content-between align-items-center pb-0">
+                      <h2>Product Configurations</h2>
+                    </div>
+          
+                    <div class="body row">
+                      <div class="col-lg-3">
+                        <app-input
+                          [required]="true"
+                          label="Packing Quantity"
+                          id="pack"
+                          placeholder="Eg. 12"
+                          [control]="purchaseOrderFormTwo.get('pack')"
+                          type="number"
+                          validator="number"
+                        ></app-input>
+                      </div>
+          
+                      <div class="col-lg-3">
+                        <app-input
+                          label="Lead Time"
+                          id="leadtime"
+                          placeholder="Eg. 3hr"
+                          [control]="purchaseOrderFormTwo.get('leadtime')"
+                          type="number"
+                          validator="number"
+                        ></app-input>
+                      </div>
+                      <div class="col-lg-5">
+                        <app-input
+                          label="Image link"
+                          id="imagelink"
+                          placeholder="Eg. https://placeholder.com"
+                          [control]="purchaseOrderFormTwo.get('imagelink')"
+                        ></app-input>
+                      </div>
+          
+                      <div class="form-group col-md-2 d-inline-block pt-4">
+                        <div class="custom-control custom-checkbox">
+                          <input type="checkbox" class="custom-control-input" id="canexpire" formControlName="canexpire" />
+                          <label class="custom-control-label pointer" for="canexpire">Can expire</label>
+                        </div>
+                      </div>
+          
+                      <div class="form-group col-md-2 d-inline-block pt-4">
+                        <div class="custom-control custom-checkbox">
+                          <input type="checkbox" class="custom-control-input" id="canbesold" formControlName="canbesold" />
+                          <label class="custom-control-label pointer" for="canbesold">Is Can be sold</label>
+                        </div>
+                      </div>
+          
+                      <div class="form-group col-md-2 d-inline-block pt-4">
+                        <div class="custom-control custom-checkbox">
+                          <input
+                            type="checkbox"
+                            class="custom-control-input"
+                            id="canbepurchased"
+                            formControlName="canbepurchased"
+                          />
+                          <label class="custom-control-label pointer" for="canbepurchased">Can be purchased</label>
+                        </div>
+                      </div>
+          
+                      <div class="form-group col-md-2 d-inline-block pt-4">
+                        <div class="custom-control custom-checkbox">
+                          <input type="checkbox" class="custom-control-input" id="anypromo" formControlName="anypromo" />
+                          <label class="custom-control-label pointer" for="anypromo">Any promo</label>
+                        </div>
+                      </div>
+          
+                      <div class="form-group col-lg-3 mt-2">
+                        <button
+                          type="submit"
+                          class="btn btn-client btn-round float-right"
+                          [disabled]="!purchaseOrderFormTwo.valid"
+                          *ngIf="!formLoading"
+                        >
+                          {{ this.mode }}
+                        </button>
+                        <button class="btn btn-client btn-round float-right" [disabled]="true" *ngIf="formLoading">
+                          <i class="fa fa-spinner fa-spin" style="margin-right: 5px"></i>
+                          please wait
+                        </button>
+          
+                        <button
+                          type="button"
+                          class="btn btn-outline-client btn-round"
+                          (click)="resetForm()"
+                          *ngIf="mode === 'Update'"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div> -->
+            </form>
+          </div>
+        </div>
+      </div>
+    </mat-step>
+  </mat-horizontal-stepper>
+</div>

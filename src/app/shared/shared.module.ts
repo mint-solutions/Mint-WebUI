@@ -44,6 +44,8 @@ import {
   MatSelectModule,
   MatMenuModule
 } from '@angular/material';
+import { ApprovePurchaseOrderModalComponent } from '@app/purchase-order/view/view.component';
+import { GrnModalComponent } from '@app/grn/update/grn-update.component';
 
 @NgModule({
   declarations: [
@@ -65,13 +67,17 @@ import {
     PurchaseOrderModalComponent,
     DateRangeSearchModalComponent,
     SupplierSearchModalComponent,
-    InvoiceNumberSearchModalComponent
+    InvoiceNumberSearchModalComponent,
+    ApprovePurchaseOrderModalComponent,
+    GrnModalComponent
   ],
   entryComponents: [
     PurchaseOrderModalComponent,
     DateRangeSearchModalComponent,
     SupplierSearchModalComponent,
-    InvoiceNumberSearchModalComponent
+    InvoiceNumberSearchModalComponent,
+    ApprovePurchaseOrderModalComponent,
+    GrnModalComponent
   ],
   imports: [
     CommonModule,

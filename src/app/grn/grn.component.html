@@ -1,9 +1,9 @@
 <div class="container-fluid">
   <app-block-header [title]="title" [breadcrumbItem]="breadcrumbItem">
     <div>
-      <a class="btn btn-sm btn-outline-client" [routerLink]="['/purchaseOrder/create']">
+      <a class="btn btn-sm btn-outline-client" [routerLink]="['/purchaseOrder/view']">
         <i class="icon fas fa-plus"></i>
-        Add Purchase Order
+        View Purchase Orders
       </a>
     </div>
   </app-block-header>
@@ -13,7 +13,7 @@
       <div class="card">
         <app-loader [isLoading]="loader"></app-loader>
         <div class="header d-flex justify-content-between align-items-center pb-0">
-          <h2>All Purchase Orders</h2>
+          <h2>All GRN</h2>
         </div>
 
         <div class="body table-responsive">
@@ -23,13 +23,6 @@
             <input #searchInput matInput (keyup)="applyFilter($event.target.value)" placeholder="Type keyword here" />
           </mat-form-field>
 
-          <mat-radio-group aria-label="Select an option" (change)="onHandleRadioChange($event)">
-            <mat-radio-button value="0" checked>Default</mat-radio-button>
-            <mat-radio-button value="1">By Invoice Number</mat-radio-button>
-            <mat-radio-button value="2">By Supplier</mat-radio-button>
-            <mat-radio-button value="3">By Date Range</mat-radio-button>
-            <mat-radio-button value="4">By Current User</mat-radio-button>
-          </mat-radio-group>
           <table mat-table [dataSource]="dataSource" class="mat-elevation-z0 col-lg-12">
             <!-- Position Column -->
             <ng-container matColumnDef="position">
@@ -87,17 +80,9 @@
                     <mat-icon>preview</mat-icon>
                     <span>Preview</span>
                   </button>
-                  <button
-                    mat-menu-item
-                    [disabled]="element.transactionStatusId > 1"
-                    [routerLink]="['/purchaseOrder/update/' + element.invoiceNumber]"
-                  >
+                  <button mat-menu-item [routerLink]="['/grn/edit/' + element.invoiceNumber]">
                     <mat-icon>create</mat-icon>
-                    <span>Update</span>
-                  </button>
-                  <button mat-menu-item [disabled]="element.transactionStatusId > 1">
-                    <mat-icon>delete</mat-icon>
-                    <span>Delete</span>
+                    <span>Edit</span>
                   </button>
                 </mat-menu>
               </td>
@@ -111,9 +96,9 @@
             <h2>Purchase order found for this option</h2>
           </div>
           <mat-paginator
-            [length]="purchaseOrders.length"
+            [length]="dataSource.data.length"
             [pageSize]="5"
-            [pageSizeOptions]="[5, 10, 15, 20, purchaseOrders.length]"
+            [pageSizeOptions]="[5, 10, 15, 20, dataSource.data.length]"
           >
           </mat-paginator>
         </div>

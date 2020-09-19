@@ -1,14 +1,17 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, AfterViewInit, Inject } from '@angular/core';
 import { Logger } from '@app/core/logger.service';
 import { ToastrService } from 'ngx-toastr';
-import { Subject, Observable, Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
+import { finalize } from 'rxjs/operators';
 import { DataTableDirective } from 'angular-datatables';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MatTableDataSource } from '@angular/material';
 import { MatPaginator } from '@angular/material/paginator';
 import { SharedService } from '../../shared/shared.service';
+import { PurchaseOrderService } from '../purchase-order.service';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatTableDataSource } from '@angular/material';
 
 const log = new Logger('home');
 
@@ -32,8 +35,31 @@ export interface OrderElement {
   invoiceNumber: string;
 }
 
+export interface ApprovePurchaseOrderElement {
+  purchaseorderId: string;
+  status: string;
+  comment: string;
+}
+
 const ORDER_ITEMS_TABLE_DATA: OrderItemsElement[] = [];
 const ORDER_TABLE_DATA: OrderElement[] = [];
+
+@Component({
+  selector: 'approve-purchase-order-modal',
+  templateUrl: 'approve-purchase-order-modal.html',
+  styleUrls: ['./view.component.scss']
+})
+export class ApprovePurchaseOrderModalComponent {
+  constructor(
+    public dialogRef: MatDialogRef<ApprovePurchaseOrderModalComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: ApprovePurchaseOrderElement
+  ) {}
+
+  onNoClick(data: ApprovePurchaseOrderElement): void {
+    data['cancel'] = true;
+    this.dialogRef.close();
+  }
+}
 
 @Component({
   selector: 'purchase-order-view',
@@ -88,7 +114,9 @@ export class PurchaseOrderViewComponent implements OnInit, AfterViewInit, OnDest
     private modalService: NgbModal,
     private router: Router,
     private sharedService: SharedService,
-    private routes: ActivatedRoute
+    private routes: ActivatedRoute,
+    private purchaseOrderService: PurchaseOrderService,
+    public modal: MatDialog
   ) {}
 
   ngOnInit() {
@@ -166,6 +194,89 @@ export class PurchaseOrderViewComponent implements OnInit, AfterViewInit, OnDest
 
   applyFilter(filterValue: string) {
     this.orderItemsDataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  onApprovePurchaseOrder(purchaseorderId: string) {
+    const data = { purchaseorderId, status: true, comment: '' };
+    this.openApproveDialog(data);
+  }
+
+  onRejectPurchaseOrder(purchaseorderId: string) {
+    const data = { purchaseorderId, status: false, comment: '' };
+    this.openApproveDialog(data);
+  }
+
+  openApproveDialog(data: any): void {
+    const dialogRef = this.modal.open(ApprovePurchaseOrderModalComponent, {
+      width: '500px',
+      data
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.approvePurchaseOrder(result);
+    });
+  }
+
+  approvePurchaseOrder(data: any) {
+    this.purchaseOrderService
+      .approvePurchaseOrder(data)
+      .pipe(
+        finalize(() => {
+          this.formLoading = false;
+        })
+      )
+      .subscribe(
+        (res: any) => {
+          console.log('approvePurchaseOrder', res);
+          this.formLoading = false;
+          if (res.status !== true) {
+            if (res.result && res.result.length > 0) {
+              res.result.forEach((err: any) => {
+                this.toastr.error(err.Message, err.Identifier);
+              });
+            }
+            console.log('error', res);
+            return this.toastr.error(res.message, 'ERROR');
+          }
+          this.toastr.success(res.message, 'SUCCESS');
+          data.status
+            ? (this.purchaseOrder[0].transactionstatusId = 2)
+            : (this.purchaseOrder[0].transactionstatusId = 3);
+        },
+        error => {
+          this.toastr.error(error, 'ERROR');
+        }
+      );
+  }
+
+  convertPurchaseOrderToGrn(purchaseOrderId: string) {
+    this.purchaseOrderService
+      .convertToGrn(purchaseOrderId)
+      .pipe(
+        finalize(() => {
+          this.formLoading = false;
+        })
+      )
+      .subscribe(
+        (res: any) => {
+          console.log('convertToGrn', res);
+          this.formLoading = false;
+          if (res.status !== true) {
+            if (res.result && res.result.length > 0) {
+              res.result.forEach((err: any) => {
+                this.toastr.error(err.Message, err.Identifier);
+              });
+            }
+            console.log('error', res);
+            return this.toastr.error(res.message, 'ERROR');
+          }
+          this.toastr.success(res.message, 'SUCCESS');
+          this.router.navigate(['/', 'grn', 'view']);
+        },
+        error => {
+          this.toastr.error(error, 'ERROR');
+        }
+      );
   }
 
   onEdit(data: any, mode: any) {
