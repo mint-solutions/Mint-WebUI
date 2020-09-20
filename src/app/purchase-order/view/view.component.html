@@ -4,7 +4,7 @@
       <button
         *ngIf="purchaseOrder[0].transactionstatusId === 1"
         class="btn btn-sm btn-outline-client"
-        [routerLink]="['/purchaseOrder/update/' + purchaseOrder[0].id]"
+        [routerLink]="['/purchaseOrder/update/' + purchaseOrder[0].invoiceNumber]"
       >
         Update
       </button>
