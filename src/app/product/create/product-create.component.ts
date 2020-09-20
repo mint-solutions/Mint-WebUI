@@ -64,17 +64,32 @@ export class ProductCreateComponent implements OnInit, AfterViewInit, OnDestroy 
     this.createForm();
     if (this.selectedRow && this.selectedRow.mode === 'edit') {
       this.mode = 'Update';
-      this.cardTitle = 'Edit Category';
+      this.title = 'Edit Product';
+      this.breadcrumbItem[0].title = 'Edit Product';
+      const {
+        name,
+        itemcode,
+        category: { id: categoryId },
+        description,
+        subcategoryId,
+        imagelink,
+        productconfiguration: { pack, canexpire, canbesold, canbepurchased, anypromo, leadtime, salestaxId }
+      } = this.selectedRow;
+
       this.productForm.patchValue({
-        name: this.selectedRow.name,
-        itemcode: this.selectedRow.itemcode,
-        description: this.selectedRow.description,
-        packingtype: this.selectedRow.packingtype,
-        pack: this.selectedRow.pack,
-        salestaxId: this.selectedRow.tax.id,
-        categoryId: this.selectedRow.category.id,
-        subcategoryId: this.selectedRow.subCategory ? this.selectedRow.subCategory.id : null,
-        expiredenabled: this.selectedRow.expiredenabled
+        name,
+        itemcode,
+        categoryId,
+        salestaxId,
+        description,
+        subcategoryId,
+        leadtime,
+        imagelink,
+        pack,
+        canexpire,
+        canbesold,
+        canbepurchased,
+        anypromo
       });
     }
   }
