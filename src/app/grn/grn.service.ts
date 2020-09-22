@@ -33,6 +33,9 @@ export class PurchaseOrderService extends BaseService<PurchaseOrderHeaderModel> 
   updatePurchaseOrder(payload: PurchaseOrderHeaderModel): Observable<any> {
     return this.sendPost(`${routes.updatePurchaseOrder}/${payload.id}/updatepurchaseOrder`, payload);
   }
+  updateGrn(payload: PurchaseOrderHeaderModel): Observable<any> {
+    return this.sendPost(`${routes.updatePurchaseOrder}/postGrn`, payload);
+  }
   approvePurchaseOrder(payload: any): Observable<any> {
     return this.sendPost(routes.approvePurchaseOrder, payload);
   }

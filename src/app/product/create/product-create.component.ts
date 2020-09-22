@@ -71,9 +71,9 @@ export class ProductCreateComponent implements OnInit, AfterViewInit, OnDestroy 
         itemcode,
         category: { id: categoryId },
         description,
-        subcategoryId,
+        subCategory: { id: subcategoryId },
         imagelink,
-        productconfiguration: { pack, canexpire, canbesold, canbepurchased, anypromo, leadtime, salestaxId }
+        productconfiguration: { pack, canexpire, canbesold, canbepurchased, anypromo, leadtime, salestax: salestaxId }
       } = this.selectedRow;
 
       this.productForm.patchValue({

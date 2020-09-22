@@ -29,6 +29,7 @@ export interface SelectedElement {
   productId: number;
   ctnQuantity: number;
   unitQuantity: number;
+  suppliedQuantity: number;
   pack: number;
 }
 
@@ -73,11 +74,10 @@ export class GrnUpdateComponent implements OnInit, AfterViewInit, OnDestroy {
   displayedSelectedColumns: string[] = [
     'position',
     'name',
-    'wholesaleCost',
-    'retailCost',
     'pack',
     'ctnQuantity',
     'unitQuantity',
+    'suppliedQuantity',
     'action'
   ];
   selection = new SelectionModel<SelectedElement>(true, []);
@@ -125,6 +125,7 @@ export class GrnUpdateComponent implements OnInit, AfterViewInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.loader = true;
     this.dataSource.paginator = this.paginator;
     this.selectedSource.paginator = this.paginator;
     this.getSuppliers();
@@ -194,7 +195,7 @@ export class GrnUpdateComponent implements OnInit, AfterViewInit, OnDestroy {
     this.sharedServiceSubsscription = this.sharedService.sharedPurchaseOrders.subscribe(purchaseOrders => {
       this.purchaseOrder = purchaseOrders.filter(purchaseOrder => purchaseOrder.invoiceNumber === invoiceNumber);
       if (!this.purchaseOrder.length) {
-        this.router.navigateByUrl('/purchaseOrder/create');
+        this.router.navigateByUrl('/grn/view');
         return;
       }
 
@@ -219,9 +220,11 @@ export class GrnUpdateComponent implements OnInit, AfterViewInit, OnDestroy {
         warehouseId
       });
 
-      this.dataSource.data = this.dataSource.data.filter(item => {
-        return this.purchaseOrder[0].orderitem.find((x: any) => x.product.id === item.productId);
-      });
+      this.dataSource.data = this.dataSource.data
+        .filter(item => {
+          return this.purchaseOrder[0].orderitem.find((x: any) => x.product.id === item.productId);
+        })
+        .map(item => ({ ...item, suppliedQuantity: 0 }));
 
       this.purchaseOrder[0].orderitem.forEach((item: any) => {
         const {
@@ -242,6 +245,7 @@ export class GrnUpdateComponent implements OnInit, AfterViewInit, OnDestroy {
           validProduct.itemCode = itemCode;
           validProduct.unitQuantity = unitQuantity;
           validProduct.retailCost = retailCost;
+          validProduct.suppliedQuantity = 0;
 
           this.selection.select(validProduct);
         }
@@ -355,7 +359,8 @@ export class GrnUpdateComponent implements OnInit, AfterViewInit, OnDestroy {
                 productId,
                 pack,
                 unitQuantity: 0,
-                ctnQuantity: 0
+                ctnQuantity: 0,
+                suppliedQuantity: 0
               };
             });
 
@@ -373,40 +378,20 @@ export class GrnUpdateComponent implements OnInit, AfterViewInit, OnDestroy {
     console.log('this.mode', this.mode);
 
     if (this.purchaseOrderFormTwo.valid && this.purchaseOrderFormTwo.valid) {
-      const purchaseItems = this.selection.selected
-        .map(selected => {
-          const {
-            productId,
-            ctnQuantity: ctnquantity,
-            retailCost: retailcost,
-            wholesaleCost: wholesalecost,
-            pack
-          } = selected;
-          const unitquantity = ctnquantity * pack;
-          const linewholesalecost = wholesalecost * ctnquantity;
-          const lineretailcost = retailcost * unitquantity;
-          return {
-            productId,
-            unitquantity,
-            ctnquantity,
-            retailcost,
-            wholesalecost,
-            linewholesalecost,
-            lineretailcost
-          };
-        })
-        .filter(selected => selected.ctnquantity);
+      const purchaseItems = this.selection.selected.map(selected => {
+        const { productId: productid, suppliedQuantity: suppliedqty } = selected;
+        return {
+          productid,
+          suppliedqty
+        };
+      });
 
       if (!purchaseItems.length) {
-        return this.toastr.error('Customize your orders and try again', 'Invalid Purchase Order');
+        return this.toastr.error('Customize your orders and try again', 'Invalid GRN');
       }
 
       const data = {
-        supplierId: this.purchaseOrderFormTwo.value.supplierId,
-        invoiceNumber: this.purchaseOrderFormTwo.value.invoiceNumber,
-        shiptobusinessId: this.purchaseOrderFormTwo.value.shiptobusinessId,
-        warehouseId: this.purchaseOrderFormTwo.value.warehouseId,
-        duedate: this.purchaseOrderFormTwo.value.duedate,
+        comment: this.purchaseOrderFormTwo.value.comment,
         purchaseItems
       };
 
@@ -455,11 +440,13 @@ export class GrnUpdateComponent implements OnInit, AfterViewInit, OnDestroy {
   onUpdate(data: any) {
     const payload = {
       ...data,
-      id: this.purchaseOrder[0]['id']
+      purchaseorderid: this.purchaseOrder[0]['id']
     };
 
+    console.log(payload);
+
     this.purchaseOrderService
-      .updatePurchaseOrder(payload)
+      .updateGrn(payload)
       .pipe(
         finalize(() => {
           this.formLoading = false;
@@ -489,7 +476,8 @@ export class GrnUpdateComponent implements OnInit, AfterViewInit, OnDestroy {
       shiptobusinessId: ['', [Validators.required]],
       duedate: ['', [Validators.required]],
       warehouseId: ['', [Validators.required]],
-      invoiceNumber: ['', [Validators.required]]
+      invoiceNumber: ['', [Validators.required]],
+      comment: ['', [Validators.required]]
     });
   }
 
