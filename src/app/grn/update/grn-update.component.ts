@@ -245,7 +245,7 @@ export class GrnUpdateComponent implements OnInit, AfterViewInit, OnDestroy {
           validProduct.itemCode = itemCode;
           validProduct.unitQuantity = unitQuantity;
           validProduct.retailCost = retailCost;
-          validProduct.suppliedQuantity = 0;
+          validProduct.suppliedQuantity = ctnQuantity;
 
           this.selection.select(validProduct);
         }
