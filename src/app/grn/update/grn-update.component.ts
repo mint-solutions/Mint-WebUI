@@ -429,7 +429,7 @@ export class GrnUpdateComponent implements OnInit, AfterViewInit, OnDestroy {
           }
           this.toastr.success(res.message, 'Purchase Order');
           this.resetForm();
-          this.router.navigate(['/', 'purchaseOrder', 'view']);
+          this.router.navigate(['/', 'grn', 'view']);
         },
         error => {
           serverError(error, this.toastr);
@@ -459,7 +459,7 @@ export class GrnUpdateComponent implements OnInit, AfterViewInit, OnDestroy {
             return componentError(res.message, this.toastr);
           }
           this.toastr.success(res.message, 'Purchase Order');
-          this.router.navigate(['/', 'purchaseOrder', 'view']);
+          this.router.navigateByUrl('/grn/view');
         },
         error => serverError(error, this.toastr)
       );
