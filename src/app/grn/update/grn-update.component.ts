@@ -92,6 +92,8 @@ export class GrnUpdateComponent implements OnInit, AfterViewInit, OnDestroy {
   mode: string = 'Create';
   purchaseOrder: any[] = [];
 
+  subscription: Subscription;
+
   selectedRow: any;
 
   packings: any[] = [];
@@ -139,7 +141,9 @@ export class GrnUpdateComponent implements OnInit, AfterViewInit, OnDestroy {
     //Add 'implements AfterViewInit' to the class.
   }
 
-  ngOnDestroy() {}
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
 
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -182,12 +186,11 @@ export class GrnUpdateComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   getParams() {
-    this.routes.params.subscribe(params => {
+    this.subscription = this.routes.params.subscribe(params => {
       const { invoiceNumber } = params;
-      if (!invoiceNumber) {
-        return;
+      if (invoiceNumber && invoiceNumber.length) {
+        this.getPurchaseOrderByInvoiceNumber(invoiceNumber);
       }
-      this.getPurchaseOrderByInvoiceNumber(invoiceNumber);
     });
   }
 
@@ -195,6 +198,7 @@ export class GrnUpdateComponent implements OnInit, AfterViewInit, OnDestroy {
     this.sharedServiceSubsscription = this.sharedService.sharedPurchaseOrders.subscribe(purchaseOrders => {
       this.purchaseOrder = purchaseOrders.filter(purchaseOrder => purchaseOrder.invoiceNumber === invoiceNumber);
       if (!this.purchaseOrder.length) {
+        alert('Error updating GRN');
         this.router.navigateByUrl('/grn/view');
         return;
       }

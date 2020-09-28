@@ -82,6 +82,7 @@ export class PurchaseOrderCreateComponent implements OnInit, AfterViewInit, OnDe
   ];
   selection = new SelectionModel<SelectedElement>(true, []);
   sharedServiceSubsscription: Subscription;
+  subscription: Subscription;
 
   cardTitle = 'New Purchase Order';
   purchaseOrderFormOne: FormGroup;
@@ -138,7 +139,9 @@ export class PurchaseOrderCreateComponent implements OnInit, AfterViewInit, OnDe
     //Add 'implements AfterViewInit' to the class.
   }
 
-  ngOnDestroy() {}
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
 
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -181,12 +184,11 @@ export class PurchaseOrderCreateComponent implements OnInit, AfterViewInit, OnDe
   }
 
   getParams() {
-    this.routes.params.subscribe(params => {
+    this.subscription = this.routes.params.subscribe(params => {
       const { invoiceNumber } = params;
-      if (!invoiceNumber) {
-        return;
+      if (invoiceNumber && invoiceNumber.length) {
+        this.getPurchaseOrderByInvoiceNumber(invoiceNumber);
       }
-      this.getPurchaseOrderByInvoiceNumber(invoiceNumber);
     });
   }
 
@@ -194,6 +196,7 @@ export class PurchaseOrderCreateComponent implements OnInit, AfterViewInit, OnDe
     this.sharedServiceSubsscription = this.sharedService.sharedPurchaseOrders.subscribe(purchaseOrders => {
       this.purchaseOrder = purchaseOrders.filter(purchaseOrder => purchaseOrder.invoiceNumber === invoiceNumber);
       if (!this.purchaseOrder.length) {
+        alert('Error updating Purchase order');
         this.router.navigateByUrl('/purchaseOrder/create');
         return;
       }
@@ -231,7 +234,11 @@ export class PurchaseOrderCreateComponent implements OnInit, AfterViewInit, OnDe
           wholesalecost: wholesaleCost,
           retailcost: retailCost
         } = item;
+
+        console.log({ item });
+
         const validProduct = this.dataSource.data.find(product => product.productId === item.product.id);
+        console.log({ validProduct });
         if (validProduct) {
           validProduct.wholesaleCost = wholesaleCost;
           validProduct.ctnQuantity = ctnQuantity;
