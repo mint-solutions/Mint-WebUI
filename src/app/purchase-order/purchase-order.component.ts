@@ -45,8 +45,7 @@ export class SupplierSearchModalComponent {
     public dialogRef: MatDialogRef<SupplierSearchModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: OrderTypeDataElement
   ) {}
-  onNoClick(data: OrderTypeDataElement): void {
-    data['cancel'] = true;
+  onNoClick(): void {
     this.dialogRef.close();
   }
 }
@@ -62,8 +61,7 @@ export class DateRangeSearchModalComponent {
     @Inject(MAT_DIALOG_DATA) public data: OrderTypeDataElement
   ) {}
 
-  onNoClick(data: OrderTypeDataElement): void {
-    data['cancel'] = true;
+  onNoClick(): void {
     this.dialogRef.close();
   }
 }
@@ -79,8 +77,7 @@ export class InvoiceNumberSearchModalComponent {
     @Inject(MAT_DIALOG_DATA) public data: OrderTypeDataElement
   ) {}
 
-  onNoClick(data: OrderTypeDataElement): void {
-    data['cancel'] = true;
+  onNoClick(): void {
     this.dialogRef.close();
   }
 }
@@ -195,7 +192,7 @@ export class PurchaseOrderComponent implements OnInit, AfterViewInit, OnDestroy 
     );
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result.cancel) {
+      if (!result) {
         return;
       }
       this.getPurchaseOrders();
@@ -240,29 +237,31 @@ export class PurchaseOrderComponent implements OnInit, AfterViewInit, OnDestroy 
           if (res.status === true) {
             this.purchaseOrders = res.result;
             this.sharedService.nextPurchaseOrders(this.purchaseOrders);
-            this.dataSource.data = this.purchaseOrders.map((orders, index) => {
-              const {
-                invoiceNumber,
-                dateCreated,
-                dueDate,
-                totalCostPrice,
-                doctypeId,
-                transactionstatus: transactionStatus,
-                transactionstatusId: transactionStatusId,
-                supplier: { companyname: supplierName }
-              } = orders;
-              return {
-                position: index + 1,
-                invoiceNumber,
-                dateCreated,
-                dueDate,
-                doctypeId,
-                transactionStatusId,
-                transactionStatus,
-                totalCostPrice,
-                supplierName
-              };
-            });
+            this.dataSource.data = this.purchaseOrders
+              .filter(orders => orders.doctypeId === 1)
+              .map((orders, index) => {
+                const {
+                  invoiceNumber,
+                  dateCreated,
+                  dueDate,
+                  totalCostPrice,
+                  doctypeId,
+                  transactionstatus: transactionStatus,
+                  transactionstatusId: transactionStatusId,
+                  supplier: { companyname: supplierName }
+                } = orders;
+                return {
+                  position: index + 1,
+                  invoiceNumber,
+                  dateCreated,
+                  dueDate,
+                  doctypeId,
+                  transactionStatusId,
+                  transactionStatus,
+                  totalCostPrice,
+                  supplierName
+                };
+              });
           } else {
             componentError(res.message, this.toastr);
           }

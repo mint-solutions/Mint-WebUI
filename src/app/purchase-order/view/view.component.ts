@@ -55,8 +55,7 @@ export class ApprovePurchaseOrderModalComponent {
     @Inject(MAT_DIALOG_DATA) public data: ApprovePurchaseOrderElement
   ) {}
 
-  onNoClick(data: ApprovePurchaseOrderElement): void {
-    data['cancel'] = true;
+  onNoClick(): void {
     this.dialogRef.close();
   }
 }
@@ -213,6 +212,7 @@ export class PurchaseOrderViewComponent implements OnInit, AfterViewInit, OnDest
     });
 
     dialogRef.afterClosed().subscribe(result => {
+      if (!result) return;
       this.approvePurchaseOrder(result);
     });
   }
