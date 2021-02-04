@@ -34,6 +34,10 @@ const routes: Routes = [
       loadChildren: 'app/grn/grn.module#GrnModule'
     },
     {
+      path: 'request',
+      loadChildren: 'app/request/request.module#RequestModule'
+    },
+    {
       path: 'settings',
       loadChildren: 'app/settings/settings.module#SettingsModule'
     },

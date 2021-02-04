@@ -42,10 +42,12 @@ import {
   MatRadioModule,
   MatOptionModule,
   MatSelectModule,
-  MatMenuModule
+  MatMenuModule,
+  MatSlideToggleModule
 } from '@angular/material';
 import { ApprovePurchaseOrderModalComponent } from '@app/purchase-order/view/view.component';
 import { GrnModalComponent } from '@app/grn/update/grn-update.component';
+import { SalesOrderModalComponent } from '@app/sales-order/create/sales-order-create.component';
 
 @NgModule({
   declarations: [
@@ -69,7 +71,8 @@ import { GrnModalComponent } from '@app/grn/update/grn-update.component';
     SupplierSearchModalComponent,
     InvoiceNumberSearchModalComponent,
     ApprovePurchaseOrderModalComponent,
-    GrnModalComponent
+    GrnModalComponent,
+    SalesOrderModalComponent
   ],
   entryComponents: [
     PurchaseOrderModalComponent,
@@ -77,7 +80,8 @@ import { GrnModalComponent } from '@app/grn/update/grn-update.component';
     SupplierSearchModalComponent,
     InvoiceNumberSearchModalComponent,
     ApprovePurchaseOrderModalComponent,
-    GrnModalComponent
+    GrnModalComponent,
+    SalesOrderModalComponent
   ],
   imports: [
     CommonModule,
@@ -98,7 +102,8 @@ import { GrnModalComponent } from '@app/grn/update/grn-update.component';
     MatDatepickerModule,
     MatOptionModule,
     MatSelectModule,
-    MatMenuModule
+    MatMenuModule,
+    MatSlideToggleModule
   ],
   exports: [
     LoaderComponent,
@@ -129,7 +134,8 @@ import { GrnModalComponent } from '@app/grn/update/grn-update.component';
     MatDialogModule,
     MatRadioModule,
     MatSelectModule,
-    MatMenuModule
+    MatMenuModule,
+    MatSlideToggleModule
   ]
 })
 export class SharedModule {}

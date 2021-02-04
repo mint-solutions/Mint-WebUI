@@ -76,6 +76,15 @@
             <li
               routerLinkActive="active"
               [routerLinkActiveOptions]="{ exact: true }"
+              [ngClass]="{ active: currentActiveMenu == 'request' }"
+            >
+              <a class="" (click)="activeInactiveMenu('request')" [routerLink]="['/', 'request', 'view']"
+                ><i class="icon fas fa-clipboard-list"></i> <span>Request</span></a
+              >
+            </li>
+            <li
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
               [ngClass]="{ active: currentActiveMenu == 'salesOrder' }"
             >
               <a class="" (click)="activeInactiveMenu('salesOrder')" [routerLink]="['/', 'salesOrder', 'view']"

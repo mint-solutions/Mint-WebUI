@@ -12,7 +12,8 @@ const routes = {
   createproducts: '/product/create',
   updateproduct: '/product',
   deleteproduct: '/product',
-  updateproductConfig: '/product'
+  updateproductConfig: '/product',
+  getRequestProducts: '/product/getProductForTransferRequest'
 };
 
 @Injectable()
@@ -21,9 +22,14 @@ export class ProductService extends BaseService<ProductModel> {
     super(httpClient);
   }
 
+  getRequestProducts(): Observable<any> {
+    return this.sendGet(`${routes.getRequestProducts}?page=1&limit=5`);
+  }
+
   getProducts(): Observable<any> {
     return this.sendGet(`${routes.getproducts}`);
   }
+
   getProductsForSale(): Observable<any> {
     return this.sendGet(`${routes.getProductsForSale}`);
   }
