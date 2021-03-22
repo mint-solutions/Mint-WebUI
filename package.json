@@ -65,6 +65,7 @@
     "ngx-lightbox": "^1.2.0",
     "ngx-moment": "^3.4.0",
     "ngx-toastr": "^9.1.2",
+    "node-sass": "^4.14.1",
     "popper.js": "^1.14.7",
     "rxjs": "^6.4.0",
     "rxjs-compat": "^6.4.0",
