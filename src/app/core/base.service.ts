@@ -30,6 +30,7 @@ export class BaseService<M> {
       catchError(this.handleError)
     );
   }
+
   sendPut(url: any, payload: any, otherData?: any): Observable<M> {
     return this.httpClient.put(url, payload, otherData).pipe(
       map((body: any) => body),
