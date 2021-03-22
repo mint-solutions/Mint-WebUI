@@ -34,26 +34,26 @@
               [routerLinkActiveOptions]="{ exact: true }"
               [ngClass]="{ active: currentActiveMenu == 'product' }"
             >
-              <a class="" (click)="activeInactiveMenu('product')" [routerLink]="['/', 'product', 'view']"
-                ><i
+              <a class="" (click)="activeInactiveMenu('product')" [routerLink]="['/', 'product', 'view']">
+                <i
                   class="icon-bag
               "
                 ></i
-                ><span>Product</span></a
-              >
+                ><span>Product</span>
+              </a>
             </li>
             <li
               routerLinkActive="active"
               [routerLinkActiveOptions]="{ exact: true }"
               [ngClass]="{ active: currentActiveMenu == 'supplier' }"
             >
-              <a class="" (click)="activeInactiveMenu('supplier')" [routerLink]="['/', 'supplier', 'view']"
-                ><i
+              <a class="" (click)="activeInactiveMenu('supplier')" [routerLink]="['/', 'supplier', 'view']">
+                <i
                   class="icon-user-following
               "
                 ></i
-                ><span>Supplier</span></a
-              >
+                ><span>Supplier</span>
+              </a>
             </li>
             <li
               routerLinkActive="active"
@@ -89,6 +89,15 @@
             >
               <a class="" (click)="activeInactiveMenu('salesOrder')" [routerLink]="['/', 'salesOrder', 'view']"
                 ><i class="icon fas fa-clipboard-list"></i> <span>Sales Order</span></a
+              >
+            </li>
+            <li
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              [ngClass]="{ active: currentActiveMenu == 'salesOrder' }"
+            >
+              <a class="" (click)="activeInactiveMenu('stockTransfer')" [routerLink]="['/', 'stocks', 'view']"
+                ><i class="icon fas fa-clipboard-list"></i> <span>Stock Transfer</span></a
               >
             </li>
 

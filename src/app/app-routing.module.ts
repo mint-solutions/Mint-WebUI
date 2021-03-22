@@ -48,6 +48,10 @@ const routes: Routes = [
     {
       path: 'merchant',
       loadChildren: 'app/merchant/merchant.module#MerchantModule'
+    },
+    {
+      path: 'stocks',
+      loadChildren: 'app/stock/stock.module#StockModule'
     }
   ]),
   {
