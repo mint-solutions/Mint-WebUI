@@ -58,17 +58,19 @@
                 {{ product.name }}
               </td>
               <td>
-                <select (change)="changeProduct($event.target.value)">
+                <select (change)="changeProduct($event.target.value, product.itemcode)">
                   <option value="select Warehouse">Select Warehouse</option>
-                  <option *ngFor="let i of product.storeproduct" value="{{ product.storeproduct.indexOf(i) }}">{{
-                    i?.warehouse?.name
-                  }}</option>
+                  <option *ngFor="let i of product.storeproduct" value="{{ product.storeproduct.indexOf(i) }}">
+                    {{ i?.warehouse?.name }}
+                  </option>
                 </select>
               </td>
               <td>
-                <select name="id" [(ngModel)]="id">
-                  <option *ngFor="let i of product.storeproduct" value="{{ i?.instockqty }}">
-                    {{ i?.instockqty }}
+                {{ product?.selectedIndex }}
+                {{ product.storeproduct[product.selectedIndex].warehouse.name }}
+                <select (change)="changeQuantity($event.target.value)" [disabled]="product.enablequantity">
+                  <option *ngFor="let i of product.storeproduct[product.selectedIndex].warehouse.numbers" value="i">
+                    {{ i }}
                   </option>
                 </select>
               </td>

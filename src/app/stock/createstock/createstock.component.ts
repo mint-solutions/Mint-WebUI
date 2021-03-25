@@ -9,6 +9,7 @@ import { finalize } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
+import { isNullOrUndefined } from 'util';
 
 export interface SelectedProductElement {
   id: string;
@@ -16,11 +17,16 @@ export interface SelectedProductElement {
   position: number;
   itemCode: string;
   storeproduct: storeproduct[];
+
+  enablequantity: boolean;
+  selectedIndex: number;
 }
 
 export interface storeproduct {
   instockqty: number;
   warehouse: warehouse;
+  numbers: number[];
+  selectedIndex: number;
 }
 
 export interface warehouse {
@@ -47,8 +53,6 @@ export class CreatestockComponent implements OnInit, AfterViewInit, OnDestroy {
   dtTrigger: Subject<any> = new Subject();
   dtOptions: DataTables.Settings = {};
 
-  productDataSource = new MatTableDataSource<SelectedProductElement>(SELECTED_PRODUCT_DATA);
-  displayedCustomerColumns: string[] = ['select', 'position', 'itemCode', 'name', 'instockqty'];
   public title = 'Create New Stock Order';
   public breadcrumbItem: any = [
     {
@@ -79,8 +83,17 @@ export class CreatestockComponent implements OnInit, AfterViewInit, OnDestroy {
     this.dtTrigger.unsubscribe();
   }
 
-  changeProduct(event: number) {
-    console.log();
+  changeProduct(index: any, itemcode: any) {
+    debugger;
+    let product = this.products.find(x => (x.itemCode = itemcode));
+    if (!isNullOrUndefined(product)) {
+      product.enablequantity = false;
+      product.selectedIndex = index;
+    }
+  }
+
+  changeQuantity(quantity: number) {
+    console.log(quantity);
   }
 
   getProducts() {
@@ -97,7 +110,20 @@ export class CreatestockComponent implements OnInit, AfterViewInit, OnDestroy {
           console.log('getProducts', res);
           if (res.status === true) {
             this.products = res.result;
-            debugger;
+
+            for (let i of this.products) {
+              i.enablequantity = true;
+              i.selectedIndex = 0;
+              for (let j of i.storeproduct) {
+                j.numbers = [];
+                Array(j.instockqty)
+                  .fill(0)
+                  .map((x, i) => {
+                    j.numbers.push(i + 1);
+                  });
+              }
+            }
+
             console.log(this.products);
             this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
               // Destroy the table first
