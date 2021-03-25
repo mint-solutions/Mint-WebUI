@@ -20,6 +20,7 @@ export interface SelectedProductElement {
 
 export interface storeproduct {
   instockqty: number;
+  warehouse: warehouse;
 }
 
 export interface warehouse {
@@ -39,6 +40,7 @@ export class CreatestockComponent implements OnInit, AfterViewInit, OnDestroy {
   //paginator: MatPaginator;
   products: SelectedProductElement[] = [];
   productid: string;
+  id: string;
 
   @ViewChild(DataTableDirective, { read: false })
   dtElement: DataTableDirective;
@@ -55,6 +57,7 @@ export class CreatestockComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   ];
   loader: boolean;
+  warehouseqty: number;
   constructor(
     private productService: ProductService,
     private toastr: ToastrService,
@@ -63,7 +66,7 @@ export class CreatestockComponent implements OnInit, AfterViewInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.productDataSource.paginator = this.paginator;
+    //this.productDataSource.paginator = this.paginator;
     this.getProducts();
   }
 
@@ -74,6 +77,10 @@ export class CreatestockComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     // Do not forget to unsubscribe the event
     this.dtTrigger.unsubscribe();
+  }
+
+  changeProduct(event: number) {
+    console.log();
   }
 
   getProducts() {

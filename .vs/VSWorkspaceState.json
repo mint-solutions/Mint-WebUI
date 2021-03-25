@@ -1,4 +1,13 @@
 {
-  "ExpandedNodes": ["", "\\src"],
+  "ExpandedNodes": [
+    "",
+    "\\src",
+    "\\src\\app",
+    "\\src\\app\\product",
+    "\\src\\app\\sales-order",
+    "\\src\\app\\stock",
+    "\\src\\app\\stock\\createstock"
+  ],
+  "SelectedNode": "\\src\\app\\stock\\createstock\\createstock.component.ts",
   "PreviewInSolutionExplorer": false
 }

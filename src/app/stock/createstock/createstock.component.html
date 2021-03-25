@@ -58,14 +58,19 @@
                 {{ product.name }}
               </td>
               <td>
-                <select>
-                  <option *ngFor="let i of product.storeproduct" value="i?.warehouse?.id">{{
+                <select (change)="changeProduct($event.target.value)">
+                  <option value="select Warehouse">Select Warehouse</option>
+                  <option *ngFor="let i of product.storeproduct" value="{{ product.storeproduct.indexOf(i) }}">{{
                     i?.warehouse?.name
                   }}</option>
                 </select>
               </td>
               <td>
-                //show quantity
+                <select name="id" [(ngModel)]="id">
+                  <option *ngFor="let i of product.storeproduct" value="{{ i?.instockqty }}">
+                    {{ i?.instockqty }}
+                  </option>
+                </select>
               </td>
               <td>
                 //show me destination warehousenames
