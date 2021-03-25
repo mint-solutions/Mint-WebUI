@@ -306,6 +306,7 @@ export class SalesOrderCreateComponent implements OnInit, AfterViewInit, OnDestr
   }
 
   getProducts() {
+    debugger;
     this.loader = true;
     this.productService
       .getProducts()

@@ -1,0 +1,64 @@
+<div class="container-fluid">
+  <app-block-header [title]="title" [breadcrumbItem]="breadcrumbItem"></app-block-header>
+</div>
+<div class="body table-responsive row">
+  <table mat-table [dataSource]="productDataSource" class="mat-elevation-z0 col-lg-12">
+    <ng-container matColumnDef="select">
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-checkbox> </mat-checkbox>
+      </th>
+      <td mat-cell *matCellDef="let row">
+        <mat-checkbox> </mat-checkbox>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="position">
+      <th mat-header-cell *matHeaderCellDef>No.</th>
+      <td mat-cell *matCellDef="let element">{{ element.position }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="itemCode">
+      <th mat-header-cell *matHeaderCellDef>ItemCode</th>
+      <td mat-cell *matCellDef="let element">{{ element.itemCode }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Name</th>
+      <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="instockqty">
+      <th mat-header-cell *matHeaderCellDef>Quantity</th>
+      <td mat-cell *matCellDef="let element">{{ element.storeproduct[0].instockqty }}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedCustomerColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedCustomerColumns"></tr>
+  </table>
+</div>
+
+<mat-paginator
+  [length]="productDataSource.data.length"
+  [pageSize]="5"
+  [pageSizeOptions]="[5, 10, 15, 20, productDataSource.data.length]"
+>
+</mat-paginator>
+
+<!--<div class="row card">
+  Select Product
+  <select class="form-control col-1" name="productid" [(ngModel)]="productid">
+    <option *ngFor="let product of products" value="{{product.pkproductid}}">{{product.productname}}</option>
+  </select>
+  <span class="col-2">Select Quantity</span>
+  <select class="form-control col-1" name="productid" [(ngModel)]="productid">
+    <option *ngFor="let product of products" value="{{product.pkproductid}}">{{product.productname}}</option>
+  </select>
+  <span class="col-1">Type</span>
+  <select class="form-control col-1" name="productid" [(ngModel)]="productid">
+    <option *ngFor="let product of products" value="{{product.pkproductid}}">{{product.productname}}</option>
+  </select>
+  <span class="col-1">Select Destination</span>
+  <select class="form-control col-1" name="productid" [(ngModel)]="productid">
+    <option *ngFor="let product of products" value="{{product.pkproductid}}">{{product.productname}}</option>
+  </select>
+</div>-->
