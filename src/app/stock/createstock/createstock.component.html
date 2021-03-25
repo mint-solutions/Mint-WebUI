@@ -1,48 +1,82 @@
 <div class="container-fluid">
   <app-block-header [title]="title" [breadcrumbItem]="breadcrumbItem"></app-block-header>
 </div>
-<div class="body table-responsive row">
-  <table mat-table [dataSource]="productDataSource" class="mat-elevation-z0 col-lg-12">
-    <ng-container matColumnDef="select">
-      <th mat-header-cell *matHeaderCellDef>
-        <mat-checkbox> </mat-checkbox>
-      </th>
-      <td mat-cell *matCellDef="let row">
-        <mat-checkbox> </mat-checkbox>
-      </td>
-    </ng-container>
 
-    <ng-container matColumnDef="position">
-      <th mat-header-cell *matHeaderCellDef>No.</th>
-      <td mat-cell *matCellDef="let element">{{ element.position }}</td>
-    </ng-container>
+<div class="row clearfix">
+  <div class="col-lg-12">
+    <div class="card">
+      <app-loader [isLoading]="loader"></app-loader>
 
-    <ng-container matColumnDef="itemCode">
-      <th mat-header-cell *matHeaderCellDef>ItemCode</th>
-      <td mat-cell *matCellDef="let element">{{ element.itemCode }}</td>
-    </ng-container>
+      <div class="header d-flex justify-content-between align-items-center pb-0">
+        <h2>All Products</h2>
+      </div>
 
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef>Name</th>
-      <td mat-cell *matCellDef="let element">{{ element.name }}</td>
-    </ng-container>
-
-    <ng-container matColumnDef="instockqty">
-      <th mat-header-cell *matHeaderCellDef>Quantity</th>
-      <td mat-cell *matCellDef="let element">{{ element.storeproduct[0].instockqty }}</td>
-    </ng-container>
-
-    <tr mat-header-row *matHeaderRowDef="displayedCustomerColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedCustomerColumns"></tr>
-  </table>
+      <div class="body table-responsive">
+        <table
+          datatable
+          [dtOptions]="dtOptions"
+          [dtTrigger]="dtTrigger"
+          class="table table-bordered table-striped table-sm"
+        >
+          <thead>
+            <tr>
+              <th>
+                select
+              </th>
+              <th>
+                No.
+              </th>
+              <th>
+                Item Code
+              </th>
+              <th>
+                Name
+              </th>
+              <th>
+                Warehouse
+              </th>
+              <th>
+                Quantity
+              </th>
+              <th>
+                Destination
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let product of products; let i = index">
+              <td>
+                //check box
+              </td>
+              <td>
+                {{ i }}
+              </td>
+              <td>
+                {{ product.itemcode }}
+              </td>
+              <td>
+                {{ product.name }}
+              </td>
+              <td>
+                <select>
+                  <option *ngFor="let i of product.storeproduct" value="i?.warehouse?.id">{{
+                    i?.warehouse?.name
+                  }}</option>
+                </select>
+              </td>
+              <td>
+                //show quantity
+              </td>
+              <td>
+                //show me destination warehousenames
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </div>
-
-<mat-paginator
-  [length]="productDataSource.data.length"
-  [pageSize]="5"
-  [pageSizeOptions]="[5, 10, 15, 20, productDataSource.data.length]"
->
-</mat-paginator>
 
 <!--<div class="row card">
   Select Product

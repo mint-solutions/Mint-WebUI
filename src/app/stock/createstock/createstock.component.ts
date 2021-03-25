@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Inject, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild, Inject, ChangeDetectorRef, AfterViewInit, OnDestroy } from '@angular/core';
 import { ProductService } from '../../product/product.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { componentError, serverError } from '@app/helper';
@@ -8,6 +8,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { finalize } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 import { DataTableDirective } from 'angular-datatables';
+import { Subject } from 'rxjs';
 
 export interface SelectedProductElement {
   id: string;
@@ -33,12 +34,16 @@ const SELECTED_PRODUCT_DATA: SelectedProductElement[] = [];
   templateUrl: './createstock.component.html',
   styleUrls: ['./createstock.component.scss']
 })
-export class CreatestockComponent implements OnInit {
-  @ViewChild(DataTableDirective, { read: false })
-  @ViewChild(MatPaginator)
-  paginator: MatPaginator;
-  products: any[] = [];
+export class CreatestockComponent implements OnInit, AfterViewInit, OnDestroy {
+  //@ViewChild(MatPaginator)
+  //paginator: MatPaginator;
+  products: SelectedProductElement[] = [];
   productid: string;
+
+  @ViewChild(DataTableDirective, { read: false })
+  dtElement: DataTableDirective;
+  dtTrigger: Subject<any> = new Subject();
+  dtOptions: DataTables.Settings = {};
 
   productDataSource = new MatTableDataSource<SelectedProductElement>(SELECTED_PRODUCT_DATA);
   displayedCustomerColumns: string[] = ['select', 'position', 'itemCode', 'name', 'instockqty'];
@@ -59,10 +64,20 @@ export class CreatestockComponent implements OnInit {
 
   ngOnInit() {
     this.productDataSource.paginator = this.paginator;
-    this.getproducts();
+    this.getProducts();
   }
 
-  getproducts() {
+  ngAfterViewInit(): void {
+    this.dtTrigger.next();
+  }
+
+  ngOnDestroy(): void {
+    // Do not forget to unsubscribe the event
+    this.dtTrigger.unsubscribe();
+  }
+
+  getProducts() {
+    this.loader = true;
     this.productService
       .getRequestProducts()
       .pipe(
@@ -75,19 +90,14 @@ export class CreatestockComponent implements OnInit {
           console.log('getProducts', res);
           if (res.status === true) {
             this.products = res.result;
-            this.productDataSource.data = this.products.map((product, index) => {
-              const { id, name, itemcode: itemCode, storeproduct: storeproduct } = product;
-              return {
-                id,
-                name,
-                itemCode,
-                storeproduct,
-                position: index + 1
-              };
+            debugger;
+            console.log(this.products);
+            this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+              // Destroy the table first
+              dtInstance.destroy();
+              // Call the dtTrigger to rerender again
+              this.dtTrigger.next();
             });
-            console.log(this.productDataSource.data);
-            console.log('dataSource', this.productDataSource);
-            this.cdr.detectChanges();
           } else {
             componentError(res.message, this.toastr);
           }
