@@ -9,24 +9,26 @@ import { finalize } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
+import { element } from 'protractor';
 
 export interface SelectedProductElement {
   id: string;
   name: string;
-  position: number;
+  //position: number;
   itemcode: string;
   storeproduct: storeproduct[];
 
-  productAdded: boolean;
-  enableproduct: boolean;
+  //productAdded: boolean;
+  //enableproduct: boolean;
   enablequantity: boolean;
-  selectedIndex: number;
+  selectedWarehouseIndex: number;
+  highestQuantity: number;
+  enteredQuantity: number;
 }
 
 export interface storeproduct {
   instockqty: number;
   warehouse: warehouse;
-  numbers: number[];
 }
 
 export interface warehouse {
@@ -41,17 +43,20 @@ const SELECTED_PRODUCT_DATA: SelectedProductElement[] = [];
   templateUrl: './createstock.component.html',
   styleUrls: ['./createstock.component.scss']
 })
-export class CreatestockComponent implements OnInit, AfterViewInit, OnDestroy {
-  //@ViewChild(MatPaginator)
-  //paginator: MatPaginator;
-  products: SelectedProductElement[] = [];
-  productid: string;
-  id: string;
-
+export class CreatestockComponent implements OnInit {
   @ViewChild(DataTableDirective, { read: false })
+  @ViewChild(MatPaginator)
+  paginator: MatPaginator;
+
   dtElement: DataTableDirective;
+
   dtTrigger: Subject<any> = new Subject();
   dtOptions: DataTables.Settings = {};
+
+  stockTransfers: any[] = [];
+
+  dataSource = new MatTableDataSource<SelectedProductElement>(SELECTED_PRODUCT_DATA);
+  displayedColumns: string[] = ['select', 'name', 'itemcode', 'warehouse', 'quantity'];
 
   public title = 'Create New Stock Order';
   public breadcrumbItem: any = [
@@ -70,44 +75,44 @@ export class CreatestockComponent implements OnInit, AfterViewInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    //this.productDataSource.paginator = this.paginator;
-    this.getProducts();
+    this.dataSource.paginator = this.paginator;
+    this.getPurchaseOrders();
   }
 
-  ngAfterViewInit(): void {
-    this.dtTrigger.next();
-  }
-
-  ngOnDestroy(): void {
-    // Do not forget to unsubscribe the event
-    this.dtTrigger.unsubscribe();
-  }
-
-  changeProduct(storeProductIndex: any, productIndex: any) {
-    debugger;
-    let product = this.products[productIndex];
+  changeProduct(warehouseIndex: any, elementId: string) {
+    let product = this.dataSource.data.find(x => x.id == elementId);
     if (product != null && product != undefined) {
-      this.products[productIndex].enablequantity = false;
-      this.products[productIndex].selectedIndex = +storeProductIndex;
+      let productIndex = this.dataSource.data.findIndex(x => x.id == elementId);
+      this.dataSource.data[productIndex].enablequantity = false;
+      this.dataSource.data[productIndex].highestQuantity = this.dataSource.data[productIndex].storeproduct[
+        warehouseIndex
+      ].instockqty;
+      this.dataSource.data[productIndex].selectedWarehouseIndex = +warehouseIndex;
     }
   }
 
-  changeQuantity(quantity: number) {
-    console.log(quantity);
-  }
-
-  addProduct(productIndex: any) {
-    if (this.products[productIndex].productAdded) {
-      this.products[productIndex].enableproduct = true;
-      this.products[productIndex].enablequantity = true;
-    } else {
-      this.products[productIndex].enableproduct = false;
-      this.products[productIndex].enablequantity = false;
+  changeQuantity(elementId: string) {
+    let product = this.dataSource.data.find(x => x.id == elementId);
+    if (product != null && product != undefined) {
+      debugger;
+      let productIndex = this.dataSource.data.findIndex(x => x.id == elementId);
+      console.log(this.dataSource.data[productIndex].enteredQuantity);
+      console.log(this.dataSource.data[productIndex].highestQuantity);
+      if (this.dataSource.data[productIndex].enteredQuantity > this.dataSource.data[productIndex].highestQuantity) {
+        console.log('print error here');
+      } else {
+        console.log('remove error here');
+      }
     }
   }
 
-  getProducts() {
+  getPurchaseOrders() {
     this.loader = true;
+
+    //const searchData = this.getSearchData();
+
+    //console.log(searchData);
+
     this.productService
       .getRequestProducts()
       .pipe(
@@ -117,31 +122,26 @@ export class CreatestockComponent implements OnInit, AfterViewInit, OnDestroy {
       )
       .subscribe(
         res => {
-          console.log('getProducts', res);
+          console.log('getPurchaseOrders', res);
           if (res.status === true) {
-            this.products = res.result;
-            for (let i of this.products) {
-              i.selectedIndex = 0;
-              i.productAdded = false;
-              i.enablequantity = true;
-              i.enableproduct = false;
-              for (let j of i.storeproduct) {
-                j.numbers = [];
-                Array(j.instockqty)
-                  .fill(0)
-                  .map((x, i) => {
-                    j.numbers.push(i + 1);
-                  });
-              }
-            }
-
-            console.log(this.products);
-            this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-              // Destroy the table first
-              dtInstance.destroy();
-              // Call the dtTrigger to rerender again
-              this.dtTrigger.next();
-            });
+            this.stockTransfers = res.result;
+            //this.sharedService.nextPurchaseOrders(this.stockTransfers);
+            this.dataSource.data = this.stockTransfers
+              //.filter(orders => orders.doctypeId === 1)
+              .map((transfers, index) => {
+                const { id, name, itemcode, storeproduct } = transfers;
+                return {
+                  id,
+                  name,
+                  itemcode,
+                  storeproduct,
+                  selectedWarehouseIndex: null,
+                  highestQuantity: null,
+                  enteredQuantity: null,
+                  enablequantity: true
+                };
+              });
+            console.log(this.dataSource.data);
           } else {
             componentError(res.message, this.toastr);
           }
@@ -149,4 +149,23 @@ export class CreatestockComponent implements OnInit, AfterViewInit, OnDestroy {
         error => serverError(error, this.toastr)
       );
   }
+
+  //getSearchData() {
+  //  const { startDate, endDate, supplierId, postedBy, invoiceNumber } = this.orderTypeData;
+
+  //  return {
+  //    postedBy,
+  //    invoiceNumber,
+  //    searchtype: this.orderType,
+  //    supplierSearch: {
+  //      supplierId,
+  //      startDate,
+  //      endDate
+  //    },
+  //    daterangeSearch: {
+  //      startDate,
+  //      endDate
+  //    }
+  //  };
+  //}
 }

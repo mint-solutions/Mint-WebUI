@@ -1,122 +1,102 @@
 <div class="container-fluid">
   <app-block-header [title]="title" [breadcrumbItem]="breadcrumbItem"></app-block-header>
-</div>
 
-<div class="row clearfix">
-  <div class="col-lg-12">
-    <div class="card">
-      <app-loader [isLoading]="loader"></app-loader>
+  <div class="row clearfix">
+    <div class="col-lg-12">
+      <div class="card">
+        <app-loader [isLoading]="loader"></app-loader>
+        <div class="header d-flex justify-content-between align-items-center pb-0">
+          <h2>All Stock Transfers</h2>
+        </div>
 
-      <div class="header d-flex justify-content-between align-items-center pb-0">
-        <h2>All Products</h2>
-      </div>
+        <div class="body table-responsive">
+          <mat-form-field class="col-lg-12" appearance="outline">
+            <mat-label>Select Type</mat-label>
+            <select matNativeControl>
+              <option value="1">Request</option>
+              <option value="0">Transfer</option>
+            </select>
+          </mat-form-field>
 
-      <div class="body table-responsive">
-        <table
-          datatable
-          [dtOptions]="dtOptions"
-          [dtTrigger]="dtTrigger"
-          class="table table-bordered table-striped table-sm"
-        >
-          <thead>
-            <tr>
-              <th>
-                Select
-              </th>
-              <!--<th>
-                No.
-              </th>-->
-              <th>
-                Item Code
-              </th>
-              <th>
-                Name
-              </th>
-              <th>
-                Type
-              </th>
-              <th>
-                Warehouse
-              </th>
-              <th>
-                Quantity
-              </th>
-              <th>
-                Destination
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let product of products; let i = index">
-              <td>
-                <input
-                  class="checkboxalign"
-                  type="checkbox"
-                  (change)="addProduct(products.indexOf(product))"
-                  [(ngModel)]="product.productAdded"
-                />
+          <mat-form-field class="col-lg-12" appearance="outline">
+            <mat-label>Search Stock Transfers</mat-label>
+            <mat-icon matPrefix>search</mat-icon>
+            <input #searchInput matInput placeholder="Type keyword here" />
+            <!--(keyup)="applyFilter($event.target.value)"-->
+          </mat-form-field>
+
+          <table mat-table [dataSource]="dataSource" class="mat-elevation-z0 col-lg-12">
+            <!-- Select Column -->
+            <ng-container matColumnDef="select">
+              <th mat-header-cell *matHeaderCellDef>Select Product</th>
+              <td mat-cell *matCellDef="let element">
+                <mat-checkbox (change)="addProduct(products.indexOf(product))"> </mat-checkbox>
+                <!--  [(ngModel)]="product.productAdded"-->
               </td>
-              <!--<td>
-                {{ i }}
-              </td>-->
-              <td>
-                {{ product.itemcode }}
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef>Order Invoice Number</th>
+              <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+            </ng-container>
+
+            <!-- Item Code Column -->
+            <ng-container matColumnDef="itemcode">
+              <th mat-header-cell *matHeaderCellDef>Item Code</th>
+              <td mat-cell *matCellDef="let element">{{ element.itemcode }}</td>
+            </ng-container>
+
+            <!--Warehouse Column-->
+            <ng-container matColumnDef="warehouse">
+              <th mat-header-cell *matHeaderCellDef>Warehouse</th>
+              <td mat-cell *matCellDef="let element">
+                <mat-form-field appearance="fill">
+                  <mat-label>Select Warehouse</mat-label>
+                  <select matNativeControl (change)="changeProduct($event.target.value, element.id)">
+                    <!--[disabled]="product.enableproduct"-->
+                    <option value=""></option>
+                    <option *ngFor="let x of element.storeproduct" [value]="element.storeproduct.indexOf(x)">
+                      {{ x.warehouse.name }}
+                    </option>
+                  </select>
+                </mat-form-field>
               </td>
-              <td>
-                {{ product.name }}
+            </ng-container>
+
+            <!--Quantity-->
+            <ng-container matColumnDef="quantity">
+              <th mat-header-cell *matHeaderCellDef>Quantity</th>
+              <td mat-cell *matCellDef="let element">
+                <mat-form-field class="example-full-width">
+                  <mat-label>Enter Quantity</mat-label>
+                  <input
+                    type="number"
+                    matInput
+                    placeholder=""
+                    [disabled]="element.enablequantity"
+                    [(ngModel)]="element.enteredQuantity"
+                    (change)="changeQuantity(element.id)"
+                  />
+                </mat-form-field>
               </td>
-              <td>
-                <select [disabled]="product.enableproduct">
-                  <option value="Select Type">Select Type</option>
-                  <option value="0">Transfer</option>
-                  <option value="1">Request</option>
-                </select>
-              </td>
-              <td>
-                <select
-                  (change)="changeProduct($event.target.value, products.indexOf(product))"
-                  [disabled]="product.enableproduct"
-                >
-                  <option value="Select Warehouse">Select Warehouse</option>
-                  <option *ngFor="let i of product.storeproduct" value="{{ product.storeproduct.indexOf(i) }}">
-                    {{ i?.warehouse?.name }}
-                  </option>
-                </select>
-              </td>
-              <td>
-                <select (change)="changeQuantity($event.target.value)" [disabled]="product.enablequantity">
-                  <option value="Select Quantity">Select Quantity</option>
-                  <option *ngFor="let i of product.storeproduct[product.selectedIndex].numbers" value="i">
-                    {{ i }}
-                  </option>
-                </select>
-              </td>
-              <td>
-                //show me destination warehousenames
-              </td>
-            </tr>
-          </tbody>
-        </table>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          </table>
+
+          <!--<div *ngIf="!purchaseOrders.length" class="header d-flex justify-content-between align-items-center pb-0">
+            <h2>Purchase order found for this option</h2>
+          </div>-->
+          <mat-paginator
+            [length]="stockTransfers.length"
+            [pageSize]="5"
+            [pageSizeOptions]="[5, 10, 15, 20, stockTransfers.length]"
+          >
+          </mat-paginator>
+        </div>
       </div>
     </div>
   </div>
 </div>
-
-<!--<div class="row card">
-  Select Product
-  <select class="form-control col-1" name="productid" [(ngModel)]="productid">
-    <option *ngFor="let product of products" value="{{product.pkproductid}}">{{product.productname}}</option>
-  </select>
-  <span class="col-2">Select Quantity</span>
-  <select class="form-control col-1" name="productid" [(ngModel)]="productid">
-    <option *ngFor="let product of products" value="{{product.pkproductid}}">{{product.productname}}</option>
-  </select>
-  <span class="col-1">Type</span>
-  <select class="form-control col-1" name="productid" [(ngModel)]="productid">
-    <option *ngFor="let product of products" value="{{product.pkproductid}}">{{product.productname}}</option>
-  </select>
-  <span class="col-1">Select Destination</span>
-  <select class="form-control col-1" name="productid" [(ngModel)]="productid">
-    <option *ngFor="let product of products" value="{{product.pkproductid}}">{{product.productname}}</option>
-  </select>
-</div>-->
