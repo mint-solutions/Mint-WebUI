@@ -50,6 +50,7 @@
             <tr *ngFor="let product of products; let i = index">
               <td>
                 <input
+                  class="checkboxalign"
                   type="checkbox"
                   (change)="addProduct(products.indexOf(product))"
                   [(ngModel)]="product.productAdded"
