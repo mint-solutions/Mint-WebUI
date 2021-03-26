@@ -21,16 +21,19 @@
           <thead>
             <tr>
               <th>
-                Add Product
+                Select
               </th>
-              <th>
+              <!--<th>
                 No.
-              </th>
+              </th>-->
               <th>
                 Item Code
               </th>
               <th>
                 Name
+              </th>
+              <th>
+                Type
               </th>
               <th>
                 Warehouse
@@ -52,14 +55,22 @@
                   [(ngModel)]="product.productAdded"
                 />
               </td>
-              <td>
+              <!--<td>
                 {{ i }}
-              </td>
+              </td>-->
               <td>
                 {{ product.itemcode }}
               </td>
               <td>
                 {{ product.name }}
+              </td>
+              <td>
+                <select [disabled]="product.enableproduct">
+                  <option value="0">Transfer</option>
+                  <option value="1">
+                    Request
+                  </option>
+                </select>
               </td>
               <td>
                 <select
