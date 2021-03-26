@@ -21,7 +21,7 @@
           <thead>
             <tr>
               <th>
-                select
+                Add Product
               </th>
               <th>
                 No.
@@ -46,7 +46,11 @@
           <tbody>
             <tr *ngFor="let product of products; let i = index">
               <td>
-                //check box
+                <input
+                  type="checkbox"
+                  (change)="addProduct(products.indexOf(product))"
+                  [(ngModel)]="product.productAdded"
+                />
               </td>
               <td>
                 {{ i }}
@@ -58,18 +62,20 @@
                 {{ product.name }}
               </td>
               <td>
-                <select (change)="changeProduct($event.target.value, product.itemcode)">
-                  <option value="select Warehouse">Select Warehouse</option>
+                <select
+                  (change)="changeProduct($event.target.value, products.indexOf(product))"
+                  [disabled]="product.enableproduct"
+                >
+                  <option value="Select Warehouse">Select Warehouse</option>
                   <option *ngFor="let i of product.storeproduct" value="{{ product.storeproduct.indexOf(i) }}">
                     {{ i?.warehouse?.name }}
                   </option>
                 </select>
               </td>
               <td>
-                {{ product?.selectedIndex }}
-                {{ product.storeproduct[product.selectedIndex].warehouse.name }}
                 <select (change)="changeQuantity($event.target.value)" [disabled]="product.enablequantity">
-                  <option *ngFor="let i of product.storeproduct[product.selectedIndex].warehouse.numbers" value="i">
+                  <option value="Select Quantity">Select Quantity</option>
+                  <option *ngFor="let i of product.storeproduct[product.selectedIndex].numbers" value="i">
                     {{ i }}
                   </option>
                 </select>

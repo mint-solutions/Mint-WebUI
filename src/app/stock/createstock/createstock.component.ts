@@ -9,15 +9,16 @@ import { finalize } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
-import { isNullOrUndefined } from 'util';
 
 export interface SelectedProductElement {
   id: string;
   name: string;
   position: number;
-  itemCode: string;
+  itemcode: string;
   storeproduct: storeproduct[];
 
+  productAdded: boolean;
+  enableproduct: boolean;
   enablequantity: boolean;
   selectedIndex: number;
 }
@@ -26,7 +27,6 @@ export interface storeproduct {
   instockqty: number;
   warehouse: warehouse;
   numbers: number[];
-  selectedIndex: number;
 }
 
 export interface warehouse {
@@ -83,17 +83,27 @@ export class CreatestockComponent implements OnInit, AfterViewInit, OnDestroy {
     this.dtTrigger.unsubscribe();
   }
 
-  changeProduct(index: any, itemcode: any) {
+  changeProduct(storeProductIndex: any, productIndex: any) {
     debugger;
-    let product = this.products.find(x => (x.itemCode = itemcode));
-    if (!isNullOrUndefined(product)) {
-      product.enablequantity = false;
-      product.selectedIndex = index;
+    let product = this.products[productIndex];
+    if (product != null && product != undefined) {
+      this.products[productIndex].enablequantity = false;
+      this.products[productIndex].selectedIndex = +storeProductIndex;
     }
   }
 
   changeQuantity(quantity: number) {
     console.log(quantity);
+  }
+
+  addProduct(productIndex: any) {
+    if (this.products[productIndex].productAdded) {
+      this.products[productIndex].enableproduct = true;
+      this.products[productIndex].enablequantity = true;
+    } else {
+      this.products[productIndex].enableproduct = false;
+      this.products[productIndex].enablequantity = false;
+    }
   }
 
   getProducts() {
@@ -110,10 +120,11 @@ export class CreatestockComponent implements OnInit, AfterViewInit, OnDestroy {
           console.log('getProducts', res);
           if (res.status === true) {
             this.products = res.result;
-
             for (let i of this.products) {
-              i.enablequantity = true;
               i.selectedIndex = 0;
+              i.productAdded = false;
+              i.enablequantity = true;
+              i.enableproduct = false;
               for (let j of i.storeproduct) {
                 j.numbers = [];
                 Array(j.instockqty)
