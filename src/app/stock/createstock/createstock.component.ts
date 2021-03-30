@@ -20,10 +20,13 @@ export interface SelectedProductElement {
 
   //productAdded: boolean;
   //enableproduct: boolean;
+  enablewarehouse: boolean;
+  enablecheckbox: boolean;
   enablequantity: boolean;
   selectedWarehouseIndex: number;
   highestQuantity: number;
   enteredQuantity: number;
+  showvalidation: boolean;
 }
 
 export interface storeproduct {
@@ -79,8 +82,28 @@ export class CreatestockComponent implements OnInit {
     this.getPurchaseOrders();
   }
 
+  applyFilter(filterValue: string) {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+    if (filterValue == null || filterValue == undefined) {
+      this.dataSource;
+      return;
+    }
+  }
+
+  addProduct(id: string) {
+    let product = this.dataSource.data.find(x => x.id == id).enablewarehouse;
+    if (product == true) {
+      this.dataSource.data.find(x => x.id == id).enablewarehouse = false;
+      this.dataSource.data.find(x => x.id == id).enablequantity = false;
+    } else {
+      this.dataSource.data.find(x => x.id == id).enablewarehouse = true;
+      this.dataSource.data.find(x => x.id == id).enablequantity = true;
+    }
+  }
+
   changeProduct(warehouseIndex: any, elementId: string) {
     let product = this.dataSource.data.find(x => x.id == elementId);
+
     if (product != null && product != undefined) {
       let productIndex = this.dataSource.data.findIndex(x => x.id == elementId);
       this.dataSource.data[productIndex].enablequantity = false;
@@ -99,9 +122,9 @@ export class CreatestockComponent implements OnInit {
       console.log(this.dataSource.data[productIndex].enteredQuantity);
       console.log(this.dataSource.data[productIndex].highestQuantity);
       if (this.dataSource.data[productIndex].enteredQuantity > this.dataSource.data[productIndex].highestQuantity) {
-        console.log('print error here');
+        this.dataSource.data[productIndex].showvalidation = true;
       } else {
-        console.log('remove error here');
+        this.dataSource.data[productIndex].showvalidation = false;
       }
     }
   }
@@ -138,7 +161,10 @@ export class CreatestockComponent implements OnInit {
                   selectedWarehouseIndex: null,
                   highestQuantity: null,
                   enteredQuantity: null,
-                  enablequantity: true
+                  enablequantity: true,
+                  enablewarehouse: false,
+                  enablecheckbox: false,
+                  showvalidation: false
                 };
               });
             console.log(this.dataSource.data);
